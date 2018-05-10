@@ -1,1 +1,2 @@
-This is a minimal example of a book based on R Markdown and **bookdown** (https://github.com/rstudio/bookdown). Please see the page "Get Started" at https://bookdown.org/ for how to compile this example.
+This is comprised of a  compilation of weekly blog posts, extensively extended with end-of-season updates, featuring varying aspects of the EPL using R code
+to produce charts and tables. Tweets, pods and game videos are also embedded
