@@ -1,2 +1,1 @@
-# eplAnnual_2017-18
-Week by Week recap of the English Premier League 2017/18 with hosts od interactive charts and tables
+This is a minimal example of a book based on R Markdown and **bookdown** (https://github.com/rstudio/bookdown). Please see the page "Get Started" at https://bookdown.org/ for how to compile this example.

@@ -1,0 +1,275 @@
+# Week 29 {-}
+
+
+
+## Match of the Day {-}
+
+Great come-back by Man United, who are now nine points clear of fifth-placed Chelsea and looking good for CL football again next year
+
+
+```{r topGame_29}
+
+embed_youtube("mvengkopiBo", width = 420, height = 315, frameborder = 0,
+   allowfullscreen = TRUE, query = NULL) 
+
+
+```
+
+***
+<p class="factoid">In 273 league appearances with Manchester United Patrice Evra was part of a line up that conceded 4 or more goals on 5 occasions (1.8%). For West Ham, he is 2 for 2 (100%)</p>
+
+***
+
+## Rod off Burnley's back {-}
+
+As many of you have heard, Burnley finally won a Premier Leaague match under Sean Dyche after going behind. Unsurprisingly, it was Everton - with their poor away record - that were the collaborators, allowing Chris Wood to be unguarded in the six yard area from a corner
+
+How does this run compare with the worst ever by team?
+ 
+ 
+```{r behind_29}
+
+## function extracted from doBy package
+
+# subSeq <- function (x, item = NULL) {
+#   rrr <- rle(x)
+#   len <- rrr$lengths
+#   val <- rrr$values
+#   
+#   first <- last <- rep.int(NA, length(val))
+#   first[1] <- 1
+#   last [1] <- len[1]
+#   if (length(val)>1){
+#     for (kk in 2:length(val)){
+#       first[kk] <- last[kk-1]+1
+#       last [kk] <- last[kk-1]+len[kk]
+#     }
+#   }
+#   midp <- floor(first + len/2)
+#   
+#   ans <- cbind(first=first, last=last, slength=len, midpoint=midp)
+#   
+#   if (!is.null(item)) {
+#     iii <- val==item
+#     ans <- as.data.frame.matrix(ans[iii,,drop=FALSE], stringsAsFactors=FALSE)
+#     ans$value <- val[iii]
+#   } else {
+#     ans <- as.data.frame.matrix(ans, stringsAsFactors=FALSE)
+#     ans$value <- val
+#   }
+#   ans
+# }
+# 
+
+
+everBehind <- scoreLines %>%
+  filter(diff == -1) %>%
+  # group_by(TEAMMATCHID) %>%
+  select(TEAMMATCHID, MATCHID) %>%
+  unique() %>%   #10499
+  left_join(standings) %>%
+  select(team, res, gameDate)
+
+everBehind %>%
+  mutate(cat = ifelse(res == "Win", 1, 0)) %>%
+  arrange(desc(gameDate)) %>%
+  group_by(team) %>%
+  do(subSeq(.$cat)) %>%
+  filter(value == 0) %>%
+  arrange(desc(slength)) %>%
+  group_by(team) %>%
+  slice(1) %>%
+  arrange(desc(slength), team) %>%
+  select(team, max_run = slength) %>%
+  DT::datatable(
+    width = 200,
+    class = 'compact stripe hover row-border order-column',
+    rownames = FALSE,
+    options = list(
+      paging = TRUE,
+      searching = TRUE,
+      info = FALSE
+    )
+  )
+
+  
+```
+ 
+ So Burnley's record does crack the top ten but is by no means the worst. Little surprise to see Sunderland and Derby County leading the field - even if over 100 games, for each, seems extraordinary
+ The Man. City run ended in 2003 ,a period before the big investment
+ 
+
+## Quick off the mark {-}
+
+With the first goal so critical, it is interesting to see who turns the ball in first in most games. Here are all the candidates, this season
+
+```{r quick_29}
+
+firstGoals <- goals %>%
+  left_join(matchTeam, by = c("TEAMMATCHID")) %>%
+  arrange(TIME) %>%
+  group_by(MATCHID) %>%
+  slice(1) %>%
+  select(PLAYER_MATCH, TIME, TEAMMATCHID) %>%
+  left_join(playerGame) %>%
+  ungroup() %>%
+  filter(season == "2017/18") %>%
+  select(name, TIME, TEAMNAME, Opponents, gameDate) %>%
+  count(name, TEAMNAME, sort = TRUE) %>%
+  rename(count = n,
+         team = TEAMNAME,
+         player = name)
+
+firstGoals %>%
+  arrange(desc(count), team) %>%
+  DT::datatable(
+    class = 'compact stripe hover row-border order-column',
+    rownames = FALSE,
+    options = list(
+      paging = TRUE,
+      searching = TRUE,
+      info = FALSE
+    )
+  )
+
+
+```
+
+Not too many surprises at the top of the list. For a full 38 game season, the record holder is a surprse: Darren Bent for Sunderland in 2009/10 when 14 of his 24 goals were the first of the game
+
+---
+
+Here are the leaders, by club, this year
+
+```{r quick_leaders_29}
+
+firstGoals %>%
+  group_by(team) %>%
+  arrange(desc(count)) %>%
+  slice(1) %>%
+  DT::datatable(
+    class = 'compact stripe hover row-border order-column',
+    rownames = FALSE,
+    options = list(
+      paging = TRUE,
+      searching = TRUE,
+      info = FALSE
+    )
+  )
+
+```
+
+_N.B. Ties for top position are not shown_
+
+At the time of writing, Benteke tops the Crystal Palace ranking with the only two goals he has scored all season
+
+
+
+***
+
+
+
+## Tweet of the Week {-}
+
+
+
+```{r}  
+shortcode("tweet", "970276394851880961") 
+```
+
+
+## Totally Football and Guardian Weekly Review Podcasts {-}
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6706745-rubbernecking-chocolate-legs-and-jay-bothroyd/embed/v4?eid=AQAAAEiMnlo5VmYA" title="Audioboom player"></iframe>
+***
+<p>
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6706857-chelsea-walk-into-city-s-jaws-arsenal-fall-again-and-the-pulis-connection-football-weekly/embed/v4?eid=AQAAAG6MnlqpVmYA" title="Audioboom player"></iframe>
+
+***
+
+## Results and Table {-}
+
+
+```{r results_29}
+
+weekly_results("2018-03-01","2018-03-06")
+
+```
+
+<p>
+---
+
+```{r standings_29}
+
+weekly_table("2018-03-06")
+
+```
+
+
+## Final Factoid {-}
+
+<p class="factoid">Dembele gets a lot of love in the Totally Football podcast above, but his assist against Arsenal was just the second of season and he has no goals. At 30, Spurs really need to upgrade on him and Sissoko if they want to press on next year </p>
+
+
+---
+
+
+## End of Season Update {-}
+
+What would be a sad epitaph to Evra's career was eased somewhat as his final appearance was as a sub helping West Ham come back from a goal down to draw at Stamford Bridge
+
+---
+
+
+#### Rod off Burnley's back {-}
+
+Here's how all the team's fared after going behind at least once in a game
+
+```{r behindu_29}
+
+scoreLines %>%
+  filter(diff == -1) %>%
+  # group_by(TEAMMATCHID) %>%
+  select(TEAMMATCHID, MATCHID) %>%
+  unique() %>%   #10499
+  left_join(standings) %>%
+  filter(season == "2017/18") %>%
+  ungroup() %>%
+  select(team, res) %>%
+  group_by(team) %>%
+  count(res)  %>%
+  spread(res, n, fill = 0) %>%
+  mutate(G = Win + Draw + Loss, ppg = round((3 * Win + Draw) / G, 2)) %>%
+  select(team, G, Win, Draw, Loss, ppg) %>%
+  DT::datatable(
+    class = 'compact stripe hover row-border order-column',
+    rownames = FALSE,
+    options = list(
+      paging = TRUE,
+      searching = TRUE,
+      info = FALSE
+    )
+  )
+```
+
+If Huddersfield, WBA or Brighton went into arrears they could pretty well say goodbye to any points
+
+?? Arsenal actually went into arrears in games more often than Brighton, though their superior talent did ensure they more often made amends
+
+---
+
+####  Quick off the mark {-}
+
+Own Goals have been beneficial to Huddersfield but two 'first-goals' have also been scored by Mooy, van la Parra and Ince- one of whom's was a last minute winnner against Watford
+
+---
+
+Dembele upped his game a bit at the end of the year and ended with .. assists, good for .. on the team. No goals, though, and rumoured to be available this summer
+
+---
+
+
+## Code Hints {-}
+
+ * tidyr - spread()

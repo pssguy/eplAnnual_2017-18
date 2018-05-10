@@ -1,0 +1,257 @@
+# Week 5 {-}
+
+
+## Game of the week {-}
+
+Second time Man City have won by 5+ goals in consecutive games against same team. They have also done it to Derby. Only achieved on two other occasions in English league top tier with WBA figuring twice: crushing local rivals, Birmingham, and suffering  at the hands of Liverpool
+
+Unfortunately, no video available so you'll have to settle for this home-made Huddesfield v Leicester game!
+
+```{r topGame_05}
+
+embed_youtube("sr_hvKIwnVE", width = 420, height = 315, frameborder = 0,
+  allowfullscreen = TRUE, query = NULL) 
+
+
+```
+
+***
+
+## Finishing Strongly {-}
+
+One thing Manchester United have improved this season is scoring on the break - particularly when teams press late for an equalizer. A classic example was this week against Everton with three late goals just after Everton missed a good chance of an equalizer    
+
+At the time of writing, they have scored more goals from the 80th minute on than any team, other than thier cross-city rivals, have managed in total
+
+```{r strong_finish_05}
+
+each <- playerGame %>%
+  select(PLAYER_MATCH, season, TEAMNAME) %>%
+  right_join(goals) %>%
+  select(season, TEAMNAME, TIME) %>%
+  filter(season == "2017/18")
+
+all <- each %>%
+  group_by(TEAMNAME) %>%
+  tally()
+
+
+each %>%
+  left_join(all) %>%
+  plot_ly(x =  ~ jitter(TIME),
+          y =  ~ fct_reorder(TEAMNAME, n)) %>%
+  add_markers(hoverinfo = "text",
+              text =  ~ paste0(TIME))  %>%
+  layout(
+    xaxis = list(title = "Goal time"),
+    yaxis = list(title = ""),
+    margin = list(l = 120, pad = -5)
+  ) %>%  config(displayModeBar = F, showLink = F)
+
+```
+
+_N.B This chart will vary over time_
+
+Not sure how long before Crystal Palace join the chart. Their next three games they face the top three in the division
+
+<p class="factoid">As forecast last week, Crystal Palace became the first team in the top English Division that a team has kicked off a campaign with five goalless, scoreless games - matching Hartlepool (tier 3 1938/9) and Sunderland (tier 2 1985/6). One of Sunderlandès opponents in that run happened to be Crystal Palace</p>
+
+## Player on the decline {-}
+
+It's tough not to put a fair share of the blame on club captaion, Jason Puncheon, and the last four mangers who keep picking him; most fans certainly appear to have had enough     
+Deemed unworthy enough for inclusion in the 2016 Cup Final starting line-up, he nevertheless appeared on the pitch for 88% of last season's EPL action without registering a single goal. The saving grace is that he already leads the league in bookings and so is likely to be forced to miss some game-time soon
+
+
+
+```{r decline}
+
+
+playerGame %>%
+  filter(PLAYERID == "PUNCHEJ" & mins > 0) %>%
+  arrange(gameDate) %>%
+  select(name, Gls, CARD) %>%
+  mutate(booking = ifelse(!is.na(CARD), 1, 0)) %>%
+  mutate(cumGls = cumsum(Gls), cumCards = cumsum(booking)) %>%
+  mutate(apps = row_number()) %>%
+  plot_ly(x =  ~ apps, y =  ~ cumGls) %>%
+  add_lines(name = "Goals") %>%
+  add_lines(x =  ~ apps,
+            y =  ~ cumCards,
+            name = "Cards") %>%
+  layout(
+    xaxis = list(title = "Appearances (inc. as sub)"),
+    yaxis = list(title = "Cumulative Record")
+  ) %>%  config(displayModeBar = F, showLink = F)
+
+
+```
+
+He only had one caution on his resume after 70 Premier League appearances to go along with 11 goals. Times have changed
+
+***
+
+<p class="factoid">It has been well recorded that Wayne Rooney has reached the 200 goals mark in the Premier League, trailing only Alan Shearer. Lesser known is that he has topped the century mark in cautions with only Gareth Barry in his sights</p>
+
+***
+
+## Super Subs {-}
+
+If you had the feeling a lot of goals were being scored by subs, you were right   
+  Early doors, but we are heading for a record season
+
+```{r super_subs}
+summary %>%
+  group_by(season) %>%
+  summarise(
+    start = sum(StGls, na.rm = T),
+    sub = sum(subGls, na.rm = T),
+    pc = round(100 * sub / (sub + start), 1)
+  ) %>%
+  plot_ly(x =  ~ season, y =  ~ pc) %>%
+  add_lines(color = I("firebrick2")) %>%
+  layout(
+    margin = list(b = 80),
+    xaxis = list(title = ""),
+    yaxis = list(title = "% Goals scored by Subs")
+  ) %>%  config(displayModeBar = F, showLink = F)
+            
+```
+
+
+
+
+***
+
+<p class="factoid">Subs for Manchester United only scored 4 times in the first three years of the Premier League. After just five games this year, that figure has been exceeded. Martial(3), Rashford and Fellaini the providers</p>
+
+***
+
+## Totally Football and Guardian Weekly Review Podcasts {-}
+
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6311098-aguero-s-goal-glut-everton-s-glass-ceiling-and-reassessing-arsenal-s-koln-onic-irritation/embed/v4?eid=AQAAAAVbwFm6TGAA" title="audioBoom player"></iframe>
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6311209-champagne-supernova-football-as-manchester-clubs-stand-apart-football-weekly/embed/v4?eid=AQAAAOdawFkpTWAA" title="audioBoom player"></iframe>
+
+***
+
+## Results and Table {-}
+
+```{r results_05}
+
+weekly_results("2017-09-12","2017-09-18")
+
+
+```
+
+
+
+```{r standings_05}
+
+weekly_table("2017-09-18")
+
+```
+
+
+***
+
+## Final Factoid {-}
+
+<p class="factoid">Newcastle became the first promoted team to win three on the trot since Watford and Bournemouth both achieved the feat in Round 17 of 2015/16</p>
+
+
+---
+
+
+## End of Season Update {-}
+
+
+#### Finishing Strongly {-}
+
+The chart above gets updated as the year progresses - so becomes somewhat cluttered
+
+Here is a table of goals scored by team in the last 10 minutes, plus extra-time, of games - extended to all 26 seasons
+
+```{r stronglyu}
+
+all <- standings %>%
+  right_join(goals) %>%
+  select(team, TIME, season) %>%
+  group_by(team, season) %>%
+  tally() %>%
+  filter(!is.na(team)) %>%
+  rename(tot = n)
+
+standings %>%
+  right_join(goals) %>%
+  select(team, TIME, season) %>%
+  filter(TIME > 80) %>%
+  group_by(team, season) %>%
+  tally() %>%
+  filter(!is.na(team)) %>%
+  inner_join(all) %>%
+  mutate(pc = round(100 * n / tot, 1)) %>%
+  arrange(desc(season), pc) %>%
+  select(team,
+         season,
+         late = n,
+         total = tot,
+         `%` = pc) %>%
+  DT::datatable(
+    class = 'compact stripe hover row-border order-column',
+    rownames = FALSE,
+    options = list(
+      paging = TRUE,
+      searching = TRUE,
+      info = FALSE
+    )
+  )
+
+```
+
+??? With ony 2 goals Brighton and Stoke do feature towards the bottom end in EPL history
+
+---
+
+??? Newcastle went one better when they won 4 in a row later in the season, not done by a promoted team since ?
+
+Neither Brighton nor Huddersfield managed more than two game winning sequences 
+
+---
+
+#### Player on the decline {-}
+
+Things dod not improve for Jason Puncheon
+
+```{r declineu}
+playerGame %>%
+  filter(PLAYERID == "PUNCHEJ", season == "2017/18") %>%
+  arrange(gameDate) %>%
+  mutate(mins = ifelse(mins == 0, 0.5, mins)) %>%
+  plot_ly(x =  ~ gameDate, y =  ~ mins) %>%
+  add_bars(hoverinfo = "text", text =  ~ paste0(Opponents)) %>%
+  layout(
+    title = "Jason Puncheon Appearances 2017/18",
+    xaxis = list(title = ""),
+    yaxis = list(title = "Minutes Played") %>% config(displayModeBar = F, showLink = F)
+  )
+
+```
+
+ After week five he was more often than not an unused sub. When he did finally get some time, he suffered a season-ending injury fouling Kevin de Bruyne
+---
+
+#### Super Subs {-}
+
+As can be seen from the above table, the amount of scoring done by subs evened out to the usual 11-12%
+
+As for Manchester United, the torrid start was not maintained ?? wait until season end
+
+
+
+---
+
+## Code Tips {-}
+
+  * dplyr - use ifelse to set dummy value
+  * plotly - use backticks for variables with spaces

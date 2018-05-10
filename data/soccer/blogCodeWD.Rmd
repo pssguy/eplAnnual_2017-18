@@ -1,0 +1,345 @@
+---
+title: "blog Code WD"
+output: html_notebook
+---
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, warning = FALSE, message=FALSE, echo=FALSE)
+```
+
+
+```{r startup}
+
+library(tidyverse)
+library(plotly)
+library(odbc)
+library(DT)
+library(glue)
+library(htmltools)
+
+
+con <- dbConnect(odbc::odbc(),
+                   Driver    = "SQL Server", 
+                   Server    = "sqlb12.webcontrolcenter.com",
+                   Database  = "epldb",
+                   UID       = "soccer",
+                   PWD       = "mlcepl",
+                   Port      = 1433)
+
+
+
+```
+
+
+## some issues so just use rds/featger files to start with
+
+```{r weekly_update}
+
+#dbWriteTable(con, "managerTeam", managerTeam) #??
+dbWriteTable(con, "allPlayers", allPlayers, overwrite = TRUE)
+#dbListTables(con) %>% head()
+dbWriteTable(con, "playerGame", playerGame, overwrite = TRUE)
+dbWriteTable(con, "playerClub", playerClub) #Cannot find data type DATE.
+dbWriteTable(con, "summary", summary, overwrite = TRUE)
+dbWriteTable(con, "standings", standings, overwrite = TRUE)
+dbWriteTable(con, "leaders", leaders, overwrite = TRUE)
+dbWriteTable(con, "allGoalsPlayer", allGoalsPlayer, overwrite = TRUE)
+dbWriteTable(con, "goals", goals, overwrite = TRUE)
+dbWriteTable(con, "Goals_team_for", Goals_team_for, overwrite = TRUE)
+dbWriteTable(con, "Goals_team_ag", Goals_team_ag, overwrite = TRUE)
+dbWriteTable(con, "Play", Play, overwrite = TRUE)
+dbWriteTable(con, "Method", Method, overwrite = TRUE)
+dbWriteTable(con, "Place", Place, overwrite = TRUE)
+dbWriteTable(con, "teamGames", teamGames, overwrite = TRUE)
+dbWriteTable(con, "milestones", milestones, overwrite = TRUE)
+dbWriteTable(con, "managers", managers, overwrite = TRUE)
+dbWriteTable(con, "goalSeqs", goalSeqs, overwrite = TRUE)
+dbWriteTable(con, "goalSeqsClub", goalSeqsClub, overwrite = TRUE)
+dbWriteTable(con, "hth", hth, overwrite = TRUE)
+dbWriteTable(con, "goalSeqTeam", goalSeqTeam, overwrite = TRUE)
+
+```
+
+
+
+# Round 2
+
+ * crowds
+ * 4-0 wins
+ * goals without reply (inc last season-start season)
+ * strength of schedule
+ * not scoring in 
+ * saints end barren home run
+ 
+
+
+
+```{r}
+
+```
+
+
+
+# Round 1
+
+## Foreign Players
+
+One fairly constant complaint has been the downturn in English player over the years. T
+
+```{r}
+
+
+games <- teamGames %>% 
+  ungroup() %>% 
+  filter(tmYrGameOrder==1) %>% 
+  pull(MATCHID)
+
+ playerGame %>% 
+  filter(MATCHID %in% games&START>0) %>% 
+  group_by(season,COUNTRY) %>% 
+  summarise(tot=n()) %>% 
+  group_by(season) %>% 
+  mutate(pc=round(100*tot/sum(tot),1)) %>% 
+  filter(COUNTRY=="England") %>% 
+  ungroup() %>% 
+  plot_ly(x=~season,y=~pc) %>% 
+  add_lines() %>% 
+  layout(margin=list(b=70),
+         title="% of Starters born in England - EPL Round 1",
+    xaxis=list(title=""),
+    yaxis=list(title="% ")
+  )
+
+```
+
+This appears to have stabilized over past coupld of seasons
+
+```{r}
+
+# 1st weeek tis year
+playerGame %>% 
+  filter(MATCHID %in% games&START>0&season=="2017/18") %>% 
+  #mutate(place=glue({city},{COUNTRY})) %>% 
+  mutate(place=paste0(city,", ",COUNTRY)) %>% 
+  select(team=TEAMNAME,player=LASTNAME,place) %>% 
+  arrange(team,player)%>%
+                         DT::datatable(class='compact stripe hover row-border order-column',rownames=FALSE,options= list(paging = TRUE, searching = TRUE,info=FALSE,lengthMenu=c(11,11)))
+
+
+playerGame %>% 
+  filter(MATCHID %in% games&START>0&season=="2017/18") %>% 
+  group_by(TEAMNAME,COUNTRY) %>% 
+  tally() %>% 
+  ungroup() %>% 
+  select(TEAMNAME) %>% 
+  group_by(TEAMNAME) %>% 
+  tally()
+
+
+```
+
+New-signing, Lacazette, is the only Frenchan on Arsenals week 1 team. Stoke boast ten different nationalities
+
+ 
+
+```{r }
+
+country.df <- playerGame %>% 
+  filter(MATCHID %in% games&START>0&season=="2017/18") %>% 
+  group_by(COUNTRY) %>% 
+  tally() 
+
+# works but need to change country ideally to alphabetical -and rev doe not seem to hel
+ country.df$COUNTRY <-  factor(country.df$COUNTRY, levels = country.df$COUNTRY[order(country.df$n,country.df$COUNTRY)])
+ 
+  
+country.df  %>% 
+  plot_ly(x=~n,y=~COUNTRY,height=1000) %>% 
+  layout(margin=list(l=100))
+
+```
+ 
+No clear candidate for second place but newly-promoted Huddersfield coach, David Wagner, has signed a few fellow-Germans
+Only two Scots, Fraser (Bournemouth) and 33-year-old, Fletcher (Stoke). The last time Scotland held the second rank after England in a lead-off game was in 1999
+
+
+```{r 2nd}
+
+
+ # playerGame %>% 
+ #  filter(MATCHID %in% games&START>0) %>% 
+ #  group_by(season,COUNTRY) %>% 
+ #  summarise(tot=n()) %>% 
+ #  group_by(season) %>% 
+ #  arrange(desc(tot)) %>% 
+ #  slice(2)
+
+```
+
+
+## Big Away Wins
+
+
+```{r, fig.height= 12}
+
+# first games for teams that have ghad 3 goals margins
+didIt <-standings %>% 
+  arrange(gameDate) %>% 
+  filter(venue=="A") %>% 
+  group_by(team) %>% 
+  mutate(awayGameOrder=row_number()) %>% 
+    filter((GF-GA)>=3) %>% 
+  group_by(team) %>% 
+    slice(1)
+
+# teams that have never achieved  
+never <-setdiff(unique(standings$team),unique(didIt$team))
+
+# never teams away games to date - select relevant cariables+ add ever
+neverTeams <- standings %>% 
+  filter(team %in% never&venue=="A") %>% 
+  group_by(team) %>% 
+  arrange(tmGameOrder) %>% 
+  mutate(awayGameOrder=row_number()) %>% 
+  arrange(desc(awayGameOrder)) %>% 
+  slice(1) %>% 
+  select(team,awayGameOrder) %>% 
+  mutate(ever="Never")
+
+# cf above re fields
+didItTeams <- didIt %>% 
+  select(team,awayGameOrder) %>% 
+  mutate(ever="First")
+
+# combine
+df <- rbind(neverTeams,didItTeams)
+
+## order team as factor for chart
+df$team <-  factor(df$team, levels = df$team[order(df$awayGameOrder)])
+
+
+ #chart 
+df %>% 
+  plot_ly(x=~awayGameOrder,y=~team,height=1000) %>% 
+  add_bars(color=~ever) %>% 
+  layout(title=" EPL Away Games before 3 goal victory",
+         margin=list(l=120),
+         xaxis=list(title="Games"),
+         yaxis=list(title="")
+         
+         ) %>%  config(displayModeBar = F,showLink = F)
+
+
+```
+
+Somewhat surprising that four teams, including some unfancied ones started their Premier League away encounters in such a splendid fashion
+
+  Southampton definitely buck the trend taking 186 games to reach the target - though they have had more success recently
+  
+```{r}
+  
+  standings %>% 
+      filter(venue=="A"&team=="Southampton") %>% 
+    mutate(GD=GF-GA) %>% 
+    group_by(GD) %>% 
+    tally() %>% 
+    plot_ly(x=~GD,y=~n) %>% 
+    add_bars(color=I("red"))
+  
+  
+  
+```
+
+
+```{r}
+
+sakho <-playerGame %>% 
+  filter(PLAYERID=="SAKHOM"&TEAMNAME=="Crystal P"&mins==90) %>% 
+  pull(MATCHID)
+
+standings %>% 
+  filter(MATCHID %in% sakho&team=="Crystal P") %>% 
+  select(res) #5/1/1
+
+standings %>% 
+  filter(team=="Crystal P") %>% 
+  arrange(desc(gameDate)) %>% 
+  mutate(win=ifelse(res=="Win",1,0)) %>% 
+  mutate(cumWins=cumsum(win)) %>% 
+  select(gameDate,res,cumWins)
+
+```
+
+
+## Man Utd are back
+
+I know, only West Ham, but still far from the turgid play of recent seasons
+
+
+```{r}
+
+
+
+```
+
+
+
+<p class="factoid">Crystal Palace have won just nine of their last 33 league games. More than half these victories came in  the 7 games in which Sakho played a full game</p> 
+
+
+
+
+Man U winning by 4 - copy twitter
+
+surprise of week - Chelsea 
+
+
+
+ 
+
+
+
+
+
+```
+week 2 want to exyend to any player better
+Try it out for any player
+
+```{r}
+
+pl <-playerGame %>% 
+  group_by(PLAYERID) %>% 
+  select(PLAYERID,name) %>% 
+  unique()
+
+players <- pl$PLAYERID
+names(players) <-pl$name 
+  
+
+
+sd <- SharedData$new(data)
+
+fs <- filter_select(
+id = "playerID", #id	An HTML element ID; must be unique within the web page
+label = "Select Player",
+sharedData = sd,
+group =  ~ players, 
+allLevels = FALSE,
+multiple = FALSE
+)
+
+
+## this is needed as crosstalk does not work nicely with bootstrap, apparently
+fs_nobootstrap <- fs
+
+attr(fs_nobootstrap, "html_dependencies") <- Filter(
+  function(dep) {dep$name != "bootstrap"},
+  attr(fs_nobootstrap, "html_dependencies")
+)
+
+tagList(
+  fs_nobootstrap,
+  br()
+)
+
+```

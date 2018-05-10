@@ -1,0 +1,285 @@
+# Week 37 {-}
+
+
+
+## Match of the Day {-} 
+
+Only one point from the top four this week-end means Chelsea still have chance to catch Liverpool and Spurs. Stoke first condemned to the drop
+
+
+```{r topGame_37}
+
+embed_youtube("ih7vZ9RgKKQ", width = 420, height = 315, frameborder = 0,
+   allowfullscreen = TRUE, query = NULL) 
+
+
+```
+
+***
+<p class="factoid">Liverpool's five goals haul is the 66th time a team has done this since Manchester United last achieved it. Manchester City account for 17 of them</p>
+
+***
+
+## Assists per Goal {-}
+
+There will be ongoing debate about whether or not Manchester City are the best ever Premier League champions and the lack of a decent rival and the 1-5 aggregate defeat by Liverpool in the Champions Leaguw will both be held against them
+
+However, there is little doubt that they have played some exhilirating football
+often involving intricate passing movements ending with a simple tap in. 30 of their goals have been finished off from within the 6 yard box
+
+The number of assists per goal is a crudish method of measuring the type of goal scored
+
+Allowing up to two assists per goal, here is every teams record in Premier League history
+
+```{r team_assists_37}
+
+playerGame %>%
+  group_by(season, TEAMNAME) %>%
+  summarize(
+    tmGoals = sum(Gls),
+    tmAss = sum(Assists),
+    av = round(tmAss / tmGoals, 2)
+  ) %>%
+  ungroup() %>%
+  arrange(desc(av), desc(tmGoals)) %>%
+  select(
+    team = TEAMNAME,
+    season,
+    Goals = tmGoals,
+    Assists = tmAss,
+    `Assist per Goal` = av
+  )  %>%
+  DT::datatable(
+    class = 'compact stripe hover row-border order-column',
+    rownames = FALSE,
+    options = list(
+      paging = TRUE,
+      searching = TRUE,
+      info = FALSE
+    )
+  )
+
+```
+
+
+A little inconclusive. Manchester City's haul of 146 is already the greatest ever by a team in a season, after just 36 games. However, on a per goal basis they are middle of the pack although well above both Liverpool (think over the top balls to Salah) and Chelsea (think the Azpilicueta-Morata linkup)
+
+---
+
+<p class="factoid">Man City have scored 30 goals with the last contact in the six-yard box - more than Huddersfield or Swansea have managed in total</p>
+
+---
+
+
+
+## Perfect Records {-}
+
+Now we are at the tail end of the season we can see for each player in a team how many games they started in and the record when they did, in terms of points per game
+
+```{r perfect_37}
+
+df <- playerGame %>%
+  filter(season == "2017/18" & START > 0) %>%
+  select(name, PLAYERID, TEAMMATCHID) %>%
+  left_join(standings) %>%
+  select(name, team, res, PLAYERID) %>%
+  mutate(points = case_when(res == "Win" ~ 3,
+                            res == "Draw" ~ 1,
+                            res == "Loss" ~ 0)) %>%
+  group_by(name, PLAYERID, team) %>%
+  summarize(
+    games = n(),
+    sumPts = sum(points),
+    avPts = round(sumPts / games, 2)
+  )
+
+df %>%
+  plot_ly(
+    x =  ~ jitter(games),
+    y =  ~ jitter(avPts),
+    color =  ~ team
+  ) %>%
+  add_markers(
+    hoverinfo = "text",
+    text =  ~ paste0(name, "<br>",
+                     team, "<br>Starts: ",
+                     games, "<br>PPG: ", avPts)
+  ) %>%
+  layout(
+    title = "Av Team Points in Games Started ",
+    xaxis = list(title = "Games Starting"),
+    yaxis = list(title = "Av. Points per Game")
+  ) %>%
+  config(displayModeBar = F, showLink = F)
+
+```
+_NB Points are jittered so that each player's information can be accessed on hovering_
+
+Click on individual teams to show only their players
+
+At the time of publication, Man City's Laporte had a perfect record of seven starts seven wins. On the flip side, Palace's six starts by Puncheon did not result in a single point
+ 
+
+***
+
+## Tweet of the Week {-} 
+
+
+```{r}  
+shortcode("tweet", "992894955650670592") 
+```
+
+
+## Totally Football and Guardian Weekly Review Podcasts {-}
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6844718-the-soft-middle-and-the-flabby-bottom/embed/v4?eid=AQAAAFPq8FoucWgA" title="Audioboom player"></iframe>
+***
+<p>
+ 
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6845058-squeaky-bum-time-at-the-bottom-of-the-premier-league-football-weekly/embed/v4?eid=AQAAAFfr8FqCcmgA" title="Audioboom player"></iframe>
+***
+
+## Results and Table {-}
+
+```{r results_37}
+
+weekly_results("2018-05-01", "2018-05-07")
+
+```
+
+<p>
+---
+
+```{r standings_37}
+
+weekly_table("2018-05-07")
+
+```
+
+
+
+
+
+
+## Final Factoid {-}
+
+<p class="factoid">For all the plaudits Roy Hodgson is receiving, under him Crystal Palace have averaged just 1.24 points per game. Immediate predecessors Allardyce, 1.24. and Pardew 1.21 have comparable records</p>
+
+
+---
+
+## End of Season Update {-}
+
+
+#### Assists per Goal {-}
+
+Of course, the Assists leader for Manchester City this year has been Kevin de Bruyne
+A recent OptaJoe tweet highlighted the great start to his EPL career 
+
+![](img/37_de_Bruyne_Assists.png)
+
+
+
+On the more wide-ranging definition of an assist, I use, de Bruyne also heads the list with 70 assists. Generally speaking, the usual names also appear at the top of the list, although the inclusion of Mikael Arteta may surprise. A good example of a pass before the assist more deep-lying player
+
+Here are how some the leaders after 100 appearances fared over time
+
+```{r team_assistsU_37}
+
+choice <- playerGame %>%
+  filter((START + subOn) > 0) %>%
+  #filter(PLAYERID=="DEBRUYK") %>%
+  arrange(gameDate) %>%
+  group_by(PLAYERID) %>%
+  mutate(order = row_number()) %>%
+  filter(order <= 100) %>%
+  group_by(name, PLAYERID) %>%
+  summarize(totAssists = sum(Assists)) %>%
+  filter(totAssists > 49) %>%
+  pull(PLAYERID)
+
+
+playerGame %>%
+  filter(PLAYERID %in% choice & (START + subOn) > 0) %>%
+  group_by(PLAYERID) %>%
+  arrange(gameDate) %>%
+  mutate(cumAss = cumsum(Assists), order = row_number()) %>%
+  plot_ly(x =  ~ order,
+          y =  ~ cumAss,
+          color =  ~ name) %>%
+  add_lines() %>% 
+  layout(title="Cumulative Assists of leading Players",
+         xaxis=list(title="Game Appearances"),
+         yaxis= list(title="Cumulative Assists")) %>% config(displayModeBar = F, showLink = F)
+
+```
+
+_NB Zoom in as required, and double-clisk on legend for individual players_
+
+Some points of interest
+
+ * At the 100 game mark de Bruyne is a dozen ahead of any one else
+ * Silva and Eriksen are showing a similar path
+ * Arteta, in particular, tailed off considerably as he aged
+ * Hazard has a long period - actually 922 minutes - without an assist in 2015/6
+ He famously tuned out on Mourinho and had long goalless spell as well
+
+---
+
+#### Perfect Records {-}
+
+Here are the best perfect records each year
+
+
+```{r perfectU_37}
+
+playerGame %>%
+  filter(START > 0) %>%
+  select(name, PLAYERID, TEAMMATCHID) %>%
+  left_join(standings) %>%
+  select(name, team, res, PLAYERID, season) %>%
+  mutate(points = case_when(res == "Win" ~ 3,
+                            res == "Draw" ~ 1,
+                            res == "Loss" ~ 0)) %>%
+  group_by(name, PLAYERID, team, season) %>%
+  summarize(
+    games = n(),
+    sumPts = sum(points),
+    avPts = round(sumPts / games, 2)
+  ) %>%
+  ungroup() %>%
+  group_by(season) %>%
+  filter(avPts == 3)  %>%
+  arrange(desc(games)) %>%
+  filter(games == max(games))   %>%
+  arrange(desc(games), season) %>%
+  select(season, player = name, team, games) %>%
+  DT::datatable(
+    class = 'compact stripe hover row-border order-column',
+    rownames = FALSE,
+    options = list(
+      paging = TRUE,
+      searching = TRUE,
+      info = FALSE
+    )
+  )
+
+```
+
+Man City head the list for the consecutive year with Nolito (who holds the overall record at 9 and was sold at the end of the campaign) featuring last season
+
+No-one even managed 2 games in 1993/94
+
+---
+
+
+
+
+
+
+
+
+
+
+
+

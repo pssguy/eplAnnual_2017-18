@@ -1,0 +1,270 @@
+# Week 15 {-}
+
+## Match of the Day {-}
+
+The big-six contest, Arsenal v Man. Utd. illustrated once again that de Gea may be the finest goalkeeper in the world
+
+
+```{r topGame_15}
+
+embed_youtube("gYLMo-0hpdc", width = 420, height = 315, frameborder = 0,
+   allowfullscreen = TRUE, query = NULL) 
+
+
+```
+
+***
+
+## Club in Crisis - Spurs {-}
+
+After being praised to the heights by the press, things at Spurs are unravelling fairly quickly. Their lack of good squad depth has been shown up by the sale of Walker, stand-off with Rose and injuries to Wanyama and Alderweireld
+
+In what cannot make happy reading for manager Mauricio Pochettino, his points-per-game average has now fallen below that of his much-derided
+predecessor, Tim Sherwood
+
+ ![](/img/timSherwood.png)
+***
+
+The last time they were further off the pace at this stage of the season was nine years back, six weeks into Harry Redknapp's stewardship
+
+ ![](/img/spursDeficit.png)
+
+
+An article in [Football365](http://www.football365.com/news/questions-mount-as-spurs-poch-fail-to-conjure-answers) mentioned how substitutions had contributed so little to their goal-scoring. 
+
+Here is the impact for all clubs
+
+```{r spurs_15}
+
+
+playerGame %>%
+  filter(on > 0 & season == "2017/18") %>%
+  group_by(TEAMNAME) %>%
+  summarize(
+    count = n(),
+    mins = sum(mins),
+    goals = sum(Gls),
+    assists = sum(Assists),
+    points = goals + assists
+  ) %>%
+  plot_ly(x =  ~ mins, y =  ~ jitter(points)) %>%
+  add_markers(
+    hoverinfo = "text",
+    text =  ~ paste0("Goals: ", goals,
+                     "<br>Assists: ", assists,
+                     "<br>Mins: ", mins),
+    showlegend = FALSE
+  ) %>%
+  add_text(text =  ~ TEAMNAME,
+           showlegend = FALSE,
+           hoverinfo = "none") %>%
+  layout(
+    title = "Goals and Assists contributed by subs - 2017/18",
+    xaxis = list(title = "Minutes", rangemode = "tozero"),
+    yaxis = list(title = "Goals and Assists")
+    
+  ) %>%  config(displayModeBar = F, showLink = F)
+
+```
+
+Obviously, a lot depends on the substitutes used (defensive or offensive) and state of the game but Spurs are middle of the road. 
+
+<p class="factoid">Manchester United stand out in their output from subs with Martial, alone, contributing 4 goals and 3 assists - more than 15 teams!
+</p>
+
+***
+
+## No hand brake on this bus {-}
+
+Man. Utd. played extremely well on the break (something that is much improved over last season) which led to one of the few occasions when Arsenal have gone two down inside a dozen minutes
+
+The chart below indicates every game the Gunners have played - showing if and when they first suffered a 2 goal deficit in games
+You may want to zoom and hover for more details
+
+```{r two_down_15}
+
+
+data <- scoreLines %>%
+  left_join(teamGames) %>%
+  left_join(standings, by = c("MATCHID" = "MATCHID", "TEAMNAME" = "team")) %>%
+  rename(TEAMMATCHID = TEAMMATCHID.x) %>%
+  select(
+    team = TEAMNAME,
+    season = season.x,
+    gameDate = gameDate.x,
+    mins,
+    diff,
+    tmYrGameOrder = tmYrGameOrder.x,
+    GF = GF.y,
+    GA = GA.y,
+    OppTeam,
+    final_Pos
+  )
+
+downTwo <- data %>%
+  filter(team == "Arsenal" & diff <= -2) %>%
+  group_by(TEAMMATCHID) %>%
+  slice(1)
+
+
+data %>%
+  filter(team == "Arsenal") %>%
+  group_by(TEAMMATCHID, gameDate) %>%
+  slice(1) %>%
+  select(TEAMMATCHID, gameDate) %>%
+  left_join(downTwo) %>%
+  arrange(gameDate) %>%
+  ungroup() %>%
+  mutate(mins = ifelse(is.na(team), 0.1, mins), order = row_number()) %>%
+  plot_ly(x =  ~ gameDate, y =  ~ mins) %>%
+  add_bars() %>%
+  layout(
+    title = "Games in which Arsenal have gone down <br>
+and stage of game it first occurred",
+xaxis = list(title = ""),
+yaxis =  list(title = "Minute Occurring")
+  ) %>% config(displayModeBar = F, showLink = F)
+
+
+```
+
+As you can see, there have been a couple of seasons when they have never been 2 goals down in a game but they have struggled lately with ten occasions already this year, by far their worst record
+
+```{r two_down_year15}
+
+downTwo %>%
+  mutate(year = as.character(year(gameDate))) %>%
+  group_by(year) %>%
+  tally() %>%
+  plot_ly(x =  ~ year,
+          y =  ~ n,
+          color =  ~ year) %>%
+  add_bars(showlegend = FALSE) %>% # does not work - neither does showscale need to make year a character
+  layout(
+    title = "Number of EPL Games Arsenal have been two goals down in - by calendar year",
+    xaxis = list(title = ""),
+    yaxis = list(title = "Count")
+  ) %>%  config(displayModeBar = F, showLink =  F)
+
+```
+
+
+---
+
+<p class="factoid">This was only the fourth occasion when Arsenal have been faced with  a two goal mountain to climb so early. The goalkeeper on each previous occasion -all lost - was Wojciech Szczęsny</p>
+
+***
+
+## Tweet of the Week {-}
+
+
+```{r tweet_15}  
+shortcode("tweet", "936397390264770560") 
+```
+
+
+
+***
+
+## Totally Football and Guardian Weekly Review Podcasts {-}
+
+
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6534073-united-s-best-de-gea-day-yet-the-world-cup-draw-and-benevento-s-last-minute-miracle/embed/v4?eid=AQAAAAMlJlq5s2MA" title="audioBoom player"></iframe>
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6534418-gunners-misfire-hull-upheaval-and-benevento-scenes-football-weekly/embed/v4?eid=AQAAAO8kJloStWMA" title="audioBoom player"></iframe>
+
+***
+
+## Results and Table {-}
+
+```{r results_15}
+
+weekly_results("2017-11-30","2017-12-04")
+
+```
+
+
+```{r standings_15}
+
+weekly_table("2017-12-04")
+
+```
+
+
+
+## Final Factoid {-}
+
+<p class="factoid">Coutinho, purportedly still keen on a January move to Real Madrid, has his most productive game for Liverpool with one goal and three assists against Brighton</p>
+
+
+---
+
+## End of Season Update {-}
+
+#### Club in Crisis - Spurs {-}
+
+It may be hard to remember that after 15 games, Spurs were only holding off Burnley for sixth-place on goal difference and trailed their North London rivals by three points
+
+![6th Drc standings]()
+ Over the remainder of the season, they were second only to Manchester City. 
+ Nevertheless, the underlying issues remain as exemplified by their near-and-yet-so-far encounter with Juventus and the partly-self-induced capitulation to Manchester United in the FA Cup semi-final. Considering that there top three subs were Sissoko, Lamela and Llorente, only two goals from the bench (Sissoko, Wanyama) is a bit paltry
+ 
+ A team much lower in the table Watford, by contrast, got a lot of output including a goal and three assists from Pereyra
+ 
+ Here are the data for subs this year
+ 
+```{r spursu_5}
+
+playerGame %>%
+  filter(season == "2017/18", subOn > 0) %>%
+  group_by(PLAYERID, name) %>%
+  summarize(
+    sumG = sum(Gls),
+    sumA = sum(Assists),
+    sumM = sum(mins),
+    points = sumG + sumA,
+    ppg = round(90 * points / sumM, 2)
+  ) %>%
+  ungroup() %>%
+  arrange(desc(points), desc(ppg), sumM) %>%
+  select(
+    player = name,
+    goals = sumG,
+    assists = sumA,
+    points,
+    mins = sumM,
+    ppg
+  ) %>%
+  DT::datatable(
+    class = 'compact stripe hover row-border order-column',
+    rownames = FALSE,
+    options = list(
+      paging = TRUE,
+      searching = TRUE,
+      info = FALSE
+    )
+  )
+
+
+```
+ 
+ 
+ Next year, the Manchester clubs will be spending again, Liverpool look like a healthy season and a replacemnt for Lovren away from a genuine title-challenge whilst Arsenal will have new managers keen to make an impression. Tottenham stand to miss ou on a top 4 place
+ 
+ 
+#### No hand brake on this bus {-}
+
+Arsenal did go two goals down once more in 2017, in a memorable match against Liverpool. Liverppol hit their second on 52 minutes, they immediately replied with a trio of their own in half a dozen minutes before allowing their vistors an eqaulizer
+  2018 has not started much better with two goal deficits to Brighton, Swansea and Machester City. All these games ended in losses
+
+
+---
+
+Coutinho did get his wish for a move to Real Madrid but Liverpool didn't miss a beat as van Dijk stepped in and Oxlade-Chamberalain stepped up. With the irrepresible Salah scoring for fun they actually marginally improved their points per game after Coutinho left
+
+---
+
+## Code Hints {-}
+
+ * None this week

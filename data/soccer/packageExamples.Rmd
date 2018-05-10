@@ -1,0 +1,39 @@
+---
+title: "epl package"
+output: html_notebook
+---
+
+Some examples
+explain for bbook etc lots of 
+uses - interest schoolkids in stats
+
+## Create a league table
+
+```{r}
+
+```
+
+## Basic
+   tables/player by tram by year/most appearances by club/av ppg by manager
+   
+##  Charts
+  player droughts/playing to gether/ sequences
+
+### Player Summary by club
+
+
+
+### Player goals
+
+
+### Length of time without scoring?
+
+
+
+### Source of players
+
+
+
+### Played to gether
+
+

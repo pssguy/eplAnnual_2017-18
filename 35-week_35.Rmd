@@ -1,0 +1,442 @@
+# Week 35 {-}
+
+
+## Match of the Day {-}
+
+WBA, Stoke and Southampton edge ever closer to the drop
+
+
+```{r topGame_35}
+
+embed_youtube("X0xoyvCJDyw", width = 420, height = 315, frameborder = 0,
+   allowfullscreen = TRUE, query = NULL) 
+
+
+```
+
+***
+<p class="factoid">What with hitting the woodwork three times the Watford v Palace 0-0 matchup saw some records forestalled. Watford's run of scoring at home only equalled their best of 12 and Palace were one shy of equalling their top sequence of scoring in 10 away games on the trot </p>
+
+***
+
+## David Silva {-}
+
+It is fitting that on a day Manchester City celebrate the title, David Silva reaches the 150 assist mark (allowing for up to two assists per goal scored)
+
+Somewhat overshadowed this season  by colleague Kevin de Bruyne, the team functions best with them both starting - currently they have only dropped 2 points in the 26 games they have lined up together
+
+The 150 assist level has rarely been achieved in the Premier League
+
+```{r silva_35 }
+
+playerGame %>%
+  group_by(PLAYERID, name) %>%
+  summarize(
+    tot = sum(Assists),
+    mins = sum(mins),
+    apg = round(90 * tot / mins, 2)
+  ) %>%
+  arrange(apg) %>%
+  filter(tot > 149) %>%
+  arrange(desc(apg)) %>%
+  ungroup() %>%
+  select(name, total = tot, `Assists per Game` = apg) %>%
+  DT::datatable(
+    class = 'compact stripe hover row-border order-column',
+    rownames = FALSE,
+    options = list(
+      paging = FALSE,
+      searching = FALSE,
+      info = FALSE
+    )
+  )
+
+```
+ 
+Silva has the distinction of providing assists at the fastest rate
+for this select group
+---
+
+He is not too shabby a goalscorer either and has shown a remarkable level of consistency over his career
+
+
+```{r silva_points_35 }
+
+df <- playerGame %>%
+  filter(PLAYERID == "SILVAD2") %>%
+  group_by(season) %>%
+  summarize(
+    sumMins = sum(mins),
+    sumGoals = sum(Gls),
+    sumAssists = sum(Assists),
+    Assists = round(90 * sumAssists / sumMins, 2),
+    Goals = round(90 * sumGoals / sumMins, 2)
+  ) %>%
+  select(-c(sumMins, sumGoals, sumAssists)) %>%
+  gather(method, value, -season)
+
+
+df %>%
+  plot_ly(
+    x =  ~ season,
+    y =  ~ value,
+    color = ~ method,
+    colors = c("red", "blue")
+  ) %>%
+  layout(
+    barmode = "stack",
+    title = "David Silva Points per Game by Season",
+    xaxis = list(title = ""),
+    yaxis = list(title = "Goals and Assists per 90 min played")
+  ) %>% config(displayModeBar = F, showLink = F)
+
+ 
+```
+
+
+ --- 
+ <p class="factoid">It has been 32 games since Manchester City lost an EPL game in which David Silva and Kevin de Bruyne both started - 1-2 to Chelsea in April 2017 </p>
+
+## Arsene Wenger {-}
+
+It would be remiss not to cover Wengers retirement after 21+ seasons at the helm with Arsenal. He will leave with the record number of games a manager has under his belt topping rival Alex Ferguson 828 to 810 and  over 300 more than
+those still currently working, such as Moyes and Allardyce
+
+The next longest serving current manager at one club is Pochettino,  who will top the 150 mark by season end
+
+Here is how the cumulative points between the two arch-rivals played out from Wenger's signng, at the end of Sepember 199,6 to Fergusons retirement, at the end of the 2012/13 season
+
+
+```{r wenger_35}
+
+ chosen <- c("FergusonA","WengerA")
+
+df <-
+   managerGame %>% 
+   filter(ManagerID %in% chosen,gameDate>"1996-09-29",gameDate<"2013-07-01") %>% 
+   left_join(standings,by=c("gameDate"="gameDate","TEAMNAME"="team")) %>% 
+   select(gameDate,season,TEAMNAME,points=points.x,Lastname) %>% 
+   arrange(gameDate) %>% 
+   group_by(Lastname) %>% 
+   mutate(order=row_number(),cumPoints=cumsum(points))
+
+df %>% 
+   ungroup() %>% 
+   select(order,Lastname,cumPoints) %>% 
+   spread(Lastname,cumPoints) %>% 
+   mutate(gap=Ferguson-Wenger) %>% 
+   plot_ly(x = ~ order, y=~gap) %>% 
+   add_lines(color=I("red")) %>% 
+  layout(title="Man Utd point advantage over Arsenal<br>during Ferguson/Wenger years",
+         xaxis=list(title="Game Order"),
+         yaxis=list(title="Cumulative Point Difference")
+         ) %>% config(displayModeBar = F, showLink = F)
+```
+
+Wenger kept pace much of the time until the end of the 2004/5 season, when both lost out to Chelsea. Over each of eight successive seasons one of them took home the trophy
+
+Man U  1996/7, 1998/9, 1999/00,2000/1,2002/3
+Arsenal   1997/8  2001/2 2003/4
+
+At the time, few would have suspected that if he had stayed managing Arsenal for another 14 seasons 'The Invincibles' would prove to be his last title triumph
+
+---
+
+His 1998/9 team only conceded 17 goals a Premier League record with the primrary defenders Dixon, Winterburn Adams and Keown backed by Seaman all,incidentally, well into their thirties. Unfortunately for them, the 59 goals scored was also a low for the Wenger years as Ian Wright had left and Thierry Henry was yet to arrive
+
+--- 
+
+One of the gripes about Arsenal is that they have got themselves into favourable positions in the League just to let it slip
+
+Here are the deepest time into the season that they reached their peak spot. I have taken the liberty of assuming that they will finish sixth thi season
+
+
+```{r topSpot_35}
+
+standings %>%
+  filter(team == "Arsenal", season > "1995/96") %>%
+  arrange(position, desc(tmYrGameOrder)) %>%
+  group_by(season) %>%
+  slice(1) %>%
+  arrange(desc(season))  %>%
+  select(season,
+         peak = position,
+         `latest week` = tmYrGameOrder,
+         final = final_Pos) %>%
+  DT::datatable(
+    class = 'compact stripe hover row-border order-column',
+    rownames = FALSE,
+    options = list(
+      paging = TRUE,
+      searching = TRUE,
+      info = FALSE
+    )
+  )
+
+```
+
+In all but one of his first nine seasons, Arsenal were top at some stage and, of course, took home three titles
+
+In the past four completed seasons they have held first or second spot at some stage in the second half of the season without ever looking like winning in the closing stages. 
+
+In his last four years he will never have had Arsenal ending within single-digit points of the Champions, culminating in a final campaign where even 4th place could not be retained after week 14.
+
+
+
+***
+
+## Tweet of the Week {-} 
+
+
+```{r}  
+shortcode("tweet", "986892971827253250") 
+```
+
+
+## Totally Football and Guardian Weekly Review Podcasts {-}
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6823827-sleeping-with-one-eye-open-and-the-proudsville-sausage/embed/v4?eid=AQAAAPxJ4FqTH2gA" title="Audioboom player"></iframe>
+***
+<p>
+ 
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6823989-wenger-finally-out-and-managers-surviving-nuclear-fallout-football-weekly/embed/v4?eid=AQAAAJtJ4Fo1IGgA" title="Audioboom player"></iframe>
+***
+
+## Results and Table {-}
+
+```{r results_35}
+
+weekly_results("2018-04-17", "2018-04-24")
+
+```
+
+<p>
+---
+
+```{r standings_35}
+
+weekly_table("2018-04-24")
+
+```
+
+
+
+## Final Factoid {-}
+
+<p class="factoid">Liverpool are making quite the habit of surrendering 2 goal leads. The game against WBA was the second this season (Arsenal) and they have 3 losses and 8 draws from such an apparantly commanding position since March 2012</p>
+
+
+---
+
+## End of Season Update {-}
+
+
+#### Time shut-out {-}
+
+In fact, Watford and Palace runs for being shut out at home and away respectively happened
+as the Hornets were stifled in games 2 and 3, whilst Palace started goalless away from home until 16th December
+
+
+```{r shutoutu_35}
+
+teams <- standings %>% 
+    filter(season=="2017/18") %>% 
+    pull(team) %>% 
+    unique()
+
+not_scoring <- function(club) {
+  df <- standings %>%
+    filter(season == "2017/18", team == club, venue == "H") %>%
+    
+    left_join(goals) %>%
+    arrange(gameDate, TIME) %>%
+    mutate(game = row_number())
+  
+  diff(c(0, setdiff(90 * (df$game - 1) + df$TIME, NA), 90 * max(df$game))) %>%
+    max()
+}
+
+data <-
+  data.frame(maxGap = map_dbl(teams, not_scoring), team = teams)
+
+data %>%
+  plot_ly(x =  ~ maxGap, y =  ~ fct_reorder(team, maxGap)) %>%
+  add_bars(color =  ~ team) %>%
+  hide_legend() %>% 
+  layout(
+    title = "",
+    margin = list(l = 120, pad = 3),
+    yaxis = list(title = ""),
+    xaxis = list(title = "Maximum Gap between Goals (mins)")
+  ) %>% config(displayModeBar = F, showLink = F)
+
+#away
+not_scoring <- function(club) {
+  df <- standings %>%
+    filter(season == "2017/18", team == club, venue == "A") %>%
+    
+    left_join(goals) %>%
+    arrange(gameDate, TIME) %>%
+    mutate(game = row_number())
+  
+  diff(c(0, setdiff(90 * (df$game - 1) + df$TIME, NA), 90 * max(df$game))) %>%
+    max()
+}
+
+data <-
+  data.frame(maxGap = map_dbl(teams, not_scoring), team = teams)
+
+data %>%
+  plot_ly(x =  ~ maxGap, y =  ~ fct_reorder(team, maxGap)) %>%
+  add_bars(color =  ~ team) %>%
+  layout(
+    title = "",
+    margin = list(l = 120, pad = 3),
+    yaxis = list(title = ""),
+    xaxis = list(title = "Maximum Gap between Goals (mins")
+  ) %>% config(displayModeBar = F, showLink = F)
+
+
+```
+
+Got the principle right. Just need to do some fine-tuning
+
+
+#### David Silva {-}
+
+Of course, at Manchester City this season, David Silvas performance was not a standout
+
+![copy of final weeks PSS stuff]()
+
+
+#### Arsene Wenger {-}
+
+Another disappointment as defeat in the Europa Cup Final means that Arsenal miss out on Champions League football again in 2018/19
+
+Here is Wenger's record against all other teams
+
+```{r Wenger_teamu_35}
+
+
+temp <- managerGame %>%
+  filter(ManagerID == "WengerA") %>%
+  select(gameDate, TEAMNAME) %>%
+  left_join(standings, by = c("gameDate", "TEAMNAME" = "team")) %>%
+  left_join(managerGame, by = c("gameDate", "OppTeam" = "TEAMNAME")) %>%
+  select(
+    ManagerID,
+    gameDate,
+    season,
+    name,
+    res = res.x,
+    GF = GF.x,
+    GA = GA.x,
+    OppTeam
+  )
+
+# from this can get league tabkes v team or manager
+
+
+## old way
+
+w <- temp %>%
+  group_by(OppTeam) %>%
+  filter(res == "Win") %>%
+  summarize(W = n())
+
+l <- temp %>%
+  group_by(OppTeam) %>%
+  filter(res == "Loss") %>%
+  summarize(L = n())
+
+d <- temp %>%
+  group_by(OppTeam) %>%
+  filter(res == "Draw") %>%
+  summarize(D = n())
+
+all <- temp %>%
+  group_by(OppTeam) %>%
+  summarize(GF = sum(GF), GA = sum(GA)) %>%
+  left_join(w) %>%
+  left_join(d) %>%
+  left_join(l) %>%
+  replace_na(list(W = 0, D = 0, L = 0)) %>%
+  mutate(G = (W + D + L), ppg = round((3 * W + D) / (W + D + L), 2))
+
+all %>%
+  plot_ly(x =  ~ G,
+          y =  ~ ppg,
+          color = I("red")) %>%
+  add_markers(
+    hoverinfo = "text",
+    text =  ~ paste0(OppTeam, "<br>(W-D-L) ", W, "-", D, "-", L,
+                     "<br>ppg: ", ppg)
+  ) %>%
+  layout(
+    title = "Arsene Wenger head-to head matchups, by Club",
+    xaxis = list(title = "Game Count"),
+    yaxis = list(title = "Av. Points Per Game")
+  ) %>% config(displayModeBar = F, showLink = F)
+```
+
+No real surorise, though in admittedly small sample siazes he did not perform that well 
+ against the Sheffield Clubs
+ 
+---
+ 
+ And by opposingmanager
+ 
+ 
+```{r wenger_manageru_35}
+
+w <- temp %>%
+  group_by(name) %>%
+  filter(res == "Win") %>%
+  summarize(W = n())
+
+l <- temp %>%
+  group_by(name) %>%
+  filter(res == "Loss") %>%
+  summarize(L = n())
+
+d <- temp %>%
+  group_by(name) %>%
+  filter(res == "Draw") %>%
+  summarize(D = n())
+
+temp %>%
+  group_by(name) %>%
+  summarize(GF = sum(GF), GA = sum(GA)) %>%
+  left_join(w) %>%
+  left_join(d) %>%
+  left_join(l) %>%
+  replace_na(list(W = 0, D = 0, L = 0)) %>%
+  mutate(G = (W + D + L), ppg = round((3 * W + D) / (W + D + L), 2)) %>%
+  arrange(desc(G)) %>%
+  select(manager = name, G, W, D, L, GF, GA, ppg) %>%
+  DT::datatable(
+    class = 'compact stripe hover row-border order-column',
+    rownames = FALSE,
+    options = list(
+      paging = TRUE,
+      searching = TRUE,
+      info = FALSE
+    )
+  )
+
+
+```
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+

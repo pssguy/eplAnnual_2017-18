@@ -1,0 +1,239 @@
+# Week 31 {-}
+
+
+## Match of the Day {-}
+
+Abbreviated version with only four games at the week-end but Salah runs riot
+
+
+```{r topGame_31}
+
+embed_youtube("7lPzCF-EJy8", width = 420, height = 315, frameborder = 0,
+   allowfullscreen = TRUE, query = NULL) 
+
+
+```
+
+***
+<p class="factoid">Tenth time a Liverpool player has added an assist to a hat-trick and Salah's feat was the first in four years; since Suarez achieved it for third time in 18 months</p>
+
+***
+
+## When Goal Difference makes No Difference {-}
+
+Huddersfield's most recent defeat left them in 15th position with a goal difference of -27. Only Stoke(-29) can currently boast(?) a worse figure and one of the current bottom-three, Southampton, are only showing a 15 goal deficit
+
+The correlation between league position and goal difference is clearly going to be high - but there are exceptions
+
+Here is the data for all completed seasons. Hover points for details NB has to be updated to week 38
+
+```{r GD_all_teams_31}
+
+df <- standings %>%
+  filter(season < "1995/96" &
+           tmYrGameOrder == 42 | season > "1994/95" & tmYrGameOrder == 34) %>%
+  select(season, team, cumGF, cumGD, final_Pos) %>%
+  arrange(desc(cumGD), desc(cumGF)) %>%
+  group_by(season) %>%
+  mutate(GDOrder = row_number())
+
+df_2017 <- df %>%
+  filter(season == "2017/18")
+
+df_not_2017 <- df %>%
+  filter(season != "2017/18")
+
+
+df %>%
+  plot_ly() %>%
+  add_markers(
+    data = df_not_2017,
+    x =  ~ jitter(GDOrder),
+    y =  ~ jitter(final_Pos),
+    name = "Other Seasons",
+    hoverinfo = "text",
+    text =  ~ paste(team,
+                    "<br>", season,
+                    "<br>GD:", GDOrder,
+                    "<br>Pos:", final_Pos)
+  ) %>%
+  add_markers(
+    data = df_2017,
+    x =  ~ jitter(GDOrder),
+    y =  ~ jitter(final_Pos),
+    color = I("red"),
+    name = "2017/18",
+    hoverinfo = "text",
+    text =  ~ paste(team,
+                    "<br>", season,
+                    "<br>GD:", GDOrder,
+                    "<br>Pos:", final_Pos)
+  ) %>%
+  
+  layout(
+    xaxis = list(title = "Goal Difference Rank"),
+    yaxis = list(title = "Final Position")
+  ) %>% config(displayModeBar = F, showLink = F)
+
+
+```
+ _N.B. The points have been jittered to avoid overlap_
+ 
+ A couple of outliers include Norwich in the inaugural PL season; they finished 3rd but with a negative goal difference of -4. On the other side of the coin, Birmingham were relegated in 19th place but were only 13th in goal difference
+ 
+ Here are how the relegated teams have fared
+ 
+```{r relegated_31}
+
+df %>%
+  arrange(desc(GDOrder)) %>%
+  group_by(season) %>%
+  slice(1:3) %>%
+  plot_ly(
+    x =  ~ jitter(GDOrder),
+    y =  ~ jitter(final_Pos),
+    color = "red",
+    hoverinfo = "text",
+    text =  ~ paste(team,
+                    "<br>", season,
+                    "<br>GD:", GDOrder,
+                    "<br>Pos:", final_Pos)
+  ) %>%
+  layout(
+    xaxis = list(title = "Goal Difference Rank"),
+    yaxis = list(title = "Final Position")
+  ) %>% config(displayModeBar = F, showLink = F)
+
+
+```
+ 
+ West Ham and Sunderland are the two teams that would have been relegated if the decision was based on goal difference but actually finished 15th
+ 
+ --- 
+ <p class="factoid">Luka Milivojevic picked up his league leading sixth penalty and is now two ahead of the field in spite of missing a last-minute chance against Man City and having one wrestled off him by Benteke (who missed)</p>
+
+## 
+
+
+
+## Tweet of the Week {-}
+
+
+```{r}  
+shortcode("tweet", "975682892335591426") 
+```
+
+
+## Totally Football and Guardian Weekly Review Podcasts {-}
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6732454-thirty-somethings-transferrable-skills-and-tedesco/embed/v4?eid=AQAAAIDVr1qmumYA" title="Audioboom player"></iframe>
+***
+<p>
+ 
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6733025-another-magical-salah-display-and-warnock-s-pub-quiz-football-weekly/embed/v4?eid=AQAAABGgsFrhvGYA" title="Audioboom player"></iframe>
+
+***
+
+## Results and Table {-}
+
+
+```{r results_31}
+
+weekly_results("2018-03-13","2018-03-20")
+
+```
+
+<p>
+---
+
+```{r standings_31}
+
+weekly_table("2018-03-20")
+
+```
+
+
+
+## Final Factoid {-}
+
+<p class="factoid">Mane grabs three assists for first time in EPL career and is just 2 goals shy of a double-double for third consecutive season</p>
+
+
+---
+
+
+
+## End of Season Update {-}
+
+
+This season, only Aguero could match Salah with a hat-trick and an assist in the same game. Prior to them, Kane had rattled the feat off three times in 10 games including the final two matches of last season
+
+---
+
+Further to the original blog post, I have highlighted this year's data but there is nothing exceptional about the campaign
+
+In fact the correlation between position if based on Goal Difference and the actual standings is one of the highest ever
+
+```{r GDu_31}
+
+raw <- df %>%
+  ungroup() %>%
+  select(-c(cumGF, cumGD, team))
+
+seasons <- df %>%
+  select(season) %>%
+  unique() %>%
+  pull(season)
+
+corr_fun <- function(yr) {
+  raw %>%
+    filter(season == yr) %>%
+    select(-season) %>%
+    cor() %>%
+    .[1, 2]
+}
+
+data <- bind_cols(corr = map_dbl(seasons, corr_fun), season = seasons)
+
+data %>%
+  plot_ly(x =  ~ season,
+          y =  ~ corr,
+          color = ~ season) %>%
+  hide_legend() %>%
+  layout(
+    title = "Correlation between Finishing Position<br>
+  and rank based on Goal Difference",
+  margin = list(b = 100),
+  yaxis = list(title = "Correlation", range = c(0.8, 1)),
+  xaxis = list(title = "")
+  ) %>% config(displayModeBar = F, showLink = F)
+```
+
+
+---
+
+Milivojevic did finish as top penalty scorer with 7, allowing Benteke to take one when they were 4-0 up on Leicester in injury time, three clear of three others (including Murray who missed a couple for Brighton)
+
+
+---
+
+Mane duly got his double-double, one of just ..  players to achieve the feat
+
+Even Manchester United have failed to get someone reaching this achievement in 7 of the 26 seasons. Chelsea's 2009/10 had 4 players meet the mark Drogba(29 goals 18 assists); Lampard(22/21); Anelka(11/15); Malouda(12/12)
+
+---
+
+## Code Hints
+
+    base - cor( )
+
+
+
+
+
+
+
+
+
+
+

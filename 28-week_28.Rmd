@@ -1,0 +1,310 @@
+# Week 28 {-}
+
+
+## Match of the Day {-}
+
+A home shellacking by the putative champions leaves Arsenal 10 points off a top 4 spot
+
+
+```{r topGame_28}
+
+embed_youtube("KEHDkGtolcg", width = 420, height = 315, frameborder = 0,
+   allowfullscreen = TRUE, query = NULL) 
+
+
+```
+
+***
+<p class="factoid">Ashley Young needs to play just over 3 full games to record the most minutes in a season wearing a Man. Utd. shirt</p>
+
+***
+
+## Top Combos {-}
+
+OptaJoe recently tweeted that the Martial and Lukaku had combined for 6 Premier League goals (each with 3 goals and 3 assists). As you may know, my database allows for two assists - and this impacts the results quite significantly, although that combo is still the best. Follow changes over the remainder of the season and see if Pogba manages a single assist for Lukaku this year
+
+By comparison, at the time of writing, Kane kas combined on 9 goals with both Alli(7 goals/2 assists) and Eriksen (6/3) whilst Salah/Firmino is at 10(4/6)
+ 
+
+
+```{r combos_28}
+
+assister <- assists %>%
+  left_join(playerGame) %>%
+  select(name, PLAYERID, PLAYER_MATCH_GOAL, gameDate, Opponents, season)
+
+
+
+scorer <- goals %>%
+  left_join(playerGame) %>%
+  select(
+    scorer = name,
+    scorerID = PLAYERID,
+    PLAYER_MATCH_GOAL,
+    theDate = gameDate,
+    season
+  )
+
+id <- "LUKAKUR"
+
+lukaku_assisting <-  assister %>%
+  filter(PLAYERID == id & season == "2017/18") %>%
+  left_join(scorer) %>%
+  count(scorer, sort = TRUE) %>%
+  rename(Ass = n, name = scorer)
+
+## may not be best way to
+
+lukaku_scoring <-  scorer %>%
+  filter(scorerID == id & season == "2017/18") %>%
+  left_join(assister) %>%
+  count(name, sort = TRUE) %>%
+  rename(Gls = n)
+
+lukaku_assisting %>%
+  full_join(lukaku_scoring) %>%
+  mutate(
+    Gls = ifelse(is.na(Gls), 0, Gls),
+    Ass = ifelse(is.na(Ass), 0, Ass),
+    Total = Gls + Ass
+  ) %>%
+  arrange(desc(Total), desc(Gls)) %>%
+  select(collaborator = name, Gls, Ass, Total) %>%
+  DT::datatable(
+    class = 'compact stripe hover row-border order-column',
+    rownames = FALSE,
+    options = list(
+      paging = FALSE,
+      searching = FALSE,
+      info = FALSE
+    )
+  )
+
+  
+```
+ 
+ 
+
+
+## Crucial Cracks {-}
+
+Harry Kane turned up with a late winner for Spurs again this week. In 5 of his past 9 scoring appearances he has been their only player to find the net
+
+Here are the results for this category over the years
+
+```{r cracks_28}
+
+playerGame %>%
+  filter(Gls > 0) %>%
+  select(name, TEAMMATCHID, Gls) %>%
+  left_join(standings) %>%
+  mutate(pc = Gls / GF) %>%
+  group_by(name, season, team) %>%
+  filter(pc == 1) %>%
+  tally() %>%
+  rename(count = n) %>%
+  arrange(desc(season), desc(count)) %>%
+  DT::datatable(
+    class = 'compact stripe hover row-border order-column',
+    rownames = FALSE,
+    options = list(
+      paging = TRUE,
+      searching = TRUE,
+      info = FALSE
+    )
+  )
+
+```
+
+Search for teams,players and seasons, as desired
+
+Obviously, it is more difficult to be a sole provider when your team are scoring many goals. For instance, this season only Sterling has been the sole goalscorer in more than one game
+
+
+***
+
+<p class="factoid">Christian Eriksen became the 23rd player to record 100 assists(inc. secondary) and just the second Spurs player to achieve the feat after Darren Anderton (126)</p>
+***
+
+
+
+## Tweet of the Week {-}
+
+
+
+```{r}  
+shortcode("tweet", "969554552700788737") 
+```
+
+
+## Totally Football and Guardian Weekly Review Podcasts {-}
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6693732-arsenal-s-new-nadir-mctominay-dominates-and-the-ballad-of-royston-drenthe/embed/v4?eid=AQAAAA1RmlpkI2YA" title="Audioboom player"></iframe>
+***
+<p>
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6693975-arsenal-s-decade-long-capitulation-and-pardew-on-the-brink-football-weekly/embed/v4?eid=AQAAANJQmlpXJGYA" title="Audioboom player"></iframe>
+
+***
+
+## Results and Table {-}
+
+```{r results_28}
+
+weekly_results("2018-02-14","2018-03-01")
+
+```
+
+<p>
+---
+
+```{r standings_28}
+
+weekly_table("2018-03-01")
+
+```
+
+
+
+## Final Factoid {-}
+
+<p class="factoid">WBA may look doomed - and over half of the teams in bottom place at this stage of the season remain there - but in the past seven seasons, Wigan twice and Leicester have escaped relegation from the depths</p>
+
+
+---
+
+## End of Season Update {-}
+
+
+Arsenal ended the season .. points behind Man City (? worst ever) and .. points behind 5th laced.
+
+The order in the mini 6 league was little different from the full standings
+
+```{r}
+top6 <-
+  c("Arsenal",
+  "Liverpool",
+  "Chelsea",
+  "Man. Utd.",
+  "Man. City",
+  "Tottenham H")
+  
+  standings %>%
+  filter(season == "2017/18" &
+  team %in% top6 & OppTeam %in% top6) %>%
+  group_by(team) %>%
+  summarize(
+  Pl = n(),
+  Pts = sum(points),
+  GF = sum(GF),
+  GA = sum(GA),
+  GD = GF - GA
+  ) %>%
+  arrange(desc(Pts), desc(GD), desc(GF), team) %>%
+  DT::datatable(
+  class = 'compact stripe hover row-border order-column',
+  rownames = FALSE,
+  options = list(
+  paging = FALSE,
+  searching = FALSE,
+  info = FALSE
+  )
+  )
+```
+
+
+---
+
+Arsenal's only victory came in a 2-0 defeat of Spurs
+
+---
+
+With Rojo, Blind and Shaw all failing to pass muster, Young, who will be 33 by the time next seasons starts, made the left back position his own and was on the pitch comfortably more than the previous two campaigns combined
+
+---
+
+#### Top Combos {-}
+
+With his 12th assist of the season, Pogba finally pulled one out for Lukaku - somewhat surprising as the striker has scored 25% .. of the team's goals
+
+Kevin de Bruyne has been, comfortably, the most creative player this season
+
+Here is a chart showing which player's goals he has assisted throughout his time in the Premier League
+
+```{r combou_28}
+
+assister <- assists %>% 
+  left_join(playerGame) %>% 
+  select(name,PLAYERID,PLAYER_MATCH_GOAL,gameDate,Opponents,season)
+
+
+
+scorer <- goals %>% 
+  left_join(playerGame) %>% 
+  select(scorer=name,scorerID=PLAYERID,PLAYER_MATCH_GOAL,theDate=gameDate)
+
+player <- "DEBRUYK"
+  
+  ## sum for player 
+  scorerOrder <- assister %>% 
+    filter(PLAYERID==player) %>% 
+    left_join(scorer) %>% 
+    group_by(scorer) %>% 
+    tally() %>% 
+    arrange(desc(n))
+  
+  
+  playerName<- assister %>% 
+    filter(PLAYERID==player) %>% 
+    head(1) %>% 
+    pull(name)
+  
+ df_1 <-  assister %>% 
+    filter(PLAYERID==player) %>% 
+    arrange(gameDate) %>% 
+    mutate(order=row_number()) %>% 
+    left_join(scorer) %>% # join individ
+    left_join(scorerOrder) 
+ 
+ 
+  
+df_1 %>% #join sum
+    plot_ly(x=~order,y=~fct_reorder(scorer, n),
+            hoverinfo="text",
+            text=~paste0(gameDate,
+                         "<br>v ",Opponents)) %>%
+    add_markers(color=~season, size=I(8)) %>% 
+    layout(margin=list(l=120),autosize = TRUE,
+           title= glue("{playerName}'s Assists by Scorer"),
+           xaxis=list(title="Goal Order"),
+           yaxis=list(title="")) %>%  config(displayModeBar = F,showLink = F)
+  
+  
+
+```
+
+An interesting quirk is that this is the first year he has laid on any for David Silva but ..  He notched  just one, for Oscar, whilst at Chelsea
+
+You can view the combination the equivalent graph for any of the 2600+ players who have laid on at least one goal in EPL history at [premiersoccerstats](www.premiersoccerstats.com) in the Players > Socrer/Assist Combo section
+
+---
+
+#### Crucial Cracks {-}
+
+With six of Jay Rodriguez's seven goals it was the only successful strike by WBA in the game. The exception was when Matt Phiilips scored a 90th minute consolation goal against Man City. Rodriguez goals accounted for nine points
+
+---
+
+## Code Hints {-}
+
+ * none this week
+
+
+
+
+
+
+
+
+
+

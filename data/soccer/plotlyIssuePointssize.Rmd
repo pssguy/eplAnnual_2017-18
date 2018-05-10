@@ -1,0 +1,38 @@
+---
+title: "Points issue"
+output: html_document
+---
+
+I am using the plotly code below to show a soccer players appearances over time
+
+```
+plot_ly(df, x = plGameOrder, y = mins,
+        mode='markers',
+        color=Team,
+        #size=points,
+        hoverinfo = "text",
+        text = paste(Team," v ",Opponents,
+                     "<br>",gameDate,
+                     "<br>On: ",on,
+                     "<br>Off: ",off,
+                     "<br>Goals ",Goals,
+                     "<br>Assists ",Assists)
+        ) %>%
+  layout(hovermode = "closest",
+         xaxis=list(title="Games Played"),
+         yaxis=list(title="Minutes Played")
+         )
+```
+
+This produces the following chart with correct plotly tooltip
+
+
+
+![](images/points1.png)
+
+
+If I remove the comment from the size factor (points refers to goals +assists in game)
+
+![](images/points2.png)
+
+The size does reflect what I want but i need to have all values smaller so no overlap (cannot quite work out in reference how to do this) Also the tooltip has an unwanted line at the bottom eg  "points (size): 2

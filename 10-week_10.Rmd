@@ -1,0 +1,328 @@
+#Week 10 {-}
+
+
+## Match of the Day {-}
+
+Kane-less Spurs lose to Pogba-less United and trail City by 8 points
+
+```{r topGame_10}
+
+embed_youtube("mdoG9SytG4w", width = 420, height = 315, frameborder = 0,
+   allowfullscreen = TRUE, query = NULL) 
+
+
+```
+
+***
+
+## Final Top 6? {-}
+
+The accepted 'top six' i.e Chelsea, Spurs, Man City, Liverpool, Arsenal and Man Utd. were generally expected to 
+comprise the first half-dozen come the end of the season for the second year running. Only Everton had come within 23 points of them last year - and it is clear they will be now be happy to finish outside of the bottom 6
+
+After 10 rounds and by dint of goal difference, they do form that elite group for the first time. What are the chances that they will hold off all rivals from now on?
+
+```{r top6_10}
+
+
+final <- c(1:6)
+
+# process as much as poss early to save processing time
+
+df_in <- standings %>%
+  arrange(season, tmYrGameOrder, position)
+
+myFun <- function(x, y) {
+  teams <- df_in %>%
+    filter(season == x & tmYrGameOrder == y) %>%
+    head(6)
+  
+  now <- teams %>%
+    pull(final_Pos)
+  
+  club <- teams %>%
+    mutate(clubs = paste(team, collapse = ", ")) %>%
+    pull(clubs)
+  
+  z <- length(intersect(final, now))
+  
+  temp_df <- data.frame(
+    count = z,
+    clubs = club,
+    season = x,
+    gameOrder = y
+  )
+  
+  return(temp_df)
+  
+}
+
+# set parameters to map over
+gameYears <- standings %>%
+  select(tmYrGameOrder, season) %>%
+  unique()
+
+season = gameYears$season
+gameOrder = gameYears$tmYrGameOrder
+
+df <- map2_df(season, gameOrder, myFun) %>%
+  unique() %>% # otherwise replicates 6 x
+  group_by(season)
+
+
+## create shared data allowing crosstalk between select input and chart
+
+sd <- SharedData$new(df)
+
+fs <- filter_select(
+  id = "season",
+  label = "Select season",
+  sharedData = sd,
+  group =  ~ season,
+  allLevels = FALSE,
+  multiple = FALSE
+)
+
+## this is needed as crosstalk does not work nicely with bootstrap, apparently
+fs_nobootstrap <- fs
+
+attr(fs_nobootstrap, "html_dependencies") <- Filter(function(dep) {
+  dep$name != "bootstrap"
+},
+attr(fs_nobootstrap, "html_dependencies"))
+
+
+
+chart <- sd %>%
+  
+  plot_ly(
+    x =  ~ gameOrder,
+    y =  ~ count,
+    hoverinfo = "text",
+    text = ~ paste0("Wk ", gameOrder, "<br>", clubs)
+  ) %>%
+  layout(
+    title = "Top 6 teams by Round compared with final table",
+    xaxis = list(title = "Games Played"),
+    yaxis = list(title = "Number of end-of-season top 6 teams",
+                 rangemode = "tozero")
+  ) %>%  config(displayModeBar = F, showLink = F)
+
+
+
+tagList(fs_nobootstrap,
+        br(),
+        chart)
+
+```
+
+_The default shows all years (the package needs enhancing) so you need to select an individual season_
+
+I have left 2017/18 in: the most recent week will equate to final positions (so will always be 6)_
+
+It turns out that in 2009/10 the top 6 after round 3 finished in the top half-dozen at the end of the season - although there were 14 weeks to follow in which another team would interpose. It was not until Round 35 that these top places were confirmed
+
+***
+
+<p class="factoid">Man City finally score in first qurter of an hour (and twice to boot). Previously, the leading scorers had been one of seven teams not to register in first 15 minutes</p>
+
+***
+
+## Attendances {-}
+
+Last week at Wembley, Spurs set the all-time attendance record that had stood for more than a decade
+
+```{r crowd_all_time_10}
+
+
+teamGames %>%
+  filter(venue == "H") %>%
+  left_join(teamGames, by = "MATCHID") %>%
+  filter(TEAMID.x != TEAMID.y) %>%
+  rename(
+    team = TEAMNAME.x,
+    Opponents = TEAMNAME.y,
+    crowd = CROWD.x,
+    gameDate = gameDate.x
+  ) %>%
+  arrange(gameDate, desc(crowd)) %>%
+  mutate(maxcrowd = cummax(crowd)) %>%
+  select(gameDate, crowd, maxcrowd, team, Opponents) %>%
+  filter(crowd == maxcrowd) %>%
+  plot_ly(
+    x =  ~ gameDate,
+    y =  ~ maxcrowd,
+    hoverinfo = "text",
+    text =  ~ paste0(crowd, "<br>", team, " v ", Opponents,
+                     "<br>", gameDate)
+  ) %>%
+  add_markers() %>%
+  add_lines(line = list(shape = "hv")) %>%
+  layout(
+    showlegend = FALSE,
+    title = "Record High Attendances at EPL matches<br>Hover for details",
+    yaxis = list(title = "Crowd Size"),
+    xaxis = list(title = "")
+  ) %>%  config(displayModeBar = F, showLink = F)
+
+```
+
+Other than in the inaugural season, significant changes in record attendance have been basically linked to increases in capacity at Manchester United's ground, Old Trafford. With Tottenham's stay at Wembley of limited duration, one of their games this season is likely to hold sway indefinitely
+
+
+As the Premier League has got more popular and a higher percentage (if not all) of the crowd is there on season tickets, the range in attendance during a season has narrowed. Back in the day, Manchester United often drew far more than some of the lesser teams 
+
+
+
+
+Lets look at individual teams NB problems here
+
+```{r club_attendances2}
+# 
+# 
+# data <-teamGames %>% 
+#   
+#     filter(venue=="H")  %>% 
+#   inner_join(teamGames,by="MATCHID") %>% 
+#   filter(TEAMID.x!=TEAMID.y) %>% 
+#   rename(Opponents=TEAMNAME.y,crowd=CROWD.x) %>% 
+#    mutate(day=wday(gameDate.x,label=TRUE)) %>% 
+#   select(team=TEAMNAME.x,Opponents,crowd,season=season.x,day) %>% 
+#   group_by(team)
+#   
+# sd <- SharedData$new(data)
+# 
+# fs <- filter_select(
+# id = "team",
+# label = "Select or Type in Team",
+# sharedData = sd,
+# group =  ~ team,
+# allLevels = FALSE,
+# multiple = FALSE
+# )
+#   
+#  ## this is needed as crosstalk does not work nicely with bootstrap, apparently
+# fs_nobootstrap <- fs
+# 
+# attr(fs_nobootstrap, "html_dependencies") <- Filter(
+#   function(dep) {dep$name != "bootstrap"},
+#   attr(fs_nobootstrap, "html_dependencies")
+# )
+# 
+# 
+# 
+# chart <- sd %>%  
+#    plot_ly(x=~season,y=~crowd) %>% 
+#    add_markers(hoverinfo="text",
+#                text=~paste0(Opponents,"<br>",crowd,
+#                             "<br>", day)) %>% 
+#   layout(title="Reported Attendances by Game <br> Hover for Detail",
+#          xaxis=list(title=""),
+#          yaxis=list(title="Crowd Size"),
+#          margin=list(b=110,pad=5)) %>% 
+#        config(displayModeBar = F,showLink = F)
+# 
+# 
+#  tagList(
+#   fs_nobootstrap,
+#   br(),
+#   chart
+# )
+
+```
+
+_There could be the odd incorrect outlier_
+
+Wimbledon, for example, had a reasonable capacity but were poorly supported - until one of the big clubs (with many supporters) came along
+
+
+***
+
+
+<p class="factoid">Martial scored his league-leading fourth goal-as-sub against Spurs. With seven, in total, notched from the bench, Man Utd have already equalled or bettered their haul in 17 previous EPL seasons</p>
+
+
+## Totally Football and Guardian Weekly Review Podcasts {-}
+
+
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6442043-england-s-u-17-glory-the-dashing-blades-and-a-keeper-caught-short-football-weekly/embed/v4?eid=AQAAAJnc-Vk7TGIA" title="audioBoom player"></iframe>
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6441773-england-s-golden-summer-and-fifty-shades-of-demarai-gray/embed/v4?eid=AQAAALHc-VktS2IA" title="audioBoom player"></iframe>
+
+***
+
+## Results and Table {-}
+
+```{r results_10}
+
+weekly_results("2017-10-24","2017-11-01")
+
+```
+
+
+```{r standings_10}
+
+weekly_table("2017-11-01")
+
+```
+
+
+---
+
+## Final Factoid {-}
+
+<p class="factoid">Palace record only their second draw in 30 league outings. All time record
+no-draws run is 28 by Bolton Wanderers</p>
+
+
+---
+
+## End of Season Update {-}
+
+#### Final Top 6? {-}
+
+Well the expected materialised. If you enter 2017/18 in the options above you can see that other than weeks 17/18 when Burnley threatened Arsenal and Spurs it was never really in doubt
+
+![](10_BurnleyTop6.PNG)
+
+---
+
+Normality was resumed with .. Manchester City managing a league-leading .. goals in the first quarter of an hour. Stoke City only managed it just once in agame they still managed to lose 1-2 to Bournemouth. On the flip side the Potteries conceded  early seven times, obviiously a factor in their relegation
+
+---
+
+#### Attendances {-} 
+
+As can be seen, Spurs had a couple more records, posting 83,222 in the derby game versus Spurs
+
+Let's have a look at which teams are the best draws
+
+```{r attendancesu_10u}
+
+df <- teamGames %>% 
+  filter(venue=="H") %>% 
+  arrange(desc(CROWD)) %>% 
+  group_by(TEAMNAME,season) %>% 
+  slice(1) %>% 
+  left_join(teamGames,by="MATCHID") %>% 
+  filter(TEAMNAME.x!=TEAMNAME.y) %>% 
+  select(season=season.x,team=TEAMNAME.x,opposition=TEAMNAME.y,attendance=CROWD.x) 
+
+df %>% 
+  arrange(desc(season,team)) %>%
+                         DT::datatable(class='compact stripe hover row-border order-column',rownames=FALSE,options= list(paging = TRUE, searching = TRUE,info=FALSE))
+```
+
+With many teams selling out each week, it can be a bit hit and miss which team pulls in the most spectators e.g this year Crystal Palace's visit produced the biggest trunout at Old Trafford
+
+Some local rivalries can be noted e.g Bournemouth v Southampton and Manchester United still seem to be the biggest draw - although they no longer match the first two seasons of the League when they were the biggest attraction for 12 of the other clubs
+
+---
+
+## Code Hints {-}
+
+ * crosstalk
+ * htmltools - tagList
+ * purrr - use of map2
+ * plotly - combine lines and markers

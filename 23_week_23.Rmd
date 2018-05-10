@@ -1,0 +1,296 @@
+# Week 23 {-}
+
+
+## Match of the Day {-}
+
+Man City's unbeaten run ended by a Coutinho-less Liverpool in seven goal thriller
+
+
+```{r topGame_23}
+
+embed_youtube("S326V6ytmts", width = 420, height = 315, frameborder = 0,
+   allowfullscreen = TRUE, query = NULL) 
+
+
+```
+
+
+***
+
+
+## Subs {-}
+
+On Saturday an oddity occurred. The kind of 'Dog didn't bark in the night' sort. Roy Hodgson, with his team hanging on to a precious three points for what would make a 'massive win" failed to make a substitution: a norm for time-wasting
+
+He may have been giving a message to the hierarchy that with the club's injury problems he did not trust his subs to be up to it and they need to make purchases in the transfer window. Perhaps he was so engrossed in the game - he is 70, after all.
+
+Whatever the reason, it was the first time it has happened for any team in the Premier League this season
+
+See how this has changed over time.
+
+
+```{r sub_use_by_year_23}
+
+playerGame %>%
+  filter(mins > 0) %>%
+  group_by(TEAMMATCHID, season, TEAMNAME, gameDate) %>%
+  tally() %>%
+  arrange(gameDate) %>%
+  mutate(subs = n - 11) %>%
+  group_by(season, subs) %>%
+  tally() %>%
+  ungroup() %>%
+  group_by(season) %>%
+  mutate(pc = 100 * nn / sum(nn)) %>%
+  plot_ly(x =  ~ season, y =  ~ pc) %>%
+  group_by(subs) %>%
+  add_bars(x =  ~ season,
+           y =  ~ pc,
+           color =  ~ as.factor(subs)) %>%
+  layout(
+    title = "Number of Subs used by Match by Team",
+    yaxis = list(title = 'Per Cent'),
+    xaxis = list(title = ""),
+    margin = list(b = 80),
+    barmode = 'stack'
+  ) %>%  config(displayModeBar = F, showLink = F) %>%  config(displayModeBar = F, showLink = F)
+
+
+
+```
+ 
+ In 2015/16 there were also no occurrences though it picked up a bit last year - when three substitutes were used a record 82.6%  of the time
+ 
+ ***
+
+The rules have changed over the years
+
+* From the 1992-93 season, teams could name three substitutes, one of whom had to be a goalkeeper, and could use any two of them for any reason
+* From the 1994-95 season, teams could name and use up to three substitutes (one of whom could only be used to replace the goalkeeper) for any reason
+* From the 1995-96 season, teams could name and use up to three substitutes for any reason with no restriction on positions
+* From the 1996-97 season, teams could name up to five and use up to three substitutes for any reason
+* From the 2008-09 season, teams could name up to seven and use up to three substitutes for any reason
+
+(Thanks Wikipedia)
+
+***
+
+<p class="factoid">With Stoke replacing Mark Hughes with Paul Lambert, there have been seven changes since the season started and, outside of the top seven teams, only Eddie Howe, at Bournemouth, was a Premier League manager at the end of last season</p>
+
+***
+
+## Recovery from Doom {-}
+
+Arguably, particularly given their long injury-list, the best performance has been by Roy Hodgson at Crystal Palace. After four games of Frank de Boer and three more defeats including away fixtures at both Manchester clubs, Palace had recorded the worst ever seven game start to a Premier League season with no points, no goals scored and 17 conceded
+
+How have the next nine worst-starting clubs fared between the 7th and 23rd rounds and on until the final standings
+
+
+```{r slow_start_23}
+
+worst <- standings %>%
+  filter(tmYrGameOrder == 7) %>%
+  arrange(cumPts, cumGD) %>%
+  slice(1:10) %>%
+  select(team, season, cumPts, cumGD, final_Pos, position) %>%
+  mutate(games = 7)
+
+
+at23 <- standings %>%
+  filter(tmYrGameOrder == 23) %>%
+  right_join(worst, by = c("team", "season")) %>%
+  select(
+    team,
+    season,
+    cumPts = cumPts.x,
+    final_Pos = final_Pos.x,
+    position = position.x
+  ) %>%
+  mutate(games = 23)
+
+
+final <- standings %>%
+  filter(tmYrGameOrder == 38) %>%
+  right_join(worst, by = c("team", "season")) %>%
+  select(
+    team,
+    season,
+    cumPts = cumPts.x,
+    final_Pos = final_Pos.x,
+    position = position.x
+  ) %>%
+  mutate(games = 38)
+
+
+df <- bind_rows(worst, at23, final)
+
+df %>%
+  group_by(team) %>%
+  mutate(combo = paste0(team, " ", season)) %>%
+  plot_ly(x =  ~ games, y =  ~ cumPts) %>%
+  add_markers(
+    x =  ~ games,
+    y =  ~ jitter(cumPts),
+    color =  ~ combo,
+    hoverinfo = "text",
+    text =  ~ paste0(
+      combo,
+      "<br>Points: ",
+      cumPts,
+      "<br>Position: ",
+      position,
+      "<br>Finished: ",
+      final_Pos
+    )
+  ) %>%
+  layout(
+    title = "Progress of 10 Teams with Worst 7 Game Start",
+    xaxis = list(title = "Games Played"),
+    yaxis = list(title = "Cumulative Points")
+  ) %>%  config(displayModeBar = F, showLink = F) %>%  config(displayModeBar = F, showLink = F)
+
+```
+
+In spite of Palace's achievements, the Newcastle team featuring Alan Shearer (23 goals), Nolberto Solano(20 assists) and Gary Speed fared even better after their sticky start.    
+ They were already six points clear of relegation after 23 games and finished 11th - only six points away from a top 6 place.      
+ 
+ Currently only two points off 9th-placed-Everton, a top half finish is certainly feasible for Hodgson's team - though even 17th spot will be acceptable given the initial circumstances
+
+
+
+***
+<p class="factoid">Stoke have already conceded 50 goals this season, eight more than any other team. Only twice, has the team conceding the most goals avoided relegation. And both Middlesbrough (1996/97) and Fulham(2006/7) only let in a total of 60. Stoke are on pace for 83</p>
+***
+
+
+
+***
+
+## Tweet of the Week {-}
+
+
+
+```{r}  
+shortcode("tweet", "952662805768847365") 
+```
+
+
+
+***
+
+## Totally Football and Guardian Weekly Review Podcasts {-}
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6598399-klopp-clips-city-s-wings-an-apology-to-david-moyes-and-the-greatest-asian-player-of-all-time/embed/v4?eid=AQAAALDqXFr_rmQA" title="Audioboom player"></iframe>
+***
+<p>
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6598530-liverpool-spoil-manchester-city-s-party-while-stoke-and-wales-have-new-arrivals-football-weekly/embed/v4?eid=AQAAAOD8XFqCr2QA" title="Audioboom player"></iframe>
+
+***
+
+## Results and Table {-}
+
+```{r results_23}
+
+weekly_results("2018-01-05","2018-01-16")
+
+```
+
+---
+
+
+```{r standings_23}
+
+weekly_table("2018-01-16")
+
+```
+
+
+---
+
+
+## Final Factoid {-}
+
+<p class="factoid">Harry Kane now tops the goal charts for Spurs in the Premier League. Two more will see him reach the century mark, becoming just the 15th player to reach this level for one club</p>
+
+
+---
+
+## End of Season Update {-}
+
+#### Subs {-}
+
+Let's look at the variation in sub usage by team
+
+```{r subUsageU_23}
+
+playerGame %>%
+  filter(mins > 0) %>%
+  group_by(TEAMMATCHID, season, TEAMNAME, gameDate) %>%
+  tally() %>%
+  arrange(gameDate) %>%
+  mutate(subs = n - 11) %>%
+  filter(season == "2017/18") %>%
+  group_by(TEAMNAME, subs) %>%
+  count() %>%
+  rename(count = nn) %>%
+  group_by(subs) %>%
+  plot_ly() %>%
+  add_bars(
+    x =  ~ TEAMNAME,
+    y =  ~ count,
+    color =  ~ as.factor(subs)
+  ) %>%
+  layout(
+    title = "Number of Subs used by Match by Team",
+    yaxis = list(title = 'Count'),
+    xaxis = list(title = ""),
+    margin = list(b = 80, r = 20),
+    barmode = 'stack'
+  ) %>%  config(displayModeBar = F, showLink = F) %>%  config(displayModeBar = F, showLink = F)
+```
+
+So Crystal Palace are an outlier, with Roy Hodgson reluctant to use them, particularly when he had a threadbare bench. Other teams go in the opposite direction , using 3 subs irrespective of the game situation. Everton being the extreme example with both Koeman and Allardyce always using 14 players
+
+---
+
+With Arsene Wenger leaving at the end of the season, Bournemouth's Eddie Howe (12 Oct 2012) is now the longest serving manager at a Premier League club and Tottenham's Mauricio Pochettino the longest at one club 
+(27 May 2014)  phrasing
+
+---
+
+#### Recovery from Doom {-}
+
+The 23rd round and 12th place proved a high-point for Palace not helped by Zaha missing three matches (all lost). However, their relatively easy run in provided them with sufficient points
+
+---
+
+Kane duly reached the century mark for Spurs and is now up to .. place in terms of most goals for one club.
+
+Here are the leading players for every PL club
+
+
+```{r club_scorersu_23}
+
+
+playerGame %>% 
+  filter(PLAYERID!="OWNGOAL") %>% 
+  group_by(name,PLAYERID,TEAMNAME) %>% 
+  summarize(goals=sum(Gls)) %>% 
+  arrange(desc(goals)) %>% 
+  group_by(TEAMNAME) %>% 
+  slice(1) %>% 
+  arrange(desc(goals)) %>% 
+  ungroup() %>% 
+  select(team=TEAMNAME,player=name,goals) %>%
+                         DT::datatable(class='compact stripe hover row-border order-column',rownames=TRUE,options= list(paging = TRUE, searching = TRUE,info=FALSE))
+
+```
+
+Alan Shearer has the unique distinction of reaching the century mark for two clubs and Aguero will be expecting to reach the top three in this category early next season
+
+## Code Hints {-}
+
+  * none this week
+
+

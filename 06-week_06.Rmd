@@ -1,0 +1,379 @@
+# Week 6 {-}
+
+
+### Game of the week West Ham 2-3 Tottenham {-}
+
+The star of this week's post, Christian Eriksen, gets involved in all three goals for Spurs
+
+```{r topGame_06}
+
+embed_youtube("5VrW8iKeE9Q", width = 420, height = 315, frameborder = 0,
+  allowfullscreen = TRUE, query = NULL) 
+
+
+```
+
+***
+
+<p class="factoid">After six games, Manchester Utd. can already boast eight names on the scoresheet. In 42 games in 1993/4, Arsenal mustered just six</p>
+
+***
+
+## Top v Bottom {-}
+
+Man City's destruction of Crystal Palace ensured those two sides produced the biggest ever difference in Goals Scored after six games of a Premier League season, 21.
+
+
+```{r GF_06}
+
+top <- standings %>%
+  filter(tmYrGameOrder == 6) %>%
+  group_by(season) %>%
+  mutate(minGF = min(cumGF), diff = cumGF - minGF) %>%
+  arrange(desc(diff)) %>%
+  slice(1) %>%
+  select(season, top = team, diff, max = cumGF)
+
+bottom <- standings %>%
+  filter(tmYrGameOrder == 6) %>%
+  group_by(season) %>%
+  mutate(maxGF = max(cumGF), diff = cumGF - maxGF) %>%
+  arrange(diff) %>%
+  slice(1) %>%
+  select(season, bottom = team, min = cumGF) %>%
+  inner_join(top, by = "season")
+
+bottom %>%
+  plot_ly(color = I("gray80"), height = 500) %>%
+  add_segments(
+    x = ~ min,
+    xend = ~ max,
+    y = ~ season,
+    yend = ~ season,
+    showlegend = FALSE
+  ) %>%
+  add_markers(
+    y =  ~ season,
+    x =  ~ max,
+    name = "Prolific",
+    color = I("blue"),
+    hoverinfo = "text",
+    text =  ~ paste(top, max)
+  ) %>%
+  add_markers(
+    y =  ~ season,
+    x =  ~ min,
+    name = "Impotent",
+    color = I("red"),
+    hoverinfo = "text",
+    text =  ~ paste(bottom, min)
+  ) %>%
+  layout(
+    title = "Most and least prolific teams after 6 Premier League games",
+    xaxis = list(title = "Goals Scored"),
+    yaxis = list(title = "")
+  ) %>%  config(displayModeBar = F, showLink = F)
+
+```
+
+Hover for details
+
+Interesting to note that Tottenham proved very slow starters for three years in five (04/05, 06,07, 08/09)
+even before Harry Kane's August travails
+
+***
+
+<p class="factoid">Man City's, de Bruyne notched up his third consecutive, distinct, two-assist league game. This has only previously been achieved a dozen times in the EPL but Christian Eriksen became the only player to appear twice in this list - in Round 1 of the season</p>
+
+## Eriksen Pass Master {-}
+
+This factoid prompted me to look at Eriksen's assists and goals by game
+Over the past 17 games he has totalled 23 assists. How does this rank all-time?
+
+
+
+```{r eriksen_06}
+
+
+sumRows <- 17
+
+df <- playerGame %>%
+  filter(mins > 0) %>%
+  arrange(gameDate, PLAYERID) %>%
+  select(PLAYERID, name, Assists) %>%
+  group_by(PLAYERID) %>%
+  mutate(games = n()) %>%
+  filter(games > sumRows)
+
+# much swifter if converting to data.tables package
+setDT(df) ##
+df2 <-
+  df[, .(
+    sum = RcppRoll::roll_sum(
+      Assists,
+      n = sumRows,
+      fill = NA,
+      align = "left"
+    ),
+    seq = seq_len(.N)
+  ),
+  keyby = .(PLAYERID)][!is.na(sum)]
+
+
+uniquePlayers <-
+  playerGame %>%
+  select(PLAYERID, name) %>%
+  unique()
+
+
+df2 %>%
+  arrange(desc(sum)) %>%
+  group_by(PLAYERID) %>%
+  slice(1) %>%
+  arrange(desc(sum)) %>%
+  left_join(uniquePlayers) %>%
+  ungroup() %>%
+  select(name, Assists = sum) %>%
+  filter(Assists > 0) %>%
+  DT::datatable(
+    height = 500,
+    width = 300,
+    class = 'compact stripe hover row-border order-column',
+    rownames = FALSE,
+    options = list(
+      paging = TRUE,
+      searching = TRUE,
+      info = FALSE
+    )
+  )
+
+
+```
+
+So Eriksen ranks up with the best of all time. A little surprising to see Henry so high but he earned 144 assists to add to his 175 goals whilst in the Premier League
+
+Here is his moving average assists per game over 17 game sequences for the Dane. He is currently performing at around the height of his career with
+Harry Kane being a prime beneficiary
+
+
+```{r moving_av_06}
+
+df2 %>%
+  filter(PLAYERID == "ERIKSEC") %>%
+  arrange(seq) %>%
+  mutate(av = sum / 17) %>%
+  plot_ly(x =  ~ seq, y =  ~ av) %>%
+  add_lines() %>%
+  layout(
+    xaxis = list(title = "Sequences of 17 Consecutive Appearances"),
+    yaxis = list(title = "Moving Average - Assists per Game")
+  ) %>%  config(displayModeBar = F, showLink = F)
+
+
+
+```
+_N.B. Unlike official statistics, up to two assists per goal are allowed_
+
+***
+
+## Barry Record {-}
+
+Gareth Barry breaking the record Premier league appearance record at the weekend was slightly tarnished by the fact that the previous record holder, Ryan Giggs, had played 40 top flight games before the Premier League was established
+
+On the other hand, Barry had already far surpassed Giggs time played as he has now played 525 complete games 138   more than the Welshman
+  
+  
+```{r barry_06}
+
+
+# select leading players
+players <- playerGame %>%
+  select(name, PLAYERID, mins) %>%
+  group_by(PLAYERID) %>%
+  summarize(tot = sum(mins, na.rm = T)) %>%
+  arrange(desc(tot)) %>%
+  head(4) %>%
+  pull(PLAYERID)
+
+## add closest still playing
+
+players <- c(players, "CARRICM")
+
+playerGame %>%
+  filter(PLAYERID %in% players) %>%
+  arrange(gameDate) %>%
+  group_by(PLAYERID) %>%
+  mutate(cummins = cumsum(mins)) %>%
+  plot_ly(x =  ~ gameDate,
+          y =  ~ cummins,
+          color =  ~ name) %>%
+  add_lines() %>%
+  layout(
+    title = "Cumulative EPL Minutes played by Leading Players",
+    xaxis = list(title = ""),
+    yaxis = list(title = "Cumulative Minutes '000")
+  ) %>%  config(displayModeBar = F, showLink = F)
+
+
+```
+  _NB Prior to 1999/2000 substitution times are estimated_
+  
+  Gareth Barry inherited the honour of most minutes played in the Premier League last December - and from David James not Ryan Giggs.     
+  Barry may set a record that will last for a very long time. He is still a regular at WBA. His closest contender from the crop of current players, Michael Carrick, trails him by around 15,000 minutes; is the same age; and has yet to play a minute of league football thi season
+  
+  
+
+
+## Totally Football and Guardian Weekly Review Podcasts {-}
+
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6332897-xg-ogs-and-cliff-richard-s-greatest-hits/embed/v4?eid=AQAAAHOJylnhoWAA" title="audioBoom player"></iframe>
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6333277-the-oumar-niasse-appreciation-edition-football-weekly/embed/v4?eid=AQAAAEiJylldo2AA" title="audioBoom player"></iframe>
+
+***
+
+## Results and Table {-}
+
+```{r results_06}
+
+weekly_results("2017-09-19","2017-09-26")
+
+```
+
+
+
+```{r standings_06}
+
+weekly_table("2017-09-26")
+
+```
+
+
+***
+
+## Final Factoid {-}
+
+<p class="factoid">Gareth Barry also holds the record for outfielder with the most complete games, 525.
+Only goalkeepers, David James(567) and Mark Schwarzer(513) also make the 500 club </p>
+
+
+---
+
+## End of Season Update {-}
+
+
+#### Top v Bottom {-}
+
+Updating the table to an end-of-season version (or after first 38 games in seasons 1-3)
+
+```{r GFu}
+
+top <- standings %>%
+  group_by(season) %>%
+  filter(tmYrGameOrder == 38) %>%
+  mutate(minGF = min(cumGF), diff = cumGF - minGF) %>%
+  arrange(desc(diff)) %>%
+  slice(1) %>%
+  select(season, top = team, diff, max = cumGF)
+
+bottom <- standings %>%
+  group_by(season) %>%
+  filter(tmYrGameOrder == 38) %>%
+  mutate(maxGF = max(cumGF), diff = cumGF - maxGF) %>%
+  arrange(diff) %>%
+  slice(1) %>%
+  select(season, bottom = team, min = cumGF) %>%
+  inner_join(top, by = "season")
+
+bottom %>%
+  plot_ly(color = I("gray80"), height = 500) %>%
+  add_segments(
+    x = ~ min,
+    xend = ~ max,
+    y = ~ season,
+    yend = ~ season,
+    showlegend = FALSE
+  ) %>%
+  add_markers(
+    y =  ~ season,
+    x =  ~ max,
+    name = "Prolific",
+    color = I("blue"),
+    hoverinfo = "text",
+    text =  ~ paste(top, max)
+  ) %>%
+  add_markers(
+    y =  ~ season,
+    x =  ~ min,
+    name = "Impotent",
+    color = I("red"),
+    hoverinfo = "text",
+    text =  ~ paste(bottom, min)
+  ) %>%
+  layout(
+    title = "Most and least prolific teams by season",
+    xaxis = list(title = "Goals Scored"),
+    yaxis = list(title = "")
+  ) %>%  config(displayModeBar = F, showLink = F)
+
+```
+
+City continued on to .  but Crystal Palace recovered sufficiently to be  . in scoring
+
+This chart exemplifies what an outlier the inaugural season was. Manchester United were champions in spite of averaging less than 1.6 goals per game, only 0.6 more than the lowest scorers Nottingham Forest. This year the gap ...
+
+
+####  Eriksen Pass Master {-}
+
+As the above table updates, continually, you can see that Eriksen's assist rate did drop off - though rarely falling below an average of an assist every other game
+
+Here are the leading players this season
+
+```{r eriksen_06u}
+
+
+playerGame %>%
+  filter(season == "2017/18") %>%
+  group_by(PLAYERID, name, TEAMNAME) %>%
+  summarize(tot = sum(Assists)) %>%
+  arrange(desc(tot)) %>%
+  ungroup() %>%
+  select(name, team = TEAMNAME, Assists = tot) %>%
+  DT::datatable(
+    width = 450,
+    class = 'compact stripe hover row-border order-column',
+    rownames = FALSE,
+    options = list(
+      paging = TRUE,
+      searching = TRUE,
+      info = FALSE
+    )
+  )
+
+```
+
+Points to note
+  
+   1. I include up to two assists per goal, which benefits midfielders
+   2. Players who have moved club during season may be listed for each team
+   
+ Kevin de Bruyne has been in a class of his own confirming the expectations put on him at the beginning of the season
+ 
+***
+ 
+#### Barry Record {-}
+
+Well he increased his margin over next up David James to an impressive 3000 minutes - which few players achieve in a season
+
+However, it ended fairly ignominiously after the [taxi affair](http://www.dailymail.co.uk/sport/football/article-5400329/West-Brom-open-probe-incident-involving-four-players.html) followed by WBA's relegation
+
+It seems likely that, at 37, his EPL career is over. Unless John Terry returns with Aston Villa, Petr Cech will take over as the current player with most minutes under his belt and he is a full ... minutes behind in .... place - and his future must also be in doubt with a clear decline in ability and a new manager in at Arsenal
+
+---
+
+
+## Code Tips {-}
+
+    * plotly - creation of dumbbell plot
+    * data.table - faster processing

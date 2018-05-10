@@ -1,0 +1,265 @@
+# Week 34 {-}
+
+
+## Match of the Day {-}
+
+Bit of a damp squib with Man. Utd. handing City the title but at least the,about- to-become, Champions put in a better performance at Wembley to take some of the pain off the Liverpool trouncing in the Champion's League
+
+
+```{r topGame_34}
+
+embed_youtube("NmHQQN1KSbw", width = 420, height = 315, frameborder = 0,
+   allowfullscreen = TRUE, query = NULL) 
+
+
+```
+
+
+***
+
+## Bravo Burnley {-}
+
+Burnley have probably been the biggest surprise of the season and are finishing the campaign in fine style with five wins in row for the first time in the top flight since the 1970's and certain to finish at their highest level since they were 6th in 1973/4
+
+What they have also provided is the most nail-biters, if you define that as games where there is at most only one goal in it
+
+Here are the standings this year
+
+```{r burnley_34}
+
+standings %>%
+  filter(season == "2017/18") %>%
+  group_by(team, season) %>% #648
+  filter(abs(GF - GA) < 2) %>%
+  tally() %>%
+  arrange(desc(n)) %>%
+  select(team, games = n) %>%
+  
+  DT::datatable(
+    class = 'compact stripe hover row-border order-column',
+    rownames = FALSE,
+    options = list(
+      paging = TRUE,
+      searching = TRUE,
+      info = FALSE
+    )
+  )
+
+```
+ 
+ At the other end of the scale are Manchester City but they do tend to offset the lack of drama with some scintillating play
+ 
+---
+
+How have this season's games as a whole compared with earlier years
+
+```{r goal_margins_34}
+
+close <- standings %>% 
+  #filter(season=="2017/18") %>%
+  group_by(season) %>% #648
+  filter(abs(GF-GA)<2) %>% 
+  tally() %>% 
+  rename(close=n)
+
+
+standings %>% 
+   group_by(season) %>% #648
+   tally() %>% 
+  inner_join(close) %>% 
+  mutate(pc=round(100*close/n,1)) %>% 
+  plot_ly(x=~ season, y= ~pc) %>% 
+  add_lines() %>% 
+  layout(title="Percentage of EPL Outcomes within 1 goal, by Season",
+         xaxis=list(title=""),
+         yaxis=list(title= "Percentage"),
+         margin=list(b=80)) %>% config(displayModeBar = F, showLink = F)
+  
+ 
+```
+
+So a welcome uptick this season, if you appreciate close games, from the lowest recorded level last year
+ 
+ --- 
+ <p class="factoid">Allowing for two assists per goal, Cresswell; Shaqiri and Allen all reached the 25 career level in the Monday game between West Ham and Stoke</p>
+ 
+ ---
+
+## Big Fish {-}
+
+If it was not for the phantom goal, Harry Kane would currently be on a 323 minute drought, his longest of the season
+
+As it is, he still remains five behind Mo Salah for the golden boot. But do either of them account for the highest share of a team's total goal scoring record?
+
+Here are all the players who account for at least 20% of their team's goal output 
+
+
+```{r murray_hurry_34}
+
+playerGame %>%
+  group_by(TEAMNAME, name) %>%
+  filter(season == "2017/18") %>%
+  summarize(totGls = sum(Gls)) %>%
+  select(TEAMNAME, name, totGls) %>%
+  ungroup() %>%
+  group_by(TEAMNAME) %>%
+  mutate(sumGls = sum(totGls), prop = round(totGls / sumGls, 3)) %>%
+  arrange(desc(prop)) %>%
+  mutate(pc = round(100 * prop, 1)) %>%
+  filter(pc > 19.9) %>%
+  select(
+    team = TEAMNAME,
+    player = name,
+    Goals = totGls,
+    `% of team` = pc
+  ) %>%
+  DT::datatable(
+    class = 'compact stripe hover row-border order-column',
+    rownames = FALSE,
+    options = list(
+      paging = TRUE,
+      searching = TRUE,
+      info = FALSE
+    )
+  )
+
+
+```
+
+This looks one that will go down to  the wire. At the time of writing, the 34 year old Murray is leading and would be in a more comfortable position (as would Brighton) if he had not missed two penalties
+
+***
+<p class="factoid">In 2002/3, James Beattie scored 23 goals for Southampton - 53.5% of the team's tally</p>
+
+
+***
+
+## Tweet of the Week {-}
+
+
+```{r}  
+shortcode("tweet", "985811245768077312") 
+```
+
+
+## Totally Football and Guardian Weekly Review Podcasts {-}
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6810404-the-secret-of-success-john-betjeman-and-girls-aloud/embed/v4?eid=AQAAAJy_1Vok62cA" title="Audioboom player"></iframe>
+***
+<p>
+ 
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6810580-manchester-city-crowned-champions-and-bayern-s-big-news-football-weekly/embed/v4?eid=AQAAADrA1VrU62cA" title="Audioboom player"></iframe>
+***
+
+## Results and Table {-}
+
+```{r results_34}
+
+weekly_results("2018-04-10", "2018-04-17")
+
+```
+
+<p>
+---
+
+```{r standings_34}
+
+weekly_table("2018-04-17")
+
+```
+
+
+
+## Final Factoid {-}
+
+<p class="factoid">Mane, Salah and Firmino each scored in an EPL game for the fifth time this season</p>
+
+
+---
+
+## End of Season Update {-}
+
+####  Bravo Burnley {-}
+
+NB need to check book is > than code -
+
+Burnley continued with close encounters and lead in that category this season. .. add bit about where they finished and Man city at opposite extreme
+
+
+```{r burnleyu_34}
+
+temp <- standings %>%
+  filter(season == "2017/18") %>%
+  mutate(good = ifelse((GF - GA) == 1, 1, 0)) %>%
+  mutate(bad = ifelse((GA - GF) == 1, 1, 0))  %>%
+  group_by(team) %>%
+  summarize(Wins = sum(good),
+            Losses = sum(bad),
+            diff = Wins - Losses)
+
+my_df <- temp %>%
+  gather(key = "cat", value = "games", -team) %>%
+  #arrange(desc(team)) %>%
+  mutate(calcGames = ifelse(cat == "Losses", -games, games)) %>%
+  left_join(temp)
+
+
+my_df %>%
+  plot_ly(
+    x = ~ calcGames,
+    y =  ~ fct_reorder(team, desc(diff)),
+    #y =  ~ fct_reorder(team, temp$diff),
+    color =  ~ cat,
+    colors = c("red", "blue")
+  ) %>%
+  hide_legend() %>%
+  add_bars(orientation = 'h',
+           hoverinfo = 'text',
+           text = ~ games) %>%
+  layout(
+    title = "Number of one-goal difference results",
+    xaxis = list(title = "Games Count"),
+    yaxis = list(title = ""),
+    margin = list(l = 120, pad = 3),
+    bargap = 0.1,
+    barmode = 'overlay',
+    xaxis = list(
+      tickmode = 'array',
+      tickvals = c(-14, -7, 0, 7, 14),
+      ticktext = c('14', '7', '0', '7', '14')
+    )
+  ) %>% config(displayModeBar = F, showLink = F)
+
+
+```
+
+---
+
+#### Big Fish {-}
+
+.. Murray did not score again and slipped down to 3rd spot with..
+
+Austin might have been up there if he had palyed more than -- % of the season
+
+
+---
+
+## Code Hints
+
+ * plotly - pyramid plot
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

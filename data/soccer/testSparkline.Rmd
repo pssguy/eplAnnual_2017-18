@@ -1,0 +1,45 @@
+---
+title: "test sparkline"
+author: "pssguy"
+date: "September 26, 2016"
+output: html_document
+runtime: shiny
+---
+
+This works
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(sparkline)
+library(dplyr)
+
+data <- data.frame(colA=c('a','a','a','b','b','b'),colB=c(1,2,3,6,5,4))
+
+```
+
+
+
+```{r static}
+data %>% 
+  filter(colA=="b") %>% 
+  .$colB %>% 
+  sparkline(type="bar")
+
+```
+
+
+```{r interactive}
+
+selectInput("choice", "choose", c("a","b"))
+output$plot <- renderSparkline({
+
+data %>% 
+  filter(colA==input$choice) %>% 
+  .$colB %>% 
+  sparkline(type="bar")
+
+})
+
+sparklineOutput("plot")
+```

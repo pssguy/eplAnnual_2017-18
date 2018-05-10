@@ -1,0 +1,275 @@
+# Week 11 {-}
+
+
+## Match of the Day {-}
+
+Mourinho still can't buy a result away against big clubs
+
+```{r topGame_11}
+
+embed_youtube("QQ-cKUlOHHk", width = 420, height = 315, frameborder = 0,
+   allowfullscreen = TRUE, query = NULL) 
+
+
+```
+
+***
+
+## The Spanish connection {-}
+
+Morata connected up with Azpilicueta's cross for Chelsea's winner against Manchester United and he has now assisted on five of the striker's seven league goals this season, only topped by six of the 52 goals Diego Costa scored for the club
+
+
+```{r example_11}
+player <- "AZPILIC"
+
+## for use in assister
+scorer <- goals %>%
+  left_join(playerGame) %>%
+  select(scorer = name, scorerID = PLAYERID, PLAYER_MATCH_GOAL)
+
+assister <- assists %>%
+  left_join(playerGame) %>%
+  select(name, PLAYERID, PLAYER_MATCH_GOAL, gameDate, Opponents, season)
+
+
+## sum for player
+scorerOrder <- assister %>%
+  filter(PLAYERID == player) %>%
+  left_join(scorer) %>%
+  group_by(scorer) %>%
+  tally() %>%
+  arrange(desc(n))
+
+
+playerName <- assister %>%
+  filter(PLAYERID == player) %>%
+  head(1) %>%
+  pull(name)
+
+
+
+assister %>%
+  filter(PLAYERID == player) %>%
+  arrange(gameDate) %>%
+  mutate(order = row_number()) %>%
+  left_join(scorer) %>% # join individ
+  left_join(scorerOrder) %>% #join sum
+  plot_ly(
+    x =  ~ order,
+    y =  ~ fct_reorder(scorer, n),
+    hoverInfo = "text",
+    text =  ~ paste0(gameDate,
+                     "<br>v ", Opponents)
+  ) %>%
+  add_markers(color =  ~ season, size = I(8)) %>%
+  layout(
+    margin = list(l = 120),
+    title = glue("{playerName}'s Assists by Scorer"),
+    xaxis = list(title = "Goal Order"),
+    yaxis = list(title = "")
+  ) %>%  config(displayModeBar = F, showLink = F)
+
+
+```
+
+See the [premiersoccerstats.com](https://mytinyshinys.shinyapps.io/premierLeague/) for any player's chart
+
+
+
+***
+
+<p class="factoid">In spite of helping create more than 50 goals at Manchester City, de Bruyne has not assisted on any of the 7 David Silva has scored during that period</p>
+
+***
+
+## Comebacks {-}
+
+For a team in crisis, Everton did well to come back from a two goal deficit to win against Watford - even if it take an injury-time penalty miss by Cleverly to gain the points
+
+Overall, once a deficit of two goals occurs, only 1.7% of teams recover to win the game - and there is a 93% chance of losing the game
+This was Everton's third victory from 211 two goal deficits they have endured in the Premier league
+
+Enter any team to view the outcomes of all their two goal deficits
+
+```{r two_down_11}
+
+data <- scoreLines %>%
+  group_by(TEAMMATCHID) %>%
+  mutate(twoDown = ifelse(diff <= -2, 1, 0)) %>%
+  filter(twoDown == 1) %>%
+  select(TEAMMATCHID, MATCHID) %>%
+  unique()  %>%
+  left_join(teamGames) %>%
+  left_join(standings) %>%
+  select(team, GF, GA, gameDate, OppTeam, res, venue) %>%
+  mutate(GD = GF - GA) %>%
+  arrange(gameDate) %>%
+  group_by(team)
+
+sd <- SharedData$new(data)
+
+fs <- filter_select(
+  id = "team",
+  label = "Select Team",
+  sharedData = sd,
+  group =  ~ team,
+  allLevels = FALSE,
+  multiple = FALSE
+)
+
+## this is needed as crosstalk does not work nicely with bootstrap, apparently
+fs_nobootstrap <- fs
+
+attr(fs_nobootstrap, "html_dependencies") <- Filter(function(dep) {
+  dep$name != "bootstrap"
+},
+attr(fs_nobootstrap, "html_dependencies"))
+
+
+
+chart <- sd %>%
+  plot_ly(x =  ~ gameDate, y =  ~ GD) %>%
+  add_markers(
+    color =  ~ res,
+    hoverinfo = "text",
+    text =  ~ paste0("v ", OppTeam, "<br>", gameDate, "<br>",
+                     GF, "-", GA)
+  ) %>%
+  layout(
+    title = "Results after being 2 down in a Game",
+    xaxis = list(title = ""),
+    yaxis = list(title = "Final Goal Difference")
+  ) %>%  config(displayModeBar = F, showLink = F)
+
+
+tagList(fs_nobootstrap,
+        br(),
+        chart)
+
+```
+
+
+
+***
+
+## Tweet of the Week {-}
+
+```{r tweet_11}
+shortcode("tweet", "927993920084201473")
+```
+
+
+
+***
+
+
+## Totally Football and Guardian Weekly Review Podcasts {-}
+
+
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6461984-city-sensational-again-bilic-sacked-at-last-and-seagulls-soar-of-course/embed/v4?eid=AQAAAEj1AFogmmIA" title="audioBoom player"></iframe>
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6462724-slaven-bilic-gone-while-manchester-city-cruise-on-football-weekly/embed/v4?eid=AQAAACT1AFoEnWIA" title="audioBoom player"></iframe>
+
+***
+
+## Results and Table {-}
+
+```{r results_11}
+
+weekly_results("2017-11-01","2017-11-08")
+
+```
+
+
+```{r standings_11}
+
+weekly_table("2017-11-08")
+
+```
+
+## Final Factoid {-}
+
+<p class="factoid">Crystal Palace have led in only one of the first 11 game. Even in the worst ever season - when they totalled just 11 points - Derby County led in nine of the 38</p>
+
+---
+
+## End of Season Update {-}
+
+#### The Spanish Connection {-}
+
+Azipcuelta hooked up with Morata .. more time finishing with a, career-high, .. assists
+with only one other defender, Aaron Cresswell topping him
+
+de Bruyne helped David Silva score in consecutive games during December
+
+####  Comebacks {-}
+
+Here is the reverse of the chart above, providing end results when the team has a two goal advantage. Note how often Liverpool have spurned goo positions over the past few seasons
+
+```{r comebacksu_11}
+
+
+
+data <- scoreLines %>%
+  group_by(TEAMMATCHID) %>%
+  mutate(twoUp = ifelse(diff >= 2, 1, 0)) %>%
+  filter(twoUp == 1) %>%
+  select(TEAMMATCHID, MATCHID) %>%
+  unique()  %>%
+  left_join(teamGames) %>%
+  left_join(standings) %>%
+  select(team, GF, GA, gameDate, OppTeam, res, venue) %>%
+  mutate(GD = GF - GA) %>%
+  arrange(gameDate) %>%
+  group_by(team)
+
+sd <- SharedData$new(data)
+
+fs <- filter_select(
+  id = "team",
+  label = "Select Team",
+  sharedData = sd,
+  group =  ~ team,
+  allLevels = FALSE,
+  multiple = FALSE
+)
+
+## this is needed as crosstalk does not work nicely with bootstrap, apparently
+fs_nobootstrap <- fs
+
+attr(fs_nobootstrap, "html_dependencies") <- Filter(function(dep) {
+  dep$name != "bootstrap"
+},
+attr(fs_nobootstrap, "html_dependencies"))
+
+
+
+chart <- sd %>%
+  plot_ly(x =  ~ gameDate, y =  ~ GD) %>%
+  add_markers(
+    color =  ~ res,
+    hoverinfo = "text",
+    text =  ~ paste0("v ", OppTeam, "<br>", gameDate, "<br>",
+                     GF, "-", GA)
+  ) %>%
+  layout(
+    title = "Results after being 2 up in a Game",
+    xaxis = list(title = ""),
+    yaxis = list(title = "Final Goal Difference")
+  ) %>%  config(displayModeBar = F, showLink = F)
+
+
+tagList(fs_nobootstrap,
+        br(),
+        chart)
+
+
+```
+
+---
+
+## Code Hints {-}
+
+ * glue

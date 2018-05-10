@@ -1,0 +1,217 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+extending what i did in blog witj remoteDatabases and further in draft dbConnections.Rmd
+
+That created databases as data.frames first I want to go away from tht
+I now port the processed files from UpdatingSQL so can use directly in code
+
+Can then revalp github which should work - make package or whatever
+
+
+```{r, message=FALSE, warning=FALSE}
+
+
+library(DBI)
+library(odbc)
+library(dplyr)
+library(dbplyr)
+library(plotly)
+library(knitr)
+#ggplot2_2.2.1.9000 also gets attached (whihc is useful as it is used in the fortify) # alt could load ggfortify
+library(stringr)
+
+```
+
+
+```{r, echo=FALSE}
+
+con <- dbConnect(odbc::odbc(),
+                   Driver    = "SQL Server", 
+                   Server    = "sqlb12.webcontrolcenter.com",
+                   Database  = "epldb",
+                   UID       = "soccer",
+                   PWD       = "mlcepl",
+                   Port      = 1433)
+
+```
+
+check connection
+```{r}
+dbListFields(con, "playerGame")
+
+playerGame <-tbl(con, "playerGame") # still alist
+# playerGame <- playerGame %>% 
+#   as.data.frame()
+
+#pg <- playerGame %>% fortify() # as with as.data.frame takes an age - may be best done in individual code as below
+
+
+system.time(
+playerGame <-tbl(con, "playerGame") %>% 
+  select(PLAYERID,name) %>% 
+   collect() %>% 
+   unique()
+) 
+  # user  system elapsed 
+  #  2.55    0.17   41.94 
+
+
+system.time(
+gb <-tbl(con, "playerGame") %>% 
+  group_by(PLAYERID,name) %>% 
+   tally() %>%
+  select(-n) %>% 
+  collect()
+) 
+# user  system elapsed 
+#    0.08    0.00    1.56
+
+## error
+system.time(
+sl <-tbl(con, "playerGame") %>% 
+  group_by(PLAYERID,name) %>% 
+   slice(1) %>% 
+  collect()
+) 
+
+## also refuses to work
+system.time(
+sl <-tbl(con, "playerGame") %>% 
+  group_by(PLAYERID,name) %>% 
+   slice(1) %>% 
+  collapse()
+) 
+
+system.time(
+di <-tbl(con, "playerGame") %>% 
+  select(PLAYERID,name) %>% 
+   distinct() %>% 
+  collect()
+) 
+
+
+
+```
+
+# works smoothly and fast until you have to turn into a dayt.frame
+
+Lets look at an example from the site e.g career with list specified already
+
+```{r}
+
+## in shiny app replaced by interactive select
+thePlayer <- "ROONEYX"
+
+dfChart <- playerGame %>% 
+    filter(PLAYERID==thePlayer) %>% 
+    select(date=gameDate,Opponents,on,off=offA,Goals=Gls,Assists,Team=TEAMNAME,mins,plGameOrder,PLAYERID) %>% 
+    mutate(points=Goals+Assists)
+
+is.data.frame(fortify(dfChart))
+
+
+dfChart %>% 
+  fortify() %>% ## fortifying here is pretty much instantaneous
+    plot_ly() %>% 
+    add_markers(x=~date,y=~mins,color=~Team,
+            hoverinfo = "text",
+            text = ~paste(date,"<br>v ",Opponents,"<br>on:",on,"<br>off:",off,"<br>Goals:",Goals,"<br>Assists:",Assists),
+            marker=list(size=~points*2+6)) %>% 
+    layout(hovermode = "closest",
+           title="",
+           xaxis=list(title="Match day Squad Game order"),
+           yaxis=list(title="Minutes played"
+           )
+    ) %>% 
+    config(displayModeBar = F,showLink = F)
+
+```
+
+ works
+ 
+ Now with the con directly in code
+ 
+```{r}
+
+dfTeamYear <- tbl(con, "summary") %>%
+    filter(PLAYERID==thePlayer) %>% 
+  fortify() %>% 
+    mutate(apps=St+On,Gls=StGls+subGls,Pens=startPens+subPens,Points=Gls+Assists,ppg=round(Points*90/mins,2),janAge=as.integer(str_sub(season,1,4)),byear=as.integer(str_sub(born,1,4)),age=janAge-byear) %>%
+    select(Season=season,Age=age,Team = TEAMNAME,Apps=apps,St,On,Off,Bench,Mins=mins,Gls,Assists,Points,ppg,Pens,Y,R,OG,MP) %>% 
+    #ungroup() # looks like this was causing issue
+    arrange(desc(Season))
+
+
+ 
+  dfTeam <- dfTeamYear %>% 
+    group_by(Team) %>%
+    summarise(Apps=sum(Apps),St=sum(St),On=sum(On),Off=sum(Off),Bench=sum(Bench),Mins=sum(Mins),Goals=sum(Gls),
+              Pens=sum(Pens),Assists=sum(Assists),Points=sum(Points),Y=sum(Y),R=sum(R),OG=sum(OG),MP=sum(MP))
+  
+ # #print(names(dfTeam))
+  
+  dfCareer <- dfTeamYear %>% 
+   
+    summarise(Apps=sum(Apps),St=sum(St),On=sum(On),Off=sum(Off),Bench=sum(Bench),Mins=sum(Mins),Goals=sum(Gls),
+              Pens=sum(Pens),Assists=sum(Assists),Points=sum(Points),Y=sum(Y),R=sum(R),OG=sum(OG),MP=sum(MP))
+  dfCareer$Team <- "Career"
+  
+  
+  
+  dfTeamYear  %>%  
+    select(-MP) %>% 
+    DT::datatable(class='compact stripe hover row-border order-column',rownames=FALSE,options= list(paging = FALSE, searching = FALSE,info=FALSE))
+    
+
+
+```
+ 
+ Couple of other tbales not done here
+ 
+```{r}
+ df <-playerGame %>% 
+    filter(PLAYERID==thePlayer) %>% 
+  fortify() %>% 
+    group_by(season,PLAYERID,name) %>% 
+    select(Gls,Assists,mins) %>% 
+    summarise(Goals=sum(Gls),Assists=sum(Assists),Points=Goals+Assists,Mins=sum(mins))%>% 
+   # filter(Points!=0) %>% otherwise does not show zero values on year
+    mutate(Gpm=90*Goals/Mins,Apm=90*Assists/Mins,Ppm=90*Points/Mins) %>% 
+    ungroup() 
+  
+ #write_csv(df,"problem.csv")
+#   
+#   df %>% 
+#     tauchart() %>% 
+#     tau_point("season","Ppm", size="2") %>% 
+#     # tau_line("season","Ppm") %>% 
+#     tau_tooltip(c("Goals","Assists")) %>% 
+#     tau_guide_x(label="") %>% 
+#     tau_guide_y(label ='Points per 90 mins')
+  df %>% 
+  plot_ly() %>% 
+  add_markers(x = ~season, y = ~Ppm,  hoverinfo = "text",
+          marker=list(size=~Mins/10, sizemode="area"),
+          text = ~paste(
+            "<br>Goals: ",Goals,
+            "<br>Assists: ",Assists,
+            "<br>Points: ",Points,
+            "<br>Minutes: ",Mins
+          )) %>%
+    layout(hovermode = "closest",
+           title="Points per 90 mins by Season",
+           xaxis=list(title=""),
+           yaxis=list(title="Points per 90 mins",rangemode="tozero"
+           )
+    ) %>%  config(displayModeBar = F,showLink = F)
+    
+  
+```
+ 
+ 
+ ## Looks good
+ 
+ 

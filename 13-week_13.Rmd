@@ -1,0 +1,303 @@
+# Week 13 {-}
+
+## Match of the Day {-}
+
+The one top-six clash ended in stalemate leaving both Liverpool and Chelsea even further behind the Manchester clubs
+
+
+```{r topGame_13}
+
+embed_youtube("n_vQUh5X0KQ", width = 420, height = 315, frameborder = 0,
+   allowfullscreen = TRUE, query = NULL) 
+
+
+```
+
+***
+
+
+## Schedule difficulty {-}
+
+In spite of the season now more than a third gone, there remain some significant differences in terms of quality of opposition faced so far (based on finishing position last year)
+
+
+
+```{r schedule_13}
+## last year's returning teams by position
+old <- standings %>%
+  filter(season == "2016/17" & tmYrGameOrder == 1) %>%
+  select(position = final_Pos, team) %>%
+  filter(position < 18)
+
+# promoted clubs filling the bottom three spots - again by how they finished in Championship
+new <-
+  data.frame(
+    team = c("Newcastle U", "Brighton", "Huddersfield"),
+    position = c(18, 19, 20)
+  )
+
+all <- bind_rows(old, new)
+
+
+myFun <- function(x) {
+  # need to remove selected team from the table and re-order
+  change <- all %>%
+    filter(team != x) %>%
+    mutate(order = row_number())
+  
+  # apply team's schedule to date
+  standings %>%
+    filter(season == "2017/18" & team == x & tmYrGameOrder <= 13) %>%
+    select(OppTeam) %>%
+    left_join(change, by = c("OppTeam" = "team")) %>%
+    summarise(diff = mean(order)) %>%
+    pull(diff)
+}
+
+# map across allteasm
+difficulty = map_dbl(all$team, myFun)
+
+df <- data.frame(team = all$team, difficulty = difficulty)
+
+df %>%
+  arrange(difficulty) %>%
+  select(`Most difficult` = team) %>%
+  DT::datatable(
+    class = 'compact stripe hover row-border order-column',
+    rownames = TRUE,
+    options = list(
+      paging = TRUE,
+      searching = FALSE,
+      info = FALSE,
+      pageLength = 10
+    ),
+    width = 300,
+    height = 700
+  )
+
+
+```
+
+ Chelsea have had the hardest run to date and still have to face Swansea(H), Newcastle(H), West Ham(A), Huddersfield(A), Southampton(H) and Everton(A). You would have to think they would be disappointed with anything less than 15 points
+ 
+Southampton's by contrast have Man City(A), Bournemouth(A), Arsenal(H), Leicester(H), Chelsea(A) and Huddersfield(H). The win over Everton will have given them a timely boost
+
+
+***
+
+<p class="factoid">In 29 starts with Sunderland last year, Jordan Pickford conceded an average of 1.72 goals per game. So far with Everton, it has been 2.15</p>
+
+***
+
+## So close for Burnley {-}
+
+Another controversial extra-time victory for Arsenal over Burnley has denied the Clarets from keeping four consecutive clean sheets in the EPL for the first time
+
+They have to settle for equalling their best ever 
+
+```{r shutouts_13}
+burnley <- standings %>%
+  filter(team == "Burnley") %>%
+  arrange(gameDate)
+
+
+counts = roll_sum(burnley$GA, n = 4)
+
+data.frame(goals = counts) %>%
+  mutate(order = row_number()) %>%
+  plot_ly(x =  ~ order, y =  ~ goals) %>%
+  add_lines() %>%
+  layout(
+    title = "Goals Conceded in 4 game-stretches - Burnley",
+    xaxis = list(title = "Game Order"),
+    yaxis = list(title = "Goals Against")
+  ) %>%  config(displayModeBar = F, showLink = F)
+
+```
+
+
+
+***
+
+<p class="factoid">Only one team conceding more than an average of 2 goals a season has avoided relegation - Wigan 16th 2009/10. Other than Everton (see above). Stoke and West Ham are currently on the button </p>
+
+***
+
+
+
+***
+
+## Tweet of the Week {-}
+
+```{r}  
+shortcode("tweet", "933768157054955520") 
+```
+
+
+
+***
+
+
+## Totally Football and Guardian Weekly Review Podcasts {-}
+
+
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6502679-pulis-p45-ed-narrative-busters-and-dulwich-hamlet-s-toilets-opposite-stand/embed/v4?eid=AQAAACyCE1oXOWMA" title="audioBoom player"></iframe>
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6518587-shambolic-everton-manchester-city-s-marvels-and-dyche-s-deep-thinking-football-weekly/embed/v4?eid=AQAAAN1qHFo7d2MA" title="audioBoom player"></iframe>
+
+***
+
+## Results and Table {-}
+
+```{r results_13}
+
+weekly_results("2017-11-21","2017-11-27")
+
+```
+
+
+```{r standings_13}
+
+weekly_table("2017-11-27")
+
+```
+
+
+
+## Final Factoid {-}
+
+<p class="factoid">Man City already look safe from relegation with 37 points. Only eight of the 66 teams relegated under the 38 game season with 38+ points have failed to survive</p>
+
+
+---
+
+## End of Season Update {-}
+
+
+#### Schedule difficulty  {-}
+
+Chelsea actually picked up 13 points with defeat at West Ham and a draw with Everton. True to expectations, Southampton mustered just 3 draws in the six games (which comprised the first half of a 12 match winless run) and were only three points clear of the bottom three by the half way mark of the campaign and were ..
+
+Here is how many points every team did in rounds 13-19 relative to the toughness of games, as measured by 2016/17 finishing position
+
+```{r }
+old <- standings %>%
+  filter(season == "2016/17" & tmYrGameOrder == 1) %>%
+  select(position = final_Pos, team) %>%
+  filter(position < 18)
+
+# promoted clubs filling the bottom three spots - again by how they finished in Championship
+new <-
+  data.frame(
+    team = c("Newcastle U", "Brighton", "Huddersfield"),
+    position = c(18, 19, 20)
+  )
+
+all <- bind_rows(old, new)
+
+
+myFun <- function(x) {
+  # need to remove selected team from the table and re-order
+  change <- all %>%
+    filter(team != x) %>%
+    mutate(order = row_number())
+  
+  # apply team's schedule to date
+  standings %>%
+    filter(season == "2017/18" & team == x & tmYrGameOrder <= 13) %>%
+    select(OppTeam) %>%
+    left_join(change, by = c("OppTeam" = "team")) %>%
+    summarise(diff = mean(order)) %>%
+    pull(diff)
+}
+
+# map across allteasm
+difficulty = map_dbl(all$team, myFun)
+
+easy <- data.frame(team = all$team, difficulty = difficulty) %>%
+  arrange(difficulty) %>%
+  mutate(difficulty = row_number())
+
+# standings at week 13
+wk13 <- standings %>%
+  filter(season == "2017/18" & tmYrGameOrder == 13) %>%
+  select(team, cum_13 = cumPts)
+
+standings %>%
+  filter(season == "2017/18" & tmYrGameOrder == 19) %>%
+  select(team, cum_19 = cumPts) %>%
+  inner_join(wk13) %>%
+  mutate(diff = cum_19 - cum_13) %>%
+  inner_join(easy) %>%
+  plot_ly(x = ~ difficulty, y =  ~ diff) %>%
+  add_markers(hoverinfo = "text",
+              text =  ~ team) %>%
+  layout(
+    title = "Points Gained Rounds 14-19 by Schedule Difficulty ",
+    xaxis = list(title = "Schedule Difficulty"),
+    yaxis = list(title = "Points Gained")
+  ) %>% config(displayModeBar = F, showLink = F)
+
+
+
+```
+
+There is a clear relationship to be seen. Teams that performed out of the ordinary would include, surprise-surprise, Manchester City. They picked up maximum points in spite of facing
+both Manchester United an Tottenham. Watford, in contrast under-performed culminating in succesive defeats to newlypromoted clubs, Huddersfield and Brighton
+
+---
+
+Pickford ended up conceding .. per game. He was one of only .. to play every minute of the season and was favourite to start in goal for England at the World Cup
+
+---
+
+
+#### So close for Burnley {-}
+
+As can be seen from the chart, Burnley's defence earned the praise it has been given.
+
+Teams that did manage four game shutout runs this season
+
+```{r shutoutsu_13}
+
+clubs <- standings %>%
+  filter(season == "2017/18") %>%
+  pull(team) %>%
+  unique()
+
+games <- standings %>%
+  filter(season == "2017/18") %>%
+  arrange(gameDate)
+
+shutouts <- function(club) {
+  goalsAg <- games %>%
+    filter(team == club) %>%
+    pull(GA)
+  
+  x <-  data.frame(counts = roll_sum(goalsAg, n = 4))
+  x$team <-  club
+  x
+}
+
+
+res <- map_df(clubs, shutouts)
+
+res %>%
+  filter(counts == 0) %>%
+  pull(team) %>%
+  unique()
+
+```
+
+The one surprise on the list is Arsenal, who have conceded .. more than Burnley. However, the run came early in the season and included home games versus Bournemouth, West Brom and Brighton as well a, more impressive, 0-0 draw at Chelsea.
+
+---
+
+In the end, no team conceded an average of two goals a game, although Stoke and West Ham (featuring two England gpalkeepers) flirted with the figure .. Of, course it did not help Stoke survive the drop
+
+---
+
+## Code Hints {-}
+
+ * RcppRoll - roll_sum

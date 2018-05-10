@@ -1,0 +1,46 @@
+---
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    social: [ menu ]
+    source_code: embed
+runtime: shiny    
+---
+
+```{r echo=FALSE, warning=FALSE, message=FALSE, tidy= TRUE, error=FALSE}
+
+  # libraries utilized in either creating dataset or using for visualization
+ library(rvest)
+ library(stringr)
+ library(purrr)
+ library(plotly)
+ library(tidyr)
+ library(readr)
+ library(dplyr)
+
+# recalculate 
+
+# work from data  a few days after videos were released
+
+videos <- read_csv("videos.csv")
+
+
+```
+
+Cumulative
+===================================== 
+
+
+``` {r summary carpentry}
+
+renderPlotly({
+  
+ videos %>% 
+   arrange(desc(views)) %>% 
+   mutate(cumViews=cumsum(views),rank=row_number(),pc=100*cumViews/max(cumViews))  %>% 
+   plot_ly(x=rank,y=pc,mode="markers+lines")
+  
+})
+
+```

@@ -1,0 +1,278 @@
+# Week 16 {-}
+
+
+
+## Match of the Day {-}
+
+Bizarrely, the top two teams contrive to score three cock-up goals
+
+
+```{r topGame_16}
+
+embed_youtube("3GtmoG1PEOI", width = 420, height = 315, frameborder = 0,
+   allowfullscreen = TRUE, query = NULL) 
+
+
+```
+
+***
+
+## City dominance {-}
+
+With an eleven point lead over their nearest rivals, Man City are looking home and hosed for the title. Their 46 point tally after 16 games is an EPL record, three greater than Chelsea 2005/6, but is actually not the largest margin at this stage of a season.    
+ In 1993/4, Man. Utd. held a 12 point lead over their nearest rivals, Blackburn, which had narrowed to 8 by the season end
+
+Here are the biggest comebacks each season (hover for details)
+
+```{r big_lead16}
+
+leaders <- standings %>% 
+  filter(position==1) %>% 
+  select(leader=team,season,tmYrGameOrder,leaderPts=cumPts)
+
+df <- standings %>% 
+  filter(final_Pos==1) %>% 
+  select(winner=team,season,tmYrGameOrder,winnerPts=cumPts) %>% 
+  left_join(leaders,by=c("season"="season","tmYrGameOrder"="tmYrGameOrder")) %>% 
+  mutate(diff=winnerPts-leaderPts) %>% 
+  filter(winner!=leader) %>% 
+  arrange(diff,desc(tmYrGameOrder)) %>% 
+  group_by(season) %>% 
+  slice(1) %>% 
+  mutate(diff=if_else(diff==0,-0.2,diff)) %>% 
+  mutate(diffnumber=if_else(diff==0,0,-diff)) %>% 
+  filter(season!="2017/18")
+
+legendtitle <- list(yref='paper',xref="paper",y=1.05,x=1.2,font=list(size= 14, color="#ff0000"),    text="Champions",showarrow=F)
+
+df %>% 
+    plot_ly(x=~season,y=~diff,color=~winner) %>% 
+  add_bars(
+           hoverinfo="text",
+           text=~paste0(
+             season,
+             "<br>",leader," led ",winner," by ",diffnumber,' points',
+             "<br>after Round ",tmYrGameOrder)
+           ) %>% 
+  layout(title="Maximun points deficit made up by Champion by Season",
+         annotations=legendtitle,
+         margin=list(b=80),
+         xaxis=list(title=""),
+         yaxis=list(title="Points in Arrears")) %>%  config(displayModeBar = F,showLink = F)
+
+```
+
+So bigger deficits later into the season have been overcome - including Manchester United over Newcastle in 1995/6 - although expectations are not high that City will implode as the Magpies did
+
+***
+
+City have also now recorded the highest single-season run of victories at 14
+
+Here are the top winning runs for every team which has appeared in the Premier League. If there are ties, the first season is shown (on hover)
+
+```{r win_runs11}
+
+standings <- standings %>% 
+  ungroup()
+  
+
+myFun <- function(x,y) {
+  standings %>% 
+    #ungroup() %>% 
+    filter(team==x&season==y) %>% 
+    arrange(tmGameOrder) %>% 
+    select(res,tmGameOrder) %>% 
+    mutate(cat=ifelse(res=="Win",1,0)) %>% 
+    do(subSeq(.$cat)) %>% 
+    filter(value==1) %>% 
+    arrange(desc(slength)) %>% 
+      slice(1) %>% 
+      pull(slength)
+}
+
+tmYrs <-standings %>%
+  select(season,team) %>%
+  unique(.)
+
+
+run <- map2_dbl(tmYrs$team,tmYrs$season,myFun)
+
+df <- cbind(tmYrs,run=run)
+
+df <-df %>% 
+  group_by(team) %>% 
+  arrange(desc(run), desc(team), season) %>% 
+  slice(1)
+
+df %>% 
+  plot_ly(x=~run,y=~fct_reorder(team, run), color=~team, showlegend = FALSE, height = 1000) %>% 
+  add_bars(hoverinfo = "text", width=0.7,
+           text=~paste0(run,"<br>",season)) %>% 
+  layout(title="Longest Sequences of Wins within season",
+         margin=list(l=100,pad=5),
+          xaxis=list(title="Wins in Row"),
+         yaxis=list(title="")
+) %>%  config(displayModeBar = F,showLink = F)
+
+
+
+```
+
+Brighton will be hoping to have got themselves off the bottom of the chart by the end of the season
+
+
+<p class="factoid">Benteke's missed penalty means he has now gone 1000 minutes without scoring in the league
+</p>
+
+***
+
+## West Brom Woes {-}
+
+WBA remain just above the drop zone but have not benefited from the Pardew bounce as the new management has produced no goals in two games against teams below them
+
+They have now gone 14 games without winning.   
+
+How often does that occur and is it a presage of relegation?
+
+
+```{r winless_run16}
+
+standings %>% 
+  mutate(cat=ifelse(res=="Win",1,0)) %>% 
+  select(gameDate,season,team,cat,final_Pos) %>% 
+  arrange(gameDate) %>% 
+  group_by(season,team) %>% 
+   mutate(roll_sum = roll_sum(cat, 14, align = "right", fill = NA)) %>% 
+  filter(roll_sum==0) %>% 
+  ungroup() %>% 
+  select(-c(gameDate,cat,roll_sum)) %>% 
+  unique() %>%
+ DT::datatable(width=300,class='compact stripe hover row-border order-column',rownames=FALSE,options= list(paging = TRUE, searching = TRUE,info=FALSE))
+
+
+```
+
+So typically once a season, with WBA featuring on one previous occasion but escaping by the skin of their teeth. 
+Generally, such a run will mean the drop but there are obviously many teams still in the mix
+
+
+<p class="factoid">There was a greater than 20 year age gap between two outfield bench-warmers for the first time this season. WBA's Gareth McAuley(38) and Rayaan Tulloch(16) also set a club record</p>
+
+***
+
+## Tweet of the Week
+
+
+```{r tweet16}  
+shortcode("tweet", "940072530953383937") 
+```
+
+
+
+***
+
+## Totally Football and Guardian Weekly Review Podcasts {-}
+
+
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6546608-city-out-of-sight-west-ham-win-at-last-and-arsenal-off-to-ostersunds/embed/v4?eid=AQAAAHmuLlqw5GMA" title="audioBoom player"></iframe>
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6546651-city-slickers-benteke-s-blunder-and-classic-allardyce-football-weekly/embed/v4?eid=AQAAAOLcLlrb5GMA" title="audioBoom player"></iframe>
+
+***
+
+## Results and Table
+
+```{r results_16}
+
+weekly_results("2017-12-04","2017-12-11")
+
+```
+
+
+```{r standings_16}
+
+weekly_table("2017-12-11")
+
+```
+
+
+
+
+## Final Factoid {-}
+
+<p class="factoid">Palace are only the second team in EPL history to be bottom after a five-game unbeaten run (QPR 2012/13)</p>
+
+
+---
+
+## End of Season Update {-}
+
+#### City dominance {-}
+
+Manchester City extended their winning run to 18 before it was ended by Crystal Palace, with Liverpool inflicting the first defeat on them two games later
+
+Brighton did extricate themselves leaving Cardiff as the only team in Premier League history never to have recorded successive victories
+
+The most common best-sequence is five; achieved by 14 of the 49 teams to ever appear in the Premier League. Let's see how often that length run has been achieved at least in a season, by club
+
+
+```{r five_winsU_16}
+fiveWins <- function(x,y) {
+  standings %>% 
+    #ungroup() %>% 
+    filter(team==x&season==y) %>% 
+    arrange(tmGameOrder) %>% 
+    select(res,tmGameOrder) %>% 
+    mutate(cat=ifelse(res=="Win",1,0)) %>% 
+    do(subSeq(.$cat)) %>% 
+    filter(value==1,slength>4) %>% 
+    nrow()
+}
+
+# tmYrs <-standings %>%
+#   select(season,team) %>%
+#   unique(.)
+
+
+
+fiveYearRun <- map2_dbl(tmYrs$team,tmYrs$season,fiveWins)
+
+## purr list col to hold years it happened
+fiveYears_df <- cbind(tmYrs,count=fiveYearRun) %>% 
+  filter(count>0) %>% 
+  count(team, sort=TRUE)
+
+
+fiveYears_df %>% 
+  plot_ly(x=~n,y=~fct_reorder(team, n), color=~team, showlegend = FALSE, height = 1000) %>% 
+  add_bars(hoverinfo = "text", width = 0.7,
+           text=~paste0(n)) %>% 
+  layout(title="Seasons with at least one 5-wins Run",
+         margin=list(l=100,pad=5),
+          xaxis=list(title="Number of Seasons"),
+         yaxis=list(title="")
+) %>%  config(displayModeBar = F,showLink = F)
+
+```
+
+Unsurprisingly, Manchester United top the list. The only seasons they have failed to achieve the feat are 2010/11 (when they nonetheless won the title by nine points); 2013/14 and 2015/16
+
+---
+
+Benteke finally ended his drought at just over 1100 minutes but he managed only .. in over .. (equivalent to games) and ended the season on the bench . On the plus side, his .. * assists was double that of any other of his six seasons in the league
+
+---
+
+#### West Brom Woes {-}
+
+Things got little better for West Brom. The winless run extended to 20 and Pardew was dismissed before season's end. Virtually the only highlight of the season was an away victory at Old Trafford under caretaker manager, Darren Moore
+
+
+---
+
+## Code Hints {-}
+
+ * plotly - annotations for legend title
+ * purrr  - map2 function example
+ * Rcpp   - roll_sum()

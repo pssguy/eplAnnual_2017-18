@@ -1,0 +1,296 @@
+# Week 36 {-}
+
+
+
+## Match of the Day {-}
+
+Signs of life from the botton three with wins for WBA and Southampton and a draw for Stoke at Anfield. Unfortunately, all available is the Liverpool game with Italian commentary
+
+
+```{r topGame_36}
+
+embed_youtube("e7kbmIpByDI", width = 420, height = 315, frameborder = 0,
+   allowfullscreen = TRUE, query = NULL) 
+
+
+```
+
+***
+<p class="factoid">Somewhat overshadowed by de Bruyne, Sterling (18 goals, 22 Assists) joins Salah as the only other player on the 40 points mark this season</p>
+
+***
+
+## Most wins - win it all {-}
+
+Manchester City have already reached the 30 win mark matching Chelsea's record, set last year, with three games still to play. Manchester United are next with 24
+
+City have already won the title but has there ever been a Premier league campaign
+where the most wins has not brought home the trophy? Well the answer is a qualified yes
+
+Here are the podium finishers for every year
+
+```{r most_wins_36}
+
+standings %>%
+  filter(res == "Win") %>%
+  group_by(season, team, final_Pos) %>%
+  tally() %>%
+  arrange(desc(n), final_Pos) %>%
+  group_by(season) %>%
+  slice(1:3) %>%
+  arrange(desc(season)) %>%
+  select(season, team, position = final_Pos, wins = n) %>%
+  DT::datatable(
+    width = 400,
+    class = 'compact stripe hover row-border order-column',
+    rownames = FALSE,
+    options = list(
+      paging = TRUE,
+      searching = TRUE,
+      info = FALSE,
+      pageLength = 12,
+      lengthMenu = c(6, 12, 18)
+    )
+  )
+
+```
+ 
+There has been the odd year when two teams have tied for the top spot. Perhaps most notably in 2011/12 when Manchester City scored twice in injury time in the last game of the season to pip Manchester United on goal difference
+ 
+ --- 
+
+
+## Scoring For and Against {-}
+
+In a no suprise game (Arsenal losing the game in stoppage time), Henrikh Mkhitaryan became the first player to both score for and against Manchester United in the same season
+
+But how often does a player come back to bite the team that sold him
+
+```{r two_club_goals_36}
+
+player_team <- playerGame %>%
+  filter(PLAYERID != "OWNGOAL") %>%
+  group_by(season, name, TEAMNAME, PLAYERID) %>%
+  summarize(tot = sum(Gls)) %>%
+  filter(tot > 0)
+
+two_Clubs <- player_team %>%
+  ungroup() %>%
+  select(-tot) %>%
+  group_by(season, name, PLAYERID) %>%
+  tally() %>%
+  filter(n > 1)
+
+for_against <- function(id, yr) {
+  temp <- player_team %>%
+    filter(PLAYERID == id & season == yr)
+  
+  teams <- temp$TEAMNAME
+  
+  scoredAgainst <- playerGame %>%
+    filter(PLAYERID == id & season == yr, Gls > 0) %>%
+    pull(Opponents)
+  
+  team <-
+    ifelse(length(intersect(teams, scoredAgainst)) > 0, intersect(teams, scoredAgainst), NA)
+  
+  data.frame(PLAYERID = id,
+             season = yr,
+             team = team)
+}
+
+data <- map2_df(two_Clubs$PLAYERID, two_Clubs$season, for_against)
+
+
+goal_ag <- data %>%
+  filter(!is.na(team))
+
+
+player_team %>%
+  left_join(goal_ag) %>%
+  filter(!is.na(team), team != TEAMNAME) %>%
+  arrange(desc(season)) %>%
+  select(player = name,
+         season,
+         `for & against` = team,
+         other = TEAMNAME) %>%
+  DT::datatable(
+    class = 'compact stripe hover row-border order-column',
+    rownames = FALSE,
+    options = list(
+      paging = TRUE,
+      searching = TRUE,
+      info = FALSE
+    )
+  )
+
+```
+
+Only two players appear twice on the list.
+
+John Hartson performed the feat first with West Ham and Wimbledon the clubs involved
+
+However, this is trumped by Robbie Keane who started the 2002/03 season for Leeds whom he scored against after a transfer to Spurs. Then in 2008/09, he was sold to Liverpool and after a disappointing spell went back to Spurs for 8 million pounds less and... well you can guess the rest
+
+
+## Best Win {-}
+
+Crystal Palace's 5-0 romp over Leicester both virtually freed them from relegation concerns and was their best ever Premier League win
+
+Here is the best result, in terms of scoreline, for every team that has appeared
+ Determing factors are by order, goal difference, goals scored and earliest occurence
+
+```{r big_win_36}
+
+standings %>%
+  mutate(GD = GF - GA) %>%
+  arrange(desc(GD), desc(GF), gameDate, season) %>%
+  group_by(team) %>%
+  slice(1) %>%
+  select(team, GF, GA, Opponents = OppTeam, date = gameDate) %>%
+  DT::datatable(
+    class = 'compact stripe hover row-border order-column',
+    rownames = FALSE,
+    options = list(
+      paging = TRUE,
+      searching = TRUE,
+      info = FALSE
+    )
+  )
+
+
+```
+
+Barnsley, Cardiff and Swindon never managed more than a two goal win in their single seasons in the league
+
+***
+
+## Tweet of the Week {-}
+
+
+```{r}  
+shortcode("tweet", "989880967224586240") 
+```
+
+
+## Totally Football and Guardian Weekly Review Podcasts {-}
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6834346-good-eggs-girth-and-brains/embed/v4?eid=AQAAAI1M6FqqSGgA" title="Audioboom player"></iframe>
+***
+<p>
+ 
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6834488-boxes-baggies-celtic-sunderland-and-more-football-weekly/embed/v4?eid=AQAAALpM6Fo4SWgA" title="Audioboom player"></iframe>
+***
+
+## Results and Table {-}
+
+```{r results_36}
+
+weekly_results("2018-04-24", "2018-05-01")
+
+```
+
+<p>
+---
+
+```{r standings_36}
+
+weekly_table("2018-04-24")
+
+```
+
+
+
+## Final Factoid {-}
+
+<p class="factoid">Shutout 19 times, three more than any other team, Huddersfield finish with Man City, Chelsea and Arsenal and could yet equal's Derby's 2007/08 EPL record of 22</p>
+
+
+---
+
+## End of Season Update {-}
+
+
+#### Most wins - win it all {-}
+
+ How about the converse. Does losing the most games in a season, condemn you to relegation?
+ 
+```{r most_lossesu_36}
+
+standings %>%
+  filter(res == "Loss") %>%
+  group_by(season, team, final_Pos) %>%
+  tally() %>%
+  arrange(desc(n), final_Pos) %>%
+  group_by(season) %>%
+  slice(1:3) %>%
+  arrange(desc(season)) %>%
+  select(season, team, position = final_Pos, losses = n) %>%
+  DT::datatable(
+    width = 400,
+    class = 'compact stripe hover row-border order-column',
+    rownames = FALSE,
+    options = list(
+      paging = TRUE,
+      searching = TRUE,
+      info = FALSE,
+      pageLength = 12,
+      lengthMenu = c(6, 12, 18)
+    )
+  )
+```
+ 
+Not the same situation at all. In fact, in 1996/97 Spurs finished in the top half of the table in spite of losing almost half their games. With 46 points, they only finished 7 points clear of second-bottom, Middlesbrough 
+
+This season..
+
+With 22 losses you seem pretty well certain to be relegated and even with just 15 a couple of sides have taken the drop including Crystal Palace in a 42 game schedule in 1992/93 and ..
+
+
+#### Best Win {-}
+
+On the same theme of opposites, here are the worst losses suffered by each team
+
+The criteris this time is biggest goal difference; lowest goals for; and game date
+
+```{r worst_lossU_36}
+
+
+standings %>%
+  mutate(GD = GF - GA) %>%
+  arrange(GD, GF, gameDate, season) %>%
+  group_by(team) %>%
+  slice(1) %>%
+  select(team, GF, GA, Opponents = OppTeam, date = gameDate) %>%
+  DT::datatable(
+    class = 'compact stripe hover row-border order-column',
+    rownames = FALSE,
+    options = list(
+      paging = TRUE,
+      searching = TRUE,
+      info = FALSE
+    )
+  )
+
+```
+
+Unsurprisngly, Manchester United lead the way as putting most teams to the sword, eight, although none for more than seven years
+
+Other than the teams appearing in the Premier League for the first time, Brighton and Huddersfield, Watford - and more surprisngly, Liverpool suffered their worst defeats. In mitigation , against Manchester City, the Merseyside team had Mane sent off after 37 minutes , won the return fixture and also beat their opponents home and away in the Champions League
+
+--
+
+## Code Hints
+
+  * base - intersect()
+
+
+
+
+
+
+
+
+
+
+

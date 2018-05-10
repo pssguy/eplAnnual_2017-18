@@ -1,0 +1,270 @@
+# Week 7 {-}
+
+
+## Game of the week WBA 2 - 2 Watford {-}
+
+These teams probably won't feature much but Watford deservedly fought back from a two goal deficit
+
+```{r topGame_07}
+
+# embed_youtube("qbs1TY3k5cQ", width = 420, height = 315, frameborder = 0,
+#   allowfullscreen = TRUE, query = NULL) 
+
+
+```
+
+
+<div style="width: 100%; height: 0px; position: relative; padding-bottom: 56.250%;"><iframe src="https://streamable.com/s/fcthv/vosdfu" frameborder="0" width="100%" height="100%" allowfullscreen style="width: 100%; height: 100%; position: absolute;"></iframe></div>
+
+
+
+## Widening gap in class {-}
+
+It was generally forecast that the top-six of last season would repeat again in this campaign - though probably not in the same order. After just seven games, we are already just one diverted Joselu strike away from Liverpool joining the other top five from last year in the leading half-dozen 
+
+```{r repeatTop6_07}
+
+seasons <- standings %>%
+  filter(season < "2017/18") %>%
+  select(season) %>%
+  unique() %>%
+  arrange(season) %>%
+  pull(season)
+
+myFun <- function(x) {
+  yr1 <- standings %>%
+    filter(tmYrGameOrder == 1 & final_Pos < 7 &
+             season == seasons[x]) %>%
+    pull(team)
+  
+  yr2 <- standings %>%
+    filter(tmYrGameOrder == 1 & final_Pos < 7 &
+             season == seasons[x + 1]) %>%
+    pull(team)
+  
+  length(intersect(yr1, yr2))
+}
+
+count=map_int(1:24,myFun)
+data.frame(season=seasons[2:25],count=count) %>% 
+  arrange(desc(season)) %>% 
+                         DT::datatable(width=200,class='compact stripe hover row-border order-column',rownames=FALSE,options= list(paging = TRUE, searching = FALSE,info=FALSE))
+
+```
+
+The only repeat season was 2008/09 when Man Utd. Liverpool, Chelsea, Arsenal, Everton and Aston Villa did the trick    
+
+  FYI that season Tottenham were 8th and Man City 10th - 40 points behind their city rivals
+
+
+***
+
+
+However the gap between top and bottom, 19 points, is the biggest after 7 games of an EPL season
+
+```{r pointgap_07}
+
+standings %>%
+  filter(tmYrGameOrder == 7) %>%
+  mutate(year = str_sub(season, 1, 4)) %>%
+  exploding_boxplot(
+    y = "cumPts",
+    group = "year",
+    color = "year",
+    label = "team",
+    ylab = "Cumulative Goals",
+    xlab = ""
+  )
+```
+
+Click on any box, for individual records and hover resulting points for team
+
+***
+
+<p class="factoid">Anthony Martial is providing a goal or an assist every 25 minutes of Premier League action this season</p>
+
+***
+
+## Classic Coutinho {-}
+
+Jon-Jo Shelvey must have been expecting it but was too slow to stop it. 20 yards out on the left side of goal, Coutinho cuts in and unleashes a bullet into the top corner    
+  For such a slight player he packs a punch and for players who have scored as many as him, he is only the second - behind dead-ball specialist David Beckham - to secure at least 50% of his goals (at the time of writing) from shots outside the area
+
+
+```{r coutinho_07}
+
+
+# set minimum goals
+minGoals <- Place %>%
+  mutate(goals = (SixYd + PenArea + LongRange)) %>%
+  group_by(PLAYERID, name) %>%
+  summarise(tot = sum(goals)) %>%
+  filter(tot >= 36) %>%
+  .$PLAYERID
+
+
+df <- Place %>%
+  filter(PLAYERID %in% minGoals & PLAYERID != "OWNGOAL") %>%
+  mutate(goals = (SixYd + PenArea + LongRange)) %>%
+  group_by(PLAYERID, name) %>%
+  summarise(
+    tot = sum(goals),
+    lr = sum(LongRange),
+    pc = round(100 * lr / tot)
+  ) %>%
+  ungroup() %>%
+  arrange(desc(pc))
+
+df$jitpc <- jitter(df$pc, amount = 0.2)
+df$jittot <- jitter(df$tot, amount = 0.2)
+
+
+df %>%
+  plot_ly() %>%
+  add_markers(
+    x = ~ jittot,
+    y = ~ jitpc,
+    hoverinfo = "text",
+    text = ~ paste(
+      name,
+      "<br>Long Range: ",
+      lr,
+      "<br>Total: ",
+      tot,
+      "<br>PerCent: ",
+      pc,
+      "%"
+    )
+  ) %>%
+  layout(
+    hovermode = "closest",
+    height = 400,
+    autosize = F,
+    title = "Long Range as % of Premier League Goals",
+    xaxis = list(title = "Total Goals"),
+    yaxis = list(title = "% Long Range")
+  )  %>%
+  config(displayModeBar = F, showLink = F)
+
+
+```
+
+Zoom and Hover for details and check out the interactive site [premiersoccerstats site](https://mytinyshinys.shinyapps.io/premierLeague/) for similar charts on share of goals by Place, Play or Method
+
+
+***
+
+<p class="factoid">Wayne Rooney'has not had an assist to his name this calendar year and the 1283 minutes played without one
+has only been surpassed once (1454) in his career</p>
+
+
+
+***
+
+## Totally Football and Guardian Weekly Review Podcasts {-}
+
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6354366-that-harry-kane-team-that-dreadful-palace-record-and-that-incredible-peru-kit/embed/v4?eid=AQAAAJDM0lm-9WAA" title="audioBoom player"></iframe>
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6354792-fabian-delph-and-the-rise-of-the-full-backs-football-weekly/embed/v4?eid=AQAAAFrM0llo92AA" title="audioBoom player"></iframe>
+
+---
+
+## Results and Table {-}
+
+```{r results_07}
+
+weekly_results("2017-09-26","2017-10-02")
+
+```
+
+
+
+```{r standings_07}
+
+weekly_table("2017-10-02")
+
+```
+
+
+
+
+## Final Factoid {-}
+
+<p class="factoid">Liverpool fans, it's not the Year of the Ox until 2021. 35 million pound buy, attacking mid-fielder, Alex Oxlade-Chamberlain has now scored precisely three league goals in the past three years of Premier Leagie action</p>
+
+
+---
+
+## End of Season Update {-}
+
+
+#### Widening gap in class {-}
+
+I have re-presented the above table as a chart(hope to expand on that)
+
+
+
+```{r gapu_07}
+
+years <- 2:length(seasons)
+
+df <- data.frame(year = years, count = count)
+
+df %>%
+  plot_ly(x =  ~ year, y =  ~ count) %>%
+  add_bars()
+
+```
+
+Well there had been talk of a top 6 prior to the season starting and so it panned out. However, Arsenal only achieved this by the skin of their teeth and a rickety defence suggests they may have trouble repeating next season. A lot will depend on summer trades and the impact of the new manager
+
+---
+
+Let's look at the trend, if any, of groupings by position
+
+
+```{r gap_trendu_07}
+
+standings %>%
+  filter(tmYrGameOrder == 38, season > "1994/95") %>%
+  mutate(cat = case_when(
+    between(final_Pos, 1, 4) ~ "A",
+    between(final_Pos, 5, 17) ~ "B",
+    between(final_Pos, 18, 20) ~ "C"
+  )) %>%
+  group_by(cat, season) %>%
+  summarize(avCatPts = round(mean(cumPts), 2)) %>%
+  plot_ly(x =  ~ season,
+          y =  ~ avCatPts,
+          color =  ~ cat) %>%
+  add_lines(showlegend = FALSE) %>%
+  layout(
+    title = "Av points by teams grouped by Top-4, Bottom-3, Rest",
+    xaxis = list(title = ""),
+    yaxis = list(title = "Av Points")
+  ) %>% config(displayModeBar = F, showLink = F)
+
+
+```
+
+Well the last few season do show something of an upturn apart from the aberration of 2015/6 which Leicester took full advantage of. Arsenal finished second (what would they give for that prospect these days) with just 71 points, 8 points less than in a typical season and .. below this year
+
+---
+
+Oxlade-Chamberlain's move actually proved relatively succesful. Playing in mid field he managed .. goals and .. assists in  .. minutes
+
+---
+
+#### Classic Coutinho {-}
+
+Well Coutinho is a Premier League player no more and left with the share of his goals outside the box just dipping below the 50% mark
+ Hernadez is now up to .. 44? goals without one from long distance
+
+
+---
+
+## Code Tips {-}
+
+ * dplyr - pull  or .$ to extract column as vector
+ * dplyr - case_when and between functions         

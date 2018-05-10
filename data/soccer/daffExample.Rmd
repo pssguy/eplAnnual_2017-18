@@ -1,0 +1,52 @@
+---
+title: "Daff Example"
+author: "pssguy"
+date: "August 18, 2015"
+output: html_document
+---
+
+This is a very quick look at the [daff package](https://github.com/paulfitz/daff)
+
+```{r, warning=FALSE, message=FALSE}
+# Main libraries
+library(daff)
+library(tidyr)
+
+
+library(DT)
+library(readr)
+library(dplyr)
+```
+The package is used to show the difference between two data.frames   
+
+I will construct them with just one value differing, which is what I wish to have as my final output
+
+```{r}
+
+df_a <- data.frame(x=c("a","b"), y=c(1,2))
+df_b <- data.frame(x=c("a","b"), y=c(1,3))
+
+```
+The function data_diff() shows the differences in the form of a TableView.
+  As I understand (probably incorrectly) to get it into data.frame format you need to write it to a csv fie and then retrieve
+
+```{r}
+dd <- diff_data(df_a,df_b)
+write_diff(dd, "diff.csv")
+res <- read_csv("diff.csv")
+print(res)
+```
+
+I now want to separate out the y column, only showing rows where changes have occurred
+and restrict the output to the relevant columns. I can easily do this using the tidyr,DT and ddplyr packages
+
+```{r}
+
+separate(data=res,col= y,into=c("Old","New"),sep="->", extra="drop") %>% 
+      filter(!is.na(New)) %>% 
+      select(x,New) %>% 
+  DT::datatable(rownames=FALSE,width=200,class='compact stripe hover row-border',options= list(paging = FALSE, searching = FALSE,info=FALSE, columnDefs = list(list(className = 'dt-right', targets = 1))))
+
+```
+I will be using this shortly to show weekly milestones achieved in the Barclays Premier League
+For updates follow me on [twitter](https://twitter.com/pssGuy)

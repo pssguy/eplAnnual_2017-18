@@ -1,0 +1,178 @@
+--- 
+title: "Premier League Annual 2017/18"
+author: "Andrew Clark"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: book
+#bibliography: [book.bib, packages.bib] 
+#biblio-style: apalike
+link-citations: yes
+description: "This is comprised of a  compilation of weekly
+blog posts featuring varying aspects of the EPL using R code
+to produce charts and tables. Tweets, pods and game videos are also embedded."
+---
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, warning = FALSE, message=FALSE, echo=TRUE,  fig.align = 'center')
+```
+
+```{r setup}
+
+
+## Required Libraries
+
+library(tidyverse) #for data carpentry
+library(plotly) # for plots
+library(DT) # for tables
+library(vembedr) # for videos
+library(blogdown) # for shortcode(tweet)
+library(crosstalk)
+#library(forcats)
+library(glue)
+library(htmltools)
+library(RcppRoll)
+library(sparkline)
+library(lubridate)
+library(grid)
+library(VennDiagram)
+library(explodingboxplotR)
+library(data.table)
+
+
+## Required data files
+
+standings<- readRDS("data/soccer/standings.rds")
+hth<- readRDS("data/soccer/hth.rds")
+managerGame<- readRDS("data/soccer/managerGame.rds")
+managers<- readRDS("data/soccer/managers.rds")
+matchTeam<- readRDS("data/soccer/matchTeam.rds")
+goals<- readRDS("data/soccer/goals.rds")
+playerGame<- readRDS("data/soccer/playerGame.rds")
+playerClub<- readRDS("data/soccer/playerClub.rds")
+teamGames<- readRDS("data/soccer/teamGames.rds")
+#teamCodes<- readRDS("data/soccer/teamCodes.rds") Occasional issues
+assists<- readRDS("data/soccer/assists.rds")
+scoreLines<- readRDS("data/soccer/scoreLines.rds") #
+scores<- readRDS("data/soccer/scores.rds")
+summary<- readRDS("data/soccer/summary.rds")
+Place <- readRDS("data/soccer/Place.rds")
+Play  <- readRDS("data/soccer/Play.rds")
+Method <- readRDS("data/soccer/Method.rds")
+
+teamCodes <- teamGames %>%
+  ungroup() %>%
+  select(TEAMNAME,TEAMID) %>%
+  unique()
+
+managers[is.na(managers$Left),"Left"] <- as.Date(Sys.Date(), origin= '1970-01-01') #
+
+managerGame <-managers %>% 
+  mutate(name=paste(FirstName,Lastname)) %>% 
+  group_by(ManagerID,ManagerTeam) %>% 
+  inner_join(standings,by=c("TEAMNAME"="team")) %>% 
+  select(Lastname,FirstName,name,ManagerID,ManagerTeam,Joined,Left,TEAMNAME,gameDate,res,GF,GA,position) %>% 
+  filter(gameDate>=as.Date(Joined)&gameDate<=as.Date(Left)) %>% 
+  mutate(points=ifelse(res=="Win",3,ifelse(res=="Draw",1,0))) %>% 
+  ungroup()
+
+## Functions for weekly reslts and tables
+
+weekly_results <- function(startDate,endDate) ({
+  
+hth %>% 
+  filter(season=="2017/18"&gameDate>=startDate&gameDate<=endDate) %>% 
+  filter(venue=="H") %>% 
+  arrange(team) %>% 
+  select(Home=team,GF,GA,Away=OppTeam) %>% 
+  DT::datatable(rownames=FALSE,class='compact stripe hover row-border',colnames = c('', '', '', ''),
+                options= list(paging = FALSE, searching = FALSE,info=FALSE,
+                              columnDefs = list(list(width = '40%', targets = list(0,3)))),width=350)
+  
+}) 
+
+weekly_table <- function(endDate) ({
+  
+  hth %>%
+  filter(season == "2017/18" & gameDate <= endDate) %>%
+  group_by(team) %>%
+  mutate(
+    W = ifelse(res == "Win", 1, 0),
+    L = ifelse(res == "Loss", 1, 0),
+    D = ifelse(res == "Draw", 1, 0)
+  ) %>%
+  summarise(
+    P = n(),
+    Pts = sum(points),
+    W = sum(W),
+    D = sum(D),
+    L = sum(L),
+    GD = sum(GF) - sum(GA),
+    GF = sum(GF)
+  ) %>%
+  arrange(desc(Pts), desc(GD), desc(GF), team) %>%
+  DT::datatable(
+    class = 'compact stripe hover row-border order-column',
+    colnames = c('', 'P', 'Pts', 'W', 'D', 'L', 'GD', 'GF'),
+    rownames = TRUE,
+    options = list(
+      paging = FALSE,
+      searching = FALSE,
+      info = FALSE
+    )
+  )
+  
+  
+}) # shows as error but cannot see where and seems to work must be something above
+
+### function extracted from doBy package which takes too long to load
+subSeq <- function (x, item = NULL) {
+  rrr <- rle(x)
+  len <- rrr$lengths
+  val <- rrr$values
+  
+  first <- last <- rep.int(NA, length(val))
+  first[1] <- 1
+  last [1] <- len[1]
+  if (length(val)>1){
+    for (kk in 2:length(val)){
+      first[kk] <- last[kk-1]+1
+      last [kk] <- last[kk-1]+len[kk]
+    }
+  }
+  midp <- floor(first + len/2)
+  
+  ans <- cbind(first=first, last=last, slength=len, midpoint=midp)
+  
+  if (!is.null(item)) {
+    iii <- val==item
+    ans <- as.data.frame.matrix(ans[iii,,drop=FALSE], stringsAsFactors=FALSE)
+    ans$value <- val[iii]
+  } else {
+    ans <- as.data.frame.matrix(ans, stringsAsFactors=FALSE)
+    ans$value <- val
+  }
+  ans
+}
+
+```
+
+# Introduction {-}
+
+Welcome to my - and possibly a world - first interactive sports annual
+
+The basis is the weekly [blog posts]() I have produced over the course of the 2017/18 English Premier League. It has been expanded with some additional - and I have passed commentary in many of the chapters updating the analyses reached at that stage of the season
+
+All the code is in R and, for those of you inclined, you can observe the code. I am no expert
+so if you have any hints to .. you can . The whole and the packages and code I used. Some weeks I will list some packages and functions which I may have used for the first time and may prove helpful
+
+The data ...
+
+Charts are generally zoomable/panable and often more detailed information can be found by hovering markers
+
+Help wanted
+-----------
+
+* Enhance code
+* Enhance design
+* Translation foreign languages
+* Other seasons

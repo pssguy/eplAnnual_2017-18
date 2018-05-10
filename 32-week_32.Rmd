@@ -1,0 +1,321 @@
+# Week 32 {-}
+
+
+## Match of the Day {-}
+
+Although Stoke and Southampton did themselves no favours, at least there is a relegation battle. Champs and top 4 now look sorted after Spurs' come-from-behind victory at Stamford Bridge
+
+
+```{r topGame_32}
+
+embed_youtube("7lPzCF-EJy8", width = 420, height = 315, frameborder = 0,
+   allowfullscreen = TRUE, query = NULL) 
+
+
+```
+
+***
+<p class="factoid">WBA pick up the first 8 game losing sequence by any club entirely within this season. Palace lost first seven games after dropping the final game of 2016/17</p>
+
+***
+
+## Klopp tops the century mark {-}
+
+Jurgen Klopp's arrival at Liverpool engendered a lot of hype and by and large it has been justified, particularly if they can overcome the odds and defeat Man City in the Champions League
+
+Klopp notched a first win in his 100th Premier Game in charge. Check out how he matches up to all others who held the reigns of a PL club
+
+```{r manager_results_32}
+
+klopp <- managerGame %>%
+  filter(ManagerID == "KloppJ") %>%
+  arrange(gameDate) %>%
+  mutate(pl = row_number(), pts = cumsum(points))
+
+pep <- managerGame %>%
+  filter(ManagerID == "GuardiolaP") %>%
+  arrange(gameDate) %>%
+  mutate(pl = row_number(), pts = cumsum(points))
+
+
+managerGame %>%
+  group_by(ManagerID) %>%
+  arrange(gameDate) %>%
+  mutate(pl = row_number(), pts = cumsum(points)) %>%
+  #filter(pl<120) %>%
+  plot_ly(x =  ~ pl, y =  ~ pts)  %>%
+  add_lines(
+    color = I("lightgrey"),
+    name = "All Managers",
+    hoverinfo = "text",
+    text =  ~ name
+  ) %>%
+  add_lines(
+    data = klopp,
+    x =  ~ pl,
+    y =  ~ pts,
+    color = I("red"),
+    name = "Klopp",
+    hoverinfo = "text",
+    text =  ~ name
+  ) %>%
+  add_lines(
+    data = pep,
+    x =  ~ pl,
+    y =  ~ pts,
+    color = I("darkblue"),
+    name = "Guardiola",
+    hoverinfo = "text",
+    text =  ~ name
+  ) %>%
+  layout(
+    title = "Cumulative Points gained by Manager",
+    xaxis = list(title = "Games Managed"),
+    yaxis = list(title = "Points Accrued")
+  ) %>% config(displayModeBar = F, showLink = F)
+
+```
+ 
+ Zoom and hover for individual Manager's name
+ 
+ At the 100 game mark, Klopp seventh on the list with 190 points, sandwiched between two Liverpool playing icons, Dalglish(191) and Keegan(188)
+ 
+ Mourinho was in a class of his own - and after 280 games still holds a 17 point edge over his closest rival, Ferguson.  I have highlighted Guardiola, as he does hold the second-best record for his time in charge
+
+ --- 
+
+
+## Double trouble {-}
+
+Manchester United scored two goals inside 20 minutes to effectively finish off Swansea but City outdid them again with a brace against Everton within a dozen ticks.
+
+However, at the time of writing, United have the edge over the season as a whole with a 11 minute opening blast against Liverpool
+
+Chelsea can trump both Manchester teams with 6 and 9 minute doubles en route to routs of Brighton and Stoke, respictively
+
+Here are each teams earliest two goal tally at this stage of the season
+
+```{r second_goals_32}
+
+allTeams <- standings %>%
+  filter(season == "2017/18") %>%
+  pull(team) %>%
+  unique()
+
+two_goals <- function(x) {
+  games  <- standings %>%
+    filter(season == "2017/18", team == x) %>%
+    pull(TEAMMATCHID)
+  
+  
+  scores %>%
+    filter(TEAMMATCHID %in% games) %>%
+    group_by(TEAMMATCHID) %>%
+    arrange(mins) %>%
+    mutate(cumGF = cumsum(GF)) %>%
+    filter(cumGF == 2) %>%
+    head()
+  
+}
+
+res <- map_df(allTeams, two_goals)
+
+res %>%
+  arrange(mins) %>%
+  group_by(TEAMMATCHID) %>%
+  slice(1) %>%
+  left_join(standings, by = "TEAMMATCHID") %>%
+  select(mins, team, OppTeam, GF.y, GA, gameDate) %>%
+  ungroup() %>%
+  arrange(mins) %>%
+  group_by(team) %>%
+  slice(1) %>%
+  ungroup() %>%
+  arrange(mins) %>%
+  select(mins, team, opponents = OppTeam, GF = GF.y, GA, gameDate) %>%
+  DT::datatable(
+    class = 'compact stripe hover row-border order-column',
+    rownames = FALSE,
+    options = list(
+      paging = TRUE,
+      searching = TRUE,
+      info = FALSE
+    )
+  )
+
+```
+ 
+ At the time of writing Leicester's are the only team to have lost after posting their quickest two goal tally. In the very first game of the season,  they scored twice within 29 minutes against Arsenal but ended up on the wrong end of a 4-3 scoreline
+
+***
+
+
+## Tweet of the Week {-}
+
+
+```{r}  
+shortcode("tweet", "980348066900402177") 
+```
+
+
+## Totally Football and Guardian Weekly Review Podcasts {-}
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6732454-thirty-somethings-transferrable-skills-and-tedesco/embed/v4?eid=AQAAAIDVr1qmumYA" title="Audioboom player"></iframe>
+***
+<p>
+ 
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6733025-another-magical-salah-display-and-warnock-s-pub-quiz-football-weekly/embed/v4?eid=AQAAABGgsFrhvGYA" title="Audioboom player"></iframe>
+
+***
+
+## Results and Table {-}
+
+```{r results_32}
+
+weekly_results("2018-03-20", "2018-04-02")
+
+```
+
+<p>
+---
+
+```{r standings_32}
+
+weekly_table("2018-04-02")
+
+```
+
+---
+
+
+## Final Factoid {-}
+
+<p class="factoid"> Lukaku became 28th player to reach 100 goal mark. In total, 10 have played for Manchester United. Goals scored for the club by these individuals range from 2 for Dion Dublin to 183 for Wayne Rooney</p>
+
+---
+
+## End of Season Update {-}
+
+Spurs finally achieved a Premier League win at Chelsea after 25 failures. It proved crucial in the race for 4th place as well ..
+
+
+Here is the summary of all the matchups 
+
+```{r historyu_32}
+
+away_results <- function(home, away) {
+  games <-  standings %>%
+    filter(team == home, OppTeam == away, venue == "H") %>%
+    tally() %>%
+    pull(n)
+  
+  
+  
+  Wins <- standings %>%
+    filter(team == home, OppTeam == away, venue == "H", res == "Loss") %>%
+    tally() %>%
+    pull(n)
+  
+  Draws <- standings %>%
+    filter(team == home, OppTeam == away, venue == "H", res == "Draw") %>%
+    tally() %>%
+    pull(n)
+  
+  Losses <- standings %>%
+    filter(team == home, OppTeam == away, venue == "H", res == "Win") %>%
+    tally() %>%
+    pull(n)
+  
+  df <-
+    data.frame(
+      home = home,
+      away = away,
+      games = games,
+      wins = Wins,
+      draws = Draws,
+      losses = Losses
+    )
+  
+}
+
+matchups <- standings %>%
+  ungroup() %>%
+  filter(venue == "H") %>%
+  select(team, OppTeam) %>%
+  unique() #1714 x 2
+
+data <- map2_df(matchups$team, matchups$OppTeam, away_results)
+
+data %>%
+  DT::datatable(
+    class = 'compact stripe hover row-border order-column',
+    rownames = FALSE,
+    options = list(
+      paging = TRUE,
+      searching = TRUE,
+      info = FALSE
+    )
+  )
+
+```
+
+
+Southampton now hold the record for futility with no wins in nineteen trips to Arsenal
+
+---
+
+WBA's worst loss run stood up to season-end
+
+Here is each club's worst sequence
+
+```{r}
+
+standings %>%
+  filter(season == "2017/18") %>%
+  mutate(cat = ifelse(GF < GA, 0, 1)) %>%
+  arrange(gameDate) %>%
+  select(team, cat) %>%
+  group_by(team) %>%
+  do(subSeq(.$cat)) %>%
+  filter(value == 0) %>%
+  arrange(desc(slength)) %>%
+  group_by(team) %>%
+  slice(1) %>%
+  arrange(desc(slength)) %>%
+  select(team, `loss run` = slength) %>%
+  DT::datatable(
+    class = 'compact stripe hover row-border order-column',
+    rownames = FALSE,
+    options = list(
+      paging = TRUE,
+      searching = TRUE,
+      info = FALSE
+    ),
+    width = 200
+  )
+                         
+```
+
+None of the top four posted back-to-back losses
+
+---
+
+#### Klopp tops the century mark {-}
+
+At season end, Klopp had picked up .. from .. games, good for .. on the list after that number of matches. Mourinho mainatained a   .. lead over Ferguson after ..
+
+---
+
+It is unlikely that any new player will top the hundred mark next season as Giroud and Sturridge, at 74 .. apiece, are next in line of current players
+
+---
+
+## Code Hints {-}
+
+ * purrr - map2_df()
+
+
+
+
+
+

@@ -1,0 +1,329 @@
+# Week 33 {-}
+
+
+## Match of the Day {-}
+
+City's title celebrations put on ice as the Manchester derby provides 5 goals and 9 bookings whilst the Liverpool one cannot provide one of either
+
+
+```{r topGame_33}
+
+embed_youtube("ifmH4HFCU08", width = 420, height = 315, frameborder = 0,
+   allowfullscreen = TRUE, query = NULL) 
+
+
+```
+
+***
+<p class="factoid">Rooney has only completed 5 of his 23 starts. He is currently posting his fourth 800+ minute goalless streak: all since the 2014/15 season</p>
+
+***
+
+## Super Subs {-}
+
+Javier 'Chicharito' Hernadeaz, came on and scored what could still be a vital goal. It is his third of the season as a sub and 15th in a career - accounting for more than a third of his output
+
+Every team has had at least one sub scoring this season but there is quite the variation between them  ranging from, at the time of writing, one for Brighton, Leicester and Huddersfield to nine for Manchester United , who have plenty of options with players like Rashford and Martial  usually on the bench.
+
+Seven of the top nine sub-scorers are still playing, led by Jermain Defoe with 24
+
+```{r subs_33}
+
+thisYear <- playerGame %>%
+  filter(START == 0 & PLAYERID != "OWNGOAL" & Gls > 0) %>%
+  arrange(desc(gameDate)) %>%
+  group_by(TEAMNAME) %>%
+  slice(1) %>%
+  ungroup() %>%
+  arrange(desc(gameDate)) %>%
+  select(TEAMNAME, gameDate, name) %>%
+  filter(gameDate > "2017-08-01")
+
+
+playerGame %>%
+  filter(START == 0 &
+           PLAYERID != "OWNGOAL" & Gls > 0 & season == "2017/18") %>%
+  group_by(TEAMNAME) %>%
+  tally() %>%
+  inner_join(thisYear) %>%
+  arrange(desc(gameDate)) %>%
+  select(
+    team = TEAMNAME,
+    total = n,
+    `most recent` = name,
+    date = gameDate
+  ) %>%
+  DT::datatable(
+    class = 'compact stripe hover row-border order-column',
+    rownames = FALSE,
+    options = list(
+      paging = TRUE,
+      searching = TRUE,
+      info = FALSE
+    )
+  )
+
+
+```
+ 
+This table highlight's  a major impediment to Spurs being a realistic challenger for the title: lack of scoring options off the bench. Currently, their top three most used subs are Sissoko, Lamela and Llorente - all attacking players - who, in total, have notched just 2 goals in  around 2000 minutes of playing time
+ 
+ --- 
+ <p class="factoid">Jamie Vardy scores for the 8th game in the last 10: his best run since the record 11 in a row during Leicester's title season</p>
+
+## Dullest Derby {-}
+
+  With Liverpool pretty well assured of a Top 4 finish and Everton of avoiding relegation, it was little surprise that the most passion showed was by Rooney when he was again an early substitute
+  In fact, it was the only Premier matchup between the teams not to feature either a goal or a caution
+
+```{r dull_derby_33 }
+
+liv_eve_matches <- standings %>%
+  filter(team == "Liverpool", OppTeam == "Everton") %>%
+  pull(MATCHID)
+
+df <- playerGame %>%
+  filter(MATCHID %in% liv_eve_matches) %>%
+  group_by(MATCHID, gameDate, season) %>%
+  mutate(cat = ifelse(CARD < "a" | is.na(CARD), 0, 1)) %>%
+  summarize(g = sum(Gls), c = sum(cat))
+
+df %>%
+  plot_ly(x =  ~ gameDate, y =  ~ g) %>%
+  add_markers(name = "Goals",
+              hoverinfo =  ~ gameDate) %>%
+  add_markers(
+    x =  ~ gameDate,
+    y = ~ jitter(c),
+    name = "Cautioned",
+    hoverinfo = "skip"
+  ) %>%
+  layout(
+    title = "Goals and Players Cautioned in Liverpool Derbies",
+    xaxis = list(title = ""),
+    yaxis = list(title = "Count")
+  ) %>% config(displayModeBar = F, showLink = F)
+
+```
+_NB Points are jittered to avoid overlap_
+
+As you can see, the January 2001 game at Everton was quite the doozy. Liverpool were ahead when Igor Biscan was dismissed. Unsworth equalized with a penalty but McAllister scored a last minute goal for the visitors
+
+![](/img/eve_liv_2001.png)
+
+The above game was more closely matched by the Manchester derby, with the away side edging ahead in a 3-2 outcome. With six players cautioned (6 for City) it also equalled the most in a Premier League matchup between the sides
+
+![](img/manchester.png)
+
+
+***
+
+## Tweet of the Week {-}
+
+
+```{r}  
+shortcode("tweet", "983296430365396993") 
+```
+
+
+## Totally Football and Guardian Weekly Review Podcasts {-}
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6788046-bubble-baths-bo-selecta-and-the-brow/embed/v4?eid=AQAAAKhzzFrOk2cA" title="Audioboom player"></iframe>
+***
+<p>
+ 
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6788284-manchester-and-merseyside-serve-derbies-of-contrast-football-weekly/embed/v4?eid=AQAAAIRzzFq8lGcA" title="Audioboom player"></iframe>
+***
+
+## Results and Table {-}
+
+```{r results_33}
+
+weekly_results("2018-04-02", "2018-04-10")
+
+```
+
+<p>
+---
+
+```{r standings_33}
+
+weekly_table("2018-04-10")
+
+```
+
+
+
+
+## Final Factoid {-}
+
+<p class="factoid">Manchester City's record this season is now 24 wins- 1 draw and 0 defeats if Aguero and David Silva start, 4-2-2 otherwise</p>
+
+
+---
+
+## End of Season Update {-}
+
+After a bright start, Rooney's second spell at Everon has been distinctly underwhelming as the parabola of his career continues on its downwards track
+
+```{r rooneyu_33}
+df <- playerGame %>%
+  filter(PLAYERID == "ROONEYX") %>%
+  group_by(season, PLAYERID, name) %>%
+  select(Gls, Assists, mins) %>%
+  summarize(
+    Goals = sum(Gls),
+    Assists = sum(Assists),
+    Points = Goals + Assists,
+    Mins = sum(mins)
+  ) %>%
+  # filter(Points!=0) %>% otherwise does not show zero values on year
+  mutate(
+    Gpm = 90 * Goals / Mins,
+    Apm = 90 * Assists / Mins,
+    Ppm = 90 * Points / Mins
+  ) %>%
+  ungroup()
+
+df %>%
+  plot_ly() %>%
+  add_markers(
+    x = ~ season,
+    y = ~ Ppm,
+    hoverinfo = "text",
+    marker = list(size =  ~ Mins / 10, sizemode = "area"),
+    text = ~ paste(
+      "<br>Goals: ",
+      Goals,
+      "<br>Assists: ",
+      Assists,
+      "<br>Points: ",
+      Points,
+      "<br>Minutes: ",
+      Mins
+    )
+  ) %>%
+  layout(
+    hovermode = "closest",
+    title = "Points per 90 mins by Season",
+    xaxis = list(title = ""),
+    yaxis = list(title = "Points per 90 mins", rangemode = "tozero")
+  ) %>% config(displayModeBar = F, showLink = F)
+
+```
+
+
+Nevertheless, it has been a great career, including five  titles
+He has been extremely durable and only Gareth Barry and Frank Lampard had spent more time on the pitch at his age
+
+```{r most_minsu_33}
+
+max_age <-  playerGame %>% 
+    filter(PLAYERID=="ROONEYX") %>% 
+     summarize(maxAge=max(age)) %>% 
+  pull(maxAge)
+
+playerGame %>%
+  filter(age <= max_age) %>%
+  group_by(PLAYERID, name) %>%
+  summarize(totMins = sum(mins)) %>%
+  arrange(desc(totMins)) %>%
+  ungroup() %>%
+  select(player = name, mins = totMins) %>%
+  head(10) %>%
+  DT::datatable(
+    class = 'compact stripe hover row-border order-column',
+    rownames = FALSE,
+    options = list(
+      paging = FALSE,
+      searching = FALSE,
+      info = FALSE
+    ),
+    width = 200
+  )
+```
+
+
+#### Super Subs {-}
+
+Although Huddersfield had only two different players score as sub, Tom Ince's for Huddersfield was a 90th minute winner against... providing what turnes out to be ..
+
+Lukaku and Salah were just taking a break on the bench but still contributed but Benteke had lost his spot when he came on to score a toppage time penalty in Palace's rout of Leicester
+
+Arsenal (2009/10) and Liverpool (2015/16) had 14 goals contributed by subs. In that Arsenal ten different players scored
+
+```{r super_subu_33}
+
+
+playerGame %>%
+  filter(subOn > 0 & Gls > 0, season == "2009/10" &
+           TEAMNAME == "Arsenal") %>%
+  count(name, sort = TRUE) %>%
+  select(player = name, goals = n) %>%
+  DT::datatable(
+    class = 'compact stripe hover row-border order-column',
+    rownames = FALSE,
+    options = list(
+      paging = FALSE,
+      searching = FALSE,
+      info = FALSE
+    ),
+    width = 200
+  )
+```
+
+
+It was Perez's only goal in the Premier League
+
+---
+
+#### Dullest Derby {-}
+
+Here is a summary of the 324 different players who have appeared in the 
+Liverpool derby during the Premier League era
+
+Steven Gerrard has clearly been the outstanding figure
+
+```{r dullest_derbyu_33}
+liv_eve_matches <- standings %>%
+  filter(team == "Liverpool", OppTeam == "Everton") %>%
+  pull(MATCHID) # 52 could
+
+playerGame %>%
+  filter(MATCHID %in% liv_eve_matches) %>%
+  group_by(name, PLAYERID, TEAMNAME) %>%
+  filter(mins > 0) %>%
+  summarize(
+    G = n(),
+    mins = sum(mins),
+    goals = sum(Gls),
+    assists = sum(Assists)
+  ) %>%
+  ungroup() %>%
+  arrange(desc(mins)) %>%
+  select(player = name, team = TEAMNAME, G, mins, goals, assists) %>%
+  DT::datatable(
+    class = 'compact stripe hover row-border order-column',
+    rownames = FALSE,
+    options = list(
+      paging = TRUE,
+      searching = TRUE,
+      info = FALSE
+    )
+  )
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

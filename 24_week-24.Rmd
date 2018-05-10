@@ -1,0 +1,294 @@
+# Week 24 {-}
+
+
+## Match of the Day {-}
+
+
+
+```{r topGame_24}
+
+embed_youtube("gd4WjNSXBrg", width = 420, height = 315, frameborder = 0,
+   allowfullscreen = TRUE, query = NULL) 
+
+
+```
+
+
+***
+
+## The goals have gone {-}
+
+A [recent article in the Guardian](https://www.theguardian.com/football/blog/2018/jan/24/premier-league-swansea-liverpool-champions-league) highlighted the fact that many teams are not exceeding a goal a game this season
+
+```{r GF_2017_24}
+
+
+standings %>%
+  filter(tmYrGameOrder == 24 & season == "2017/18") %>%
+  arrange(desc(cumGF)) %>%
+  mutate(gpg = round(cumGF / tmYrGameOrder, 2)) %>%
+  select(team, gpg) %>%
+  plot_ly(
+    x =  ~ gpg,
+    y =  ~ fct_reorder(team, gpg),
+    color =  ~ team
+  ) %>%
+  add_bars() %>%
+  hide_legend() %>%
+  layout(
+    title = "Goals per Game after 24 matches",
+    xaxis = list(title = "Goals For"),
+    yaxis = list(title = ""),
+    margin = list(l = 100, pad = 5)
+  ) %>%  config(displayModeBar = F, showLink = F)
+
+```
+
+In fact, over half the teams are averaging less than 1.1 per game
+How does this compare, historically, at this stage of the season
+
+```{r GF_by season_24}
+
+
+standings %>%
+  group_by(season) %>%
+  filter(tmYrGameOrder == 24 & cumGF < 25) %>%
+  tally() %>%
+  plot_ly(x =  ~ season,
+          y =  ~ n,
+          color =  ~ season) %>%
+  add_bars()  %>%
+  hide_legend() %>%
+  layout(
+    title = "Teams Averaging a Goal per Game or less after 24 Matches",
+    xaxis = list(title = ""),
+    yaxis = list(title = ""),
+    margin = list(l = 100, pad = 5)
+  ) %>%  config(displayModeBar = F, showLink = F)
+
+
+```
+ 
+So, definitely one of the highest on record
+
+***
+
+<p class="factoid">Anthony Martial scored in his third consecutive league game, one of 19 players to achieve the feat so far this season</p>
+
+***
+
+## Clean Sheets {-}
+
+As a corollary, fewer goals by some teams will tend to mean more clean sheets by their opposition. Here are the nuber shutouts achieved by goalies by season. Filter by season,team or goaly using the select box
+
+
+```{r clean_sheets_24}
+
+
+gk <- playerGame %>%
+  filter(POSITION == "Goalkeeper" & START > 0) %>%
+  left_join(standings, by = "MATCHID") %>%  #
+  filter(TEAMNAME != team) %>%
+  select(name, gameDate.x, GF, TEAMNAME, season = season.x)
+
+
+gk %>%
+  group_by(name, TEAMNAME, season) %>%
+  filter(GF == 0) %>%
+  count(sort = TRUE) %>%
+  select(season,
+         player = name,
+         team = TEAMNAME,
+         count = n) %>%
+  DT::datatable(
+    class = 'compact stripe hover row-border order-column',
+    rownames = FALSE,
+    options = list(
+      paging = TRUE,
+      searching = TRUE,
+      info = FALSE
+    )
+  )
+
+         
+```
+
+At the time of writing (after 24 rounds), Manchester United's de Gea leads the way this year, with 14. Injury withstanding, he seems sure to exceed his previous best but matching the all time record of Cech will take some doing   
+
+Here are the leaders per season. Hover the bar for details
+
+```{r cclean_sheetsb_24}
+
+gk %>%
+  group_by(name, TEAMNAME, season) %>%
+  filter(GF == 0) %>%
+  count(sort = TRUE) %>%
+  group_by(season) %>%
+  slice(1) %>%
+  plot_ly(x =  ~ season,
+          y =  ~ n,
+          color =  ~ TEAMNAME) %>%
+  add_bars(hoverinfo = "text",
+           text =  ~ paste0(n, " ", name, ", ", TEAMNAME)) %>%
+  layout(
+    title = "Goalkeeper with most clean sheets per season",
+    xaxis = list(title = ""),
+    yaxis = list(title = ""),
+    margin = list(b = 80, pad = 5)
+  ) %>%  config(displayModeBar = F, showLink = F) 
+
+```
+_N.B. If there are two or more leading goalies in a season, only one is highlighted_
+
+It is interesting to see the change since the early days of the Premier League when even the top performers were keeping the opposition at bay only once every four or five games 
+
+
+
+***
+<p class="factoid">The all time leader is Petr Cech with 202. Next in line is David James followed by the, somewhat unheralded, Mark Schwarzer</p>
+***
+
+
+
+
+## Tweet of the Week {-} 
+
+
+
+```{r}  
+shortcode("tweet", "956596478591451136") 
+```
+
+
+
+***
+
+## Totally Football and Guardian Weekly Review Podcasts {-}
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6612365-gratuitous-backheels-alexis-arboreal-artistry-and-the-remarkably-unremarkable-ashley-barnes/embed/v4?eid=AQAAAFguaVqN5WQA" title="Audioboom player"></iframe>
+***
+<p>
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6612474-transfer-swap-shop-another-stung-hornet-and-lyon-tamers-football-weekly/embed/v4?eid=AQAAAJouaVr65WQA" title="Audioboom player"></iframe>
+
+***
+
+## Results and Table {-}
+
+```{r results_24}
+
+weekly_results("2018-01-23","2018-01-28")
+
+```
+
+---
+
+```{r standings_24}
+
+weekly_table("2018-01-28")
+
+```
+
+
+
+
+## Final Factoid {-}
+
+<p class="factoid">Mkhitaryan made a bright start to this season, leading the league with 7 assists(including secondary) in late September, but he neither added to that figure nor scored in his final 496 league minutes for United</p>
+
+
+---
+
+## End of Season Update {-}
+
+#### The goals have gone {-}
+
+Here is the end-of season result
+
+```{r goals_goneu_24}
+
+standings %>%
+  group_by(season, team) %>%
+  mutate(maxGames = max(tmYrGameOrder)) %>%
+  filter(tmYrGameOrder == maxGames, cumGF < maxGames) %>%
+  group_by(season) %>%
+  tally() %>%
+  plot_ly(x =  ~ season,
+          y =  ~ n,
+          color =  ~ season) %>%
+  add_bars()  %>%
+  hide_legend() %>%
+  layout(
+    title = "Teams Averaging a Goal per Game by Season",
+    xaxis = list(title = ""),
+    yaxis = list(title = ""),
+    margin = list(b = 100, pad = 5)
+  ) %>%  config(displayModeBar = F, showLink = F)
+```
+
+
+So, in the end, only six teams but that has only been matched in a full season once and is a big step up from the last couple of years
+
+
+Let's look at these team's top scorer
+
+```{r low_scoreu_24}
+lowscorers <-standings %>% 
+  group_by(season,team) %>%  
+  filter(season=="2017/18") %>% 
+  mutate(maxGames=max(tmYrGameOrder)) %>% 
+  filter(tmYrGameOrder==maxGames,cumGF<maxGames) %>% 
+  pull(team)
+
+
+playerGame %>% 
+  filter(season=="2017/18", TEAMNAME %in% lowscorers,PLAYERID!="OWNGOAL") %>% 
+  group_by(name,TEAMNAME,PLAYERID) %>% 
+  summarize(Goals=sum(Gls),mins=sum(mins),pc=round(100*mins/(38*90),0)) %>% 
+  arrange(desc(Goals)) %>%
+  group_by(TEAMNAME) %>% 
+  slice(1) %>% 
+  arrange(Goals) %>%
+  select(team=TEAMNAME,name,Goals,`% playing`=pc) %>% 
+ DT::datatable(class='compact stripe hover row-border order-column',rownames=FALSE,options= list(paging = FALSE, searching = FALSE,info=FALSE))
+
+```
+
+
+You could argue that Murray, albeit he missed teo penalties, kept Brighton up. He is already 34, though, and they clearly need a replacement soon. Austin is a natural striker but was barely on the pitch for 25% of the time. He is injury-prone but presumably Southampton assumed Gabbiadini would suffice
+
+---
+
+That proved to be Martial's only three game scoring sequence as he lacked game time omce Alexis Sanchez arrived
+
+```{r goal_sequ_24}
+playerGame %>%
+  filter(season=="2017/18",mins>0) %>%
+  arrange(gameDate) %>%
+  group_by(PLAYERID,name) %>% 
+  mutate(cat=ifelse(Gls>0,1,0)) %>%
+  do(subSeq(.$cat)) %>%
+    filter(value==1) %>%
+    arrange(desc(slength)) %>%
+      filter(slength>2) %>% 
+  ungroup() %>% 
+  arrange(desc(slength),PLAYERID) %>% 
+  select(name,run=slength) %>%
+                         DT::datatable(width= 300,class='compact stripe hover row-border order-column',rownames=FALSE,options= list(paging = TRUE, searching = TRUE,info=FALSE))
+```
+
+There were .. or .. if you count both halves of Aguero's six in a row. Salah had three separate sequences of four or more games with at least one goal
+
+No out-an-out surprises although Perez only scored .. goals in total and in two of Woods games he was asecond half substitute
+
+---
+
+It is too early to guage Mkhitaryan's career at Arsenal as he had a period out with injury. It is still amazing that a player of his pedigree could only provide 1 assist for Man United in 2016/17
+
+---
+
+## Code Hints {-}
+
+  * dplyr - count()
+
+

@@ -1,0 +1,345 @@
+# Week 14 {-}
+
+
+## Match of the Day {-}
+
+Allardyce is beaming. Everton are close to top half of table and he has three long-term-injured players back soon: Boalsie, Barkley and Coleman
+
+```{r topGame_14}
+
+embed_youtube("JddLLNc2tvw", width = 420, height = 315, frameborder = 0,
+   allowfullscreen = TRUE, query = NULL) 
+
+
+```
+
+***
+
+
+## Rooney Rocket {-}
+
+I do not collect the  number of goals scored from own-half but that final goal of his hat-trick was the 28th in his EPL career from outside of the area - good for 7th all-time 
+
+What is perhaps even more impressive is that after just over 900 minutes on the pitch he has already notched 7 goals
+In only one season has he started the year more quickly
+
+```{r rooney_14}
+
+plDroughtFun <- function(df) {
+  expand.grid(c(df$on:df$off), df$PLAYER_MATCH)
+}
+
+## calculate minuteds played to date
+rooney <- playerGame %>%
+  filter(PLAYERID == "ROONEYX") %>%
+  select(season, gameDate, mins, Gls) %>%
+  group_by(season) %>%
+  arrange(gameDate) %>%
+  mutate(cumMins = cumsum(mins), cumGls = cumsum(Gls))
+
+
+maxMins <- rooney %>%
+  filter(season == "2017/18" & cumMins == max(cumMins)) %>%
+  select(cumMins) %>%
+  pull(cumMins)
+
+# need to add other column as are matching on TIME
+gls <- goals %>%
+  mutate(scored = 1)
+
+
+games <- playerGame %>%
+  filter(PLAYERID == "ROONEYX" & mins > 0) %>%
+  select(PLAYERID,
+         name,
+         PLAYER_MATCH,
+         START,
+         on,
+         offA,
+         gameDate,
+         TEAMMATCHID,
+         season) %>%
+  mutate(on = as.integer(on), off = as.integer(offA)) %>%
+  mutate(on = ifelse(is.na(on), 1, on), off = ifelse(is.na(off), 90, off))
+
+# create list so can apply function above with purrr
+games_list <- split(games, 1:nrow(games))
+mins <- map_df(games_list, plDroughtFun)
+
+
+# rename columns and add gameDate
+names(mins) <- c("TIME", "PLAYER_MATCH")
+mins <- mins %>%
+  left_join(games) %>%
+  select(TIME, PLAYER_MATCH, gameDate, season)
+
+goalData <- mins %>%
+  left_join(gls)  %>%
+  select(PLAYER_MATCH, TIME, gameDate, scored, season) %>%
+  arrange(gameDate, TIME, season) %>%
+  group_by(season) %>%
+  mutate(
+    minsPlayed = row_number(),
+    goal = ifelse(is.na(scored), 0, 1),
+    cumGoals = cumsum(goal)
+  )
+
+
+df <- goalData %>%
+  filter(minsPlayed == maxMins) %>%
+  arrange(season)
+
+theTitle <-
+  glue("Goals scored by Rooney after {maxMins} minutes of season")
+
+df %>%
+  plot_ly(x =  ~ season,
+          y =  ~ cumGoals,
+          color =  ~ season) %>%
+  add_bars(showlegend = FALSE) %>%
+  layout(
+    title = theTitle,
+    margin = list(r = 20),
+    xaxis = list(title = ""),
+    yaxis = list(title = "Goals to date")
+  ) %>%  config(displayModeBar = F, showLink = F)
+          
+
+```
+
+This chart will update as the season progresses
+
+At the time of writing, however, he had yet to record an assist
+
+
+***
+
+<p class="factoid">Raheem Sterling turns 23 on 8th September. He has 95 goals and assists (up to 2 per goal) equalling Ryan Giggs at the same age. Rooney leads with 142</p>
+
+***
+
+## Palace Patience {-}
+
+After the first seven games Palace were pointless, but twice as far into the season has seen them reach nine points - still bottom but now only fourth favourites for the drop
+
+They recorded their first clean sheet and first away point at arch-rivals Brighton, but are now scoreless on their league travels for a club EPL record 826 minutes, almost 250 minutes longer than their previous record set in 1994: one ended by current England manager, Gareth Southgate
+
+```{r palace_14}
+tmDroughtFun <- function(df) {
+  expand.grid(c(1:90),df$TEAMMATCHID)
+}
+
+
+
+# need to add other column as are matching on TIME
+gls <- goals %>% 
+  mutate(scored=1)
+
+
+games <- teamGames %>% 
+  filter(TEAMNAME=="Crystal P"&venue=="A") %>% 
+  ungroup() %>% 
+  select(TEAMMATCHID,gameDate)
+
+
+mins <- expand.grid(c(1:90),games$TEAMMATCHID)
+names(mins) <- c("TIME","TEAMMATCHID")
+
+mins <-mins %>% 
+  left_join(games) %>% 
+  select(TIME,TEAMMATCHID,gameDate) %>% 
+  as.tbl()
+
+
+# create gaps between goals
+goalData <- mins %>% 
+  left_join(gls)  %>% 
+  select(TEAMMATCHID,TIME,gameDate,scored) %>% 
+  arrange(gameDate,TIME) %>% 
+  mutate(minOrder=row_number(),goal=ifelse(is.na(scored),0,1)) %>% 
+  filter(goal==1|minOrder==max(minOrder)) %>% # to take account of current spell
+  mutate(minslag=lag(minOrder),gap=minOrder-minslag)
+
+# account for gap at beginning of career
+goalData[1,]$gap <- goalData[1,]$minOrder
+
+goalData %>% 
+  arrange(gameDate) %>% 
+  mutate(order=row_number()) %>% 
+  plot_ly(x=~order,y=~gap) %>% 
+  add_bars()  %>% 
+  layout(title="Gap between away goals",
+         xaxis=list(title="Goal Order"),
+         yaxis=list(title="Minutes")) %>%  config(displayModeBar = F,showLink = F)
+         
+
+  
+
+
+```
+
+
+
+***
+
+<p class="factoid">Giroud now has 16 goals as a sub, accounting for 23% of all his EPL strikes. Renowned super-sub, Solskjaer, only had 19% from the bench</p>
+
+***
+
+## Tweet of the Week {-}
+
+```{r}  
+shortcode("tweet", "936082648295866368") 
+```
+
+The answer is Viduka. Who - like Salah and a few others - managed 12 in 14. The missing player is Papiss Cisse who got 13 at the start of his career at Newcastle
+
+***
+
+
+## Totally Football and Guardian Weekly Review Podcasts {-}
+
+
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6527110-rejuvenated-rooney-sterling-and-salah-strike-again-and-presumptuous-pep-talks/embed/v4?eid=AQAAAABgIFqGmGMA" title="audioBoom player"></iframe>
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6527311-raheem-sterling-english-managers-and-the-world-cup-draw-football-weekly-extra/embed/v4?eid=AQAAAK9fIFpPmWMA" title="audioBoom player"></iframe>
+
+***
+
+## Results and Table {-}
+
+```{r results_14}
+
+weekly_results("2017-11-27","2017-11-30")
+
+```
+
+
+```{r standings_14}
+
+weekly_table("2017-11-30")
+
+```
+
+
+## Final Factoid {-}
+
+<p class="factoid">Man. Utd. have already scored precisely 4 goals in six league games and look well placed to obliterate the single-seaon record of seven which they currently jointly hold with Chelsea and Tottenham</p>
+
+
+---
+
+## End of Season Update {-}
+
+
+#### Rooney Rocket {-}
+
+The table updates throughout the season and is interesting to note that given the time he has spent on the pitch his goal return of 10 ia actually the most common level he achieved throughout his career - although most of his goals came in the first half of the season
+
+NB Assist data to add
+
+
+#### Palace Patience {-}
+
+In the end, as the table above shows, Palace also failed to score on their next away game (0-0 at WBA) before Christain Benteke, of all people, headed one in their shock 3-0 win at Leicester - ending the misert at 935 minutes 
+
+```{r palaceu_14}
+tmDroughtFun <- function(df) {
+  expand.grid(c(1:90), df$TEAMMATCHID)
+}
+
+# all clubs
+clubs <- standings %>%
+  select(team) %>%
+  unique() %>%
+  pull()
+
+# need to add other column as are matching on TIME
+gls <- goals %>%
+  mutate(scored = 1)
+
+
+goal_gap <- function(team)
+  ({
+    games <- teamGames %>%
+      filter(TEAMNAME == team & venue == "A") %>%
+      ungroup() %>%
+      select(TEAMMATCHID, gameDate)
+    
+    
+    mins <- expand.grid(c(1:90), games$TEAMMATCHID)
+    names(mins) <- c("TIME", "TEAMMATCHID")
+    
+    mins <- mins %>%
+      left_join(games) %>%
+      select(TIME, TEAMMATCHID, gameDate) %>%
+      as.tbl()
+    
+    
+    # create gaps between goals
+    goalData <- mins %>%
+      left_join(gls)  %>%
+      select(TEAMMATCHID, TIME, gameDate, scored) %>%
+      arrange(gameDate, TIME) %>%
+      mutate(minOrder = row_number(), goal = ifelse(is.na(scored), 0, 1)) %>%
+      filter(goal == 1 |
+               minOrder == max(minOrder)) %>% # to take account of current spell
+      mutate(
+        minslag = lag(minOrder),
+        gap = minOrder - minslag,
+        prevDate = lag(gameDate)
+      )
+    # added date last scored but does not mean much given relegation/summers
+    
+    #max(goalData$gap,na.rm = TRUE)
+    
+    data <- goalData %>%
+      filter(gap == max(gap, na.rm = TRUE)) %>%
+      select(gap, gameDate)
+    
+    
+    data
+  })
+
+
+
+df <- map_df(clubs, goal_gap)
+df$club <- clubs
+
+df  %>%
+  plot_ly(x =  ~ gap,
+          y =  ~ fct_reorder(club, gap),
+          height = 1000) %>%
+  add_bars(
+    hoverinfo = "text",
+    width = 0.6,
+    opacity = 0.5,
+    text =  ~ paste0(club, " ", gap, " mins<br>Ended: ", gameDate)
+  ) %>%
+  layout(
+    margin = list(l = 100, pad = 5),
+    yaxis = list(title = ""),
+    xaxis = list(title = "")
+  ) %>%
+  config(displayModeBar = F, showLink = F)
+
+```
+
+Hover bars for end date. Of the ever=presents, Manchester United pip Chelsea by just three minutes. Huddersfield feature in the top ten in spite of only appearing in one season, to date
+
+---
+
+Giroud popped in one more as sub for Arsenal before his move to Chelsea where he has also got off the mark - both of these two against Southampton
+
+---
+
+So much for predictions. After six 4 goal hauls in their first 14 outings they .. did not manage one again all season
+
+
+---
+
+## Code Hints {-}
+
+ * base - expand.grid, lag
+

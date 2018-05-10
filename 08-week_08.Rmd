@@ -1,0 +1,298 @@
+# Week 8 {-}
+
+## Game of the week Crystal Palace 2 - 1 Chelsea {-}
+
+Champions lose to previously goalless, pointless London rivals
+
+
+```{r topGame_08}
+
+embed_youtube("MuLTnBYuEWs", width = 420, height = 315, frameborder = 0,
+   allowfullscreen = TRUE, query = NULL) 
+
+
+```
+
+
+<p class="factoid">Julian Speroni and Gareth McAuley made their first appearances of the season becoming the oldest player and oldest outfielder, respectively, to appear in this campaign</p>
+
+
+
+***
+
+## Mo's MO {-}
+
+It is a well known that Jose Mourinho's modus operandi in away games against top sides is to play very conseravtively. It was not that succesful last season and although he got a point at Liverpool, the latter's poor defence was probably there for the taking against a team that had averaged three goals per game after seven rounds
+
+Jamie Redknapp mentioned that you don't expect many 3-2 victories from a Mourinho team.     
+
+ In fact, there have been six
+
+```{r }
+shortcode("tweet", "919708190715002881")
+```
+
+Well behind Sir Alex Fergsuon against whom all managers are measured and who has a marginally better overall win percentage (53-51)
+
+Let's look at a heatmaps of their results. Hover squares for totals
+
+```{r no_score_08}
+
+temp <- managerGame %>%
+  filter(ManagerID == "MourinhoJ") %>%
+  mutate(combo = paste0(GF, GA)) %>%
+  group_by(combo) %>%
+  tally()
+
+
+allCombos <- expand.grid(data.frame(GF = 0:9, GA = 0:9)) %>%
+  mutate(combo = paste0(GF, GA)) #still a df with 100vals
+
+test <- allCombos %>%
+  left_join(temp) %>%
+  select(GF, GA, count = n)
+
+# need to transform
+Games <- t(matrix(
+  test$count,
+  nrow = 10,
+  ncol = 10,
+  byrow = TRUE,
+  dimnames = list(unique(test$GF),
+                  unique(test$GA))
+))
+
+
+plot_ly(
+  x = unique(test$GF),
+  y = unique(test$GF),
+  z = Games,
+  key = Games,
+  hoverinfo = "z",
+  colorscale = 'YIOrRd',
+  reversescale = T,
+  type = "heatmap"
+) %>%
+  layout(
+    title = "Mourinho Results by Goal Score",
+    xaxis = list(title = "Goals Against"),
+    yaxis = list(title = "Goals For")
+  ) %>%  config(displayModeBar = F, showLink = F)
+
+```
+
+
+So his 23rd goalless stalemate. 2-0 victories (40) is narrowly the most common outcome
+
+
+```{r no_score_AF_08}
+
+```
+
+Interestingly, 1-0 victories is the only result that topped the century mark but 0-0 draws were relatively less commonplace than with Mourinho 
+
+***
+
+## City on the Rampage {-}
+
+Meanwhile, United's cross-city rivals continue apace with only their second-ever seven goal haul in the Premier League (7-0 v Norwich 2103/4) and now boast the most ever goals scored after eight rounds
+
+```{r cum_GF_08}
+
+
+
+prev <- standings %>%
+  filter(tmYrGameOrder <= 8 & season < "2017/18") %>%
+  select(team, tmYrGameOrder, season, cumGF) %>%
+  arrange(season, tmYrGameOrder) %>%
+  group_by(season, team)
+
+current <- standings %>%
+  filter(tmYrGameOrder <= 8 & season == "2017/18") %>%
+  select(team, tmYrGameOrder, season, cumGF) %>%
+  arrange(season, tmYrGameOrder) %>%
+  group_by(season, team)
+
+manC <- standings %>%
+  filter(tmYrGameOrder <= 8 &
+           season == "2017/18" & team == "Man. City") %>%
+  select(team, tmYrGameOrder, season, cumGF) %>%
+  arrange(season, tmYrGameOrder) %>%
+  group_by(season, team)
+
+prev %>%
+  plot_ly(
+    x =  ~ tmYrGameOrder,
+    y =  ~ cumGF,
+    hoverinfo = "text",
+    text =  ~ paste0(team, "<br>", season, "<br>",
+                     cumGF, " goals")
+  ) %>%
+  add_lines(color = I("lightgrey"), name = "Prev Years") %>%
+  add_lines(
+    data = current,
+    x =  ~ tmYrGameOrder,
+    y =  ~ cumGF,
+    color = I("red"),
+    name = "2017/18"
+  ) %>%
+  add_lines(
+    data = manC,
+    x =  ~ tmYrGameOrder,
+    y =  ~ cumGF,
+    color = I("blue"),
+    name = "Man City 17/18"
+  ) %>%
+  layout(
+    title = "Goals for by team by Year",
+    xaxis = list(title = "Games played"),
+    yaxis = list(title = "Cumulative Goals")
+  ) %>%  config(displayModeBar = F, showLink = F)
+
+
+```
+
+Everton (2005/06) now replace Palace as the lowest scorers at this stage of the season. The Toffees had finished 4th the previous campaign
+
+
+***
+
+<p class="factoid">After 8 League games, City have already scored as many goals as 16 teams have managed after 38 matches in previous EPL campaigns - including their team of 2006/07</p>
+
+***
+
+## Arsenal conceding Away {-}
+
+Courtesy of a 90th minute strike by Watford's Cleverley, Arsenal(26) now only have Crystal Palace(29) ahead of them in terms of conceding the most EPL goals in 2017
+
+```{r ARS_GA_08}
+
+standings %>%
+  filter(venue == "A") %>%
+  select(gameDate, GA, team) %>%
+  mutate(year = str_sub(gameDate, 1, 4)) %>%
+  group_by(year, team) %>%
+  summarise(tot = sum(GA)) %>%
+  arrange(desc(tot)) %>%
+  filter(team == "Arsenal") %>%
+  plot_ly(x =  ~ year,
+          y =  ~ tot,
+          color = I("red")) %>%
+  layout(
+    title = "Arsenal goals conceded by calendar year",
+    xaxis = list(title = ""),
+    yaxis = list(title = "Goals conceded")
+  ) %>%  config(displayModeBar = F, showLink = F)
+
+```
+
+1992 and 2017   (at the time of writing) are part years
+
+Up to and including 2007, Arsenal conceded 20 away goals in only two years. Since then, they have only dipped below this level once.       
+2011 included an 8-2 drubbing at Old Trafford
+
+***
+
+## Totally Football and Guardian Weekly Review Podcasts {-}
+
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtrans`
+
+
+## Final Factoid {-}
+
+<p class="factoid">de Bruyne was withdrawn after 66 minutes with 4 assists - one shy of the EPL record</p>
+
+
+---
+
+## End of Season Update {-}
+
+Speroni amd McAuley remained the oldest player(38.6 years) and outfielder(38.2 years) to appear this season, although both were bench players by the end of the season
+
+#### Mo's MO {-}
+
+The heat map gets updated and you can see that there was just one more 0-0 result, a disappointing end of calendar home game against Southampton. The most common result..
+
+..? min table
+
+
+#### City on the Rampage {-}
+
+For the remainder of the season City were there or thereabouts as the top scorers ever after each round of games and..
+
+```{r}
+
+
+#mnc this year
+mnc <- standings %>%
+  filter(team == "Man. City", season == "2017/18") %>%
+  select(team, season, tmYrGameOrder, cumGF, GF, GA, OppTeam)
+
+
+## other teams
+
+best <- standings %>%
+  filter(tmYrGameOrder <= 39, season < "2017/18") %>%
+  arrange(desc(cumGF)) %>%
+  group_by(tmYrGameOrder) %>%
+  slice(1) %>%
+  select(team, season, cumGF, tmYrGameOrder) %>%
+  ungroup() #esssential
+
+
+plot_ly() %>%
+  add_lines(
+    data = mnc,
+    x =  ~ tmYrGameOrder,
+    y =  ~ cumGF,
+    line = list(shape = "hv"),
+    color = I("lightblue"),
+    name = "Man. City",
+    hoverinfo = "text",
+    text = ~ paste0("Round: ", tmYrGameOrder, "<br>v ", OppTeam, "<br>",
+                    GF, "-", GA)
+  ) %>%
+  add_lines(
+    data = best,
+    x =  ~ tmYrGameOrder,
+    y =  ~ cumGF,
+    line = list(shape = "hv"),
+    color = I("red"),
+    hoverinfo = "text",
+    text = ~ paste0(
+      "Round: ",
+      tmYrGameOrder,
+      "<br>",
+      cumGF,
+      "<br>",
+      team,
+      "<br>",
+      season
+    ),
+    name = "Best"
+  ) %>%
+  
+  layout(
+    title = "Man City goalscoring over season vs best ever",
+    xaxis = list(title = "Games Played"),
+    yaxis = list(title = "Cumulative Points")
+  ) %>% config(displayModeBar = F, showLink = F)
+
+```
+
+
+Interestingly, their 2013/14 title-winning team reached 100 goals after 37 games but only scored 2 in their final game and thus could not match the 2009/10 Chelsea side that pummeled Wigan 8-0 on the final day of that season
+
+---
+
+#### Arsenal conceding Away {-}
+
+In the end, Arsenal did improve sonewhat. The 35 goals conceded was some way off Stoke's 40 and not even a club EPL record. However, the away travails continued into 2018 so that by mid-April they were the only club in the top five divisions of English football not to gain points on their travels since the turn of the year
+
+---
+
+## Code Hints {-}
+
+  * plotly - heatmaps, combining two data.frames
+  * base - expand.grid and t(for transform)

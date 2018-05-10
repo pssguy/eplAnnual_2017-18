@@ -1,0 +1,422 @@
+# Week 1 {-}
+
+## Welcome to the New Season {-}
+
+Well we're back with an exciting start to the new season. Manchester United turned in their best performance in  years and Huddersfield had a dream return to the top tier. Some things remain the same though with Dele Alli conning Shelvey into a dismissal and Liverpool conceding from corners
+
+### Game of the Week {-}
+
+Arsenal and Leicester swapping blows with the Gunners emerging victorious
+
+```{r topGame_01}
+
+embed_youtube(
+  "tXq8TlZupEY",
+  width = 420,
+  height = 315,
+  frameborder = 0,
+  allowfullscreen = TRUE,
+  query = NULL
+  ) %>%
+  div(align = "center")
+  
+
+```
+
+
+
+
+
+
+## English born Players {-}
+
+One fairly constant theme has been the downturn in English player over the years. 
+
+
+
+```{r english_starters_01}
+
+games <- teamGames %>%
+  ungroup() %>%
+  filter(tmYrGameOrder == 1) %>%
+  pull(MATCHID)
+
+playerGame %>%
+  filter(MATCHID %in% games & START > 0) %>%
+  group_by(season, COUNTRY) %>%
+  summarise(tot = n()) %>%
+  group_by(season) %>%
+  mutate(pc = round(100 * tot / sum(tot), 1)) %>%
+  filter(COUNTRY == "England") %>%
+  ungroup() %>%
+  plot_ly(x =  ~ season, y =  ~ pc) %>%
+  add_lines() %>%
+  layout(
+    margin = list(b = 70),
+    title = "% of Starters born in England - EPL Round 1",
+    xaxis = list(title = ""),
+    yaxis = list(title = "% ")
+  ) %>%  config(displayModeBar = F, showLink = F)
+
+```
+
+This appears to have stabilized over the past couple of seasons
+
+---
+
+Check out how each of the teams started the season
+
+
+```{r country_table_01}
+
+
+# 1st weeek this year
+playerGame %>%
+  filter(MATCHID %in% games & START > 0 & season == "2017/18") %>%
+  mutate(place = paste0(city, ", ", COUNTRY)) %>%
+  select(team = TEAMNAME, player = LASTNAME, place) %>%
+  arrange(team, player) %>%
+  DT::datatable(
+    class = 'compact stripe hover row-border order-column',
+    rownames = FALSE,
+    options = list(
+      paging = TRUE,
+      searching = TRUE,
+      info = FALSE,
+      lengthMenu = c(11, 11)
+    )
+  )
+
+
+```
+
+New-signing, Lacazette, was the only Frenchman in Arsenal's starting line-up (It has been as high as seven). 
+
+ Stoke boasted ten different nationalities
+ 
+---
+
+Here is the breakdown across the EPL
+
+```{r allcountries_01, fig.height=10}
+
+country.df <- playerGame %>%
+  filter(MATCHID %in% games & START > 0 & season == "2017/18") %>%
+  group_by(COUNTRY) %>%
+  tally()
+
+#use forcats - works even though character - then prder on reverse alphabetically - ideally opposite of that
+country.df  %>%
+  plot_ly(x =  ~ n,
+          y =  ~ fct_reorder(COUNTRY, n),
+          height = 1000) %>%
+  layout(
+    margin = list(l = 100, pad = 5),
+    yaxis = list(title = ""),
+    xaxis = list(title = "")
+  ) %>%
+  config(displayModeBar = F, showLink = F)
+
+
+```
+
+
+No clear candidate for second place but newly-promoted Huddersfield coach, David Wagner, has signed a few fellow-Germans
+
+Only two Scots, Fraser (Bournemouth) and 33-year-old, Fletcher (Stoke). The last time Scotland held the second rank, after England, in a game to lead off a season was in 1999
+
+
+
+
+
+## Big Away Wins {-}
+
+
+<p class="factoid">What Birmingham never did in seven seasons and Southampton only achieved at the 186th attempt, Huddersfield accomplished at the first time of asking<br>Won their first EPL away game by at least a three goal margin<br>Surprisingly, three other teams match them, including Blackpool, who were relegated the same year</p> 
+
+
+
+```{r big_win_01, fig.height= 12}
+
+
+
+# first games for teams that have had 3 goals margins
+didIt <- standings %>%
+  arrange(gameDate) %>%
+  filter(venue == "A") %>%
+  group_by(team) %>%
+  mutate(awayGameOrder = row_number()) %>%
+  filter((GF - GA) >= 3) %>%
+  group_by(team) %>%
+  slice(1)
+
+# teams that have never achieved
+never <- setdiff(unique(standings$team), unique(didIt$team))
+
+# never teams away games to date - select relevant cariables+ add ever
+neverTeams <- standings %>%
+  filter(team %in% never & venue == "A") %>%
+  group_by(team) %>%
+  arrange(tmGameOrder) %>%
+  mutate(awayGameOrder = row_number()) %>%
+  arrange(desc(awayGameOrder)) %>%
+  slice(1) %>%
+  select(team, awayGameOrder) %>%
+  mutate(ever = "Never")
+
+# cf above re fields
+didItTeams <- didIt %>%
+  select(team, awayGameOrder) %>%
+  mutate(ever = "First")
+
+# combine
+df <- rbind(neverTeams, didItTeams)
+
+# order team as factor for chart
+df$team <-
+  factor(df$team, levels = df$team[order(df$awayGameOrder)])
+
+
+#chart
+df %>%
+  plot_ly(x =  ~ awayGameOrder,
+          y =  ~ team,
+          height = 1000) %>%
+  add_bars(color =  ~ ever) %>%
+  layout(
+    title = " EPL Away Games before 3 goal victory",
+    margin = list(l = 120, pad = 5),
+    xaxis = list(title = "Games"),
+    yaxis = list(title = "")
+    
+  ) %>%  config(displayModeBar = F, showLink = F)
+
+```
+
+It took Newcastle more than a century of matches which is a touch unexpected given that they were a high-scoring, successful team when they first made the Premier league
+
+Southampton definitely buck the trend taking 186 games to reach the target - though they have had more success recently
+
+```{r southampton_01}
+
+
+standings %>%
+  filter(venue == "A" & team == "Southampton") %>%
+  mutate(GD = GF - GA) %>%
+  group_by(GD) %>%
+  tally() %>%
+  plot_ly(x =  ~ GD, y =  ~ n) %>%
+  add_bars(color = I("red3")) %>%
+  layout(
+    title = "Southampton PL results by Goal Difference",
+    xaxis = list(title = "Goal Difference"),
+    yaxis = list(title = "Games Count")
+  ) %>%  config(displayModeBar = F, showLink = F)
+
+
+```
+
+## Man Utd are back {-}
+
+I know, only West Ham, but still far from the turgid play of recent seasons. They end by far their longest run without a four goal victory
+
+
+```{r mnu_streak_01}
+
+
+standings %>%
+  arrange(gameDate) %>%
+  group_by(team) %>%
+  filter((GF - GA) >= 4 & team == "Man. Utd.") %>%
+  select(gameDate, tmGameOrder) %>%
+  mutate(last = lag(tmGameOrder)) %>%
+  mutate(last = (ifelse(is.na(last), 0, last)),
+         diff = tmGameOrder - last,
+         order = row_number() - 1) %>%
+  plot_ly(x =  ~ order, y =  ~ diff) %>%
+  add_bars(color = I("red")) %>%
+  layout(
+    title = "Man Utd sequences between 4 goal victories",
+    xaxis = list(title = ""),
+    yaxis = list(title = "")
+  ) %>%  config(displayModeBar = F, showLink = F)
+
+```
+
+---
+
+### Totally Football and Guardian Weekly Review Podcasts {-}
+
+
+
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6203313-chelsea-crash-and-burn-ley-as-huddersfield-make-their-mark/embed/v4?eid=AQAAAO9tlFmxp14A" title="audioBoom player"></iframe>
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6203084-goals-petulance-and-absent-defences-the-premier-league-is-back-football-weekly/embed/v4?eid=AQAAANRslFnMpl4A" title="audioBoom player"></iframe>
+
+---
+
+### Results and Table {-}
+
+```{r results_01}
+
+hth %>%
+  filter(season == "2017/18" &
+           gameDate >= "2017-08-09" &
+           gameDate <= "2017-08-15") %>% 
+  filter(venue == "H") %>%
+  arrange(team) %>%
+  select(Home = team, GF, GA, Away = OppTeam) %>%
+  DT::datatable(
+    rownames = FALSE,
+    class = 'compact stripe hover row-border',
+    colnames = c('', '', '', ''),
+    options = list(
+      paging = FALSE,
+      searching = FALSE,
+      info = FALSE,
+      columnDefs = list(list(
+        width = '40%', targets = list(0, 3)
+      ))
+    ),
+    width = 250
+  )
+```
+
+---
+
+```{r table_01}
+
+
+
+# table
+hth %>%
+  filter(season == "2017/18" & gameDate <= "2017-08-17") %>%
+  group_by(team) %>%
+  mutate(
+    W = ifelse(res == "Win", 1, 0),
+    L = ifelse(res == "Loss", 1, 0),
+    D = ifelse(res == "Draw", 1, 0)
+  ) %>%
+  summarise(
+    P = n(),
+    Pts = sum(points),
+    W = sum(W),
+    D = sum(D),
+    L = sum(L),
+    GD = sum(GF) - sum(GA),
+    GF = sum(GF)
+  ) %>%
+  arrange(desc(Pts), desc(GD), desc(GF), team) %>%
+  DT::datatable(
+    class = 'compact stripe hover row-border order-column',
+    colnames = c('', 'P', 'Pts', 'W', 'D', 'L', 'GD', 'GF'),
+    rownames = TRUE,
+    options = list(
+      paging = FALSE,
+      searching = FALSE,
+      info = FALSE
+    )
+  )
+
+
+```
+
+
+
+
+### Final Factoid {-}
+
+<p class="factoid">Crystal Palace have won just nine of their most recent 33 league games. More than half these victories came in  the 7 games in which Sakho played a full ninety minutes</p> 
+
+***
+
+## End of Season Update {-}
+
+### English born Players {-}
+
+No great departure from week 1, with a slight uptick for the second year running
+
+```{r byYear_02u}
+games <- teamGames %>%
+  ungroup() %>%
+  #filter(tmYrGameOrder == 1) %>%
+  pull(MATCHID)
+
+playerGame %>%
+  filter(MATCHID %in% games & START > 0) %>%
+  group_by(season, COUNTRY) %>%
+  summarise(tot = n()) %>%
+  group_by(season) %>%
+  mutate(pc = round(100 * tot / sum(tot), 1)) %>%
+  filter(COUNTRY == "England") %>%
+  ungroup() %>%
+  plot_ly(x =  ~ season, y =  ~ pc) %>%
+  add_lines() %>%
+  layout(
+    margin = list(b = 70),
+    title = "% of Starters born in England  by Season",
+    xaxis = list(title = ""),
+    yaxis = list(title = "% ")
+  ) %>%  config(displayModeBar = F, showLink = F)
+```
+
+There is a tremendous range, by club. Here is a chart ordering clubs by finishing position
+
+```{r by_team_position_02u, fig.height = 8}
+games <- teamGames %>%
+  ungroup() %>%
+  filter(season=="2017/18") %>%
+  pull(MATCHID)
+
+finalPos <- standings %>% 
+  filter(season=="2017/18",tmYrGameOrder==1) %>% 
+  select(team,final_Pos)
+
+
+
+test <- playerGame %>%
+  filter(MATCHID %in% games & START > 0, COUNTRY == "England") %>%
+  group_by(TEAMNAME, COUNTRY) %>%
+  summarise(pc = round(100*n()/418,1)) %>%
+  left_join(finalPos,by=c("TEAMNAME"="team")) 
+
+
+
+test %>% 
+  plot_ly(x= ~ pc,y=~fct_reorder(TEAMNAME, -final_Pos)
+          ) %>% 
+  add_markers() %>% 
+  layout(paper_bgcolor='transparent',plot_bgcolor='transparent',
+         margin=list(l=120),
+         title="Proportion of English-born Starters by Club - 2017/18",
+         yaxis=list(title=""),
+         xaxis=list(title= "% English Born")) %>% config(displayModeBar = F, showLink = F)
+  
+
+
+
+```
+
+ Unsurprisingly, the top teams tend to be the wealthiest, who can afford to bring in the best players from around the world
+
+Chelseas 6.2% does make the top 5 in terms of proprtion of non-English for any season but the record is Arsenal's 2007/8 team with only 3.1%. A teenage, Theo Walcott was the only Englishman to feature for more than the 155 minutes of Justin Hoyte
+
+The teams relegated are fairly typical so any shift may depend on the promoted club and Wolves have a lot of Portugese players 
+
+
+***
+
+### Man Utd are back {-}
+
+United really turned it on early in the season and immediately followed up with another 4-0 win at Swansea in the next fixture, with equivalent scorelines against Everton and Crystal Palace by week 7. However, that was that and they go into next year on a 31 game drought (equal 6th worst in their PL history)
+
+The team scored 5 or more on 44 occasions during Sir Alex Ferguson's 21 year reign in the Premier League. They have not achieved it once since
+
+***
+
+## Code Tips {-}
+
+ * dplyr - pull, slice
+ * forcats - fct_reorder
+ * DT - columnDefs, lengthMenu

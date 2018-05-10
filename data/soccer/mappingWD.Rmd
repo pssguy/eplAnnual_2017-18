@@ -1,0 +1,223 @@
+---
+title: "SA maps working doc"
+output: html_notebook
+---
+
+Working doc for poss sa speech
+would be nice to be able to extend elsewhere/use hexmapr
+
+The data comes from [maplibrary.org](http://maplibrary.org/library/stacks/Africa/South%20Africa/index.htm) so has lots of different maps from around world. I downloaded shp files but there asre other formats dra/ etc.
+Not obvious there is any sf maps available yet
+
+There are 9 subdivison areas in south africa - which also have downloadable data (what is white gap)
+
+[robin lovelace book](https://bookdown.org/robinlovelace/geocompr/spatial-class.html)
+
+not 
+
+http://www.diva-gis.org/datadown looks like may also have info (could be just maps/pop - which are in grids)
+
+```{r}
+
+# Load libraries
+
+# General usage
+library(tidyverse) #  data-carpentry
+library(plotly) # interactive graphics
+library(DT) #  tables
+library(leaflet) #  maps
+
+# Topic specific
+library(sp)
+library(sf)
+
+```
+
+```{r}
+## read in shape file
+library(maptools)
+
+# unzipped the SOU_admin_SHP.zip file gives SOU.dbf/SOU.shp/SOU.shx files in the shapefiles directory
+
+data <- readShapePoly("shapefiles/SOU.shp")
+#use rgdal::readOGR or sf::st_readError in getinfo.shape(filen) : Error opening SHP file
+
+
+data <- st_read("shapefiles/SOU.shp", stringsAsFactors = FALSE)
+# Error in CPL_read_ogr(dsn, layer, as.character(options), quiet, type,  : 
+#   Open failed. also same with /shapefiles/SOU.shp 
+
+# from maptools vignette
+library(maptools)
+xx <- readShapePoly(system.file("shapes/sids.shp", package="maptools")[1],
+ IDvar="FIPSNO", proj4string=CRS("+proj=longlat +ellps=clrk66"))  #SPDF
+plot(xx, border="blue", axes=TRUE, las=1)
+#plot.new() not in vignette
+text(coordinates(xx), labels=row.names(xx), cex=0.6) #Error in text.default(coordinates(xx), labels = row.names(xx), cex = 0.6) : plot.new has not been called yet
+as(xx, "data.frame")[1:5, 1:6]
+xxx <- xx[xx$SID74 < 2,]
+plot(xxx, border="red", add=TRUE)
+tmpfl <- paste(tempdir(), "xxpoly", sep="/")
+writePolyShape(xxx, tmpfl)
+getinfo.shape(paste(tmpfl, ".shp", sep=""))
+axx <- readShapePoly(tmpfl, proj4string=CRS("+proj=longlat +ellps=clrk66"))
+plot(xxx, border="black", lwd=4)
+plot(axx, border="yellow", lwd=1, add=TRUE)
+unlink(paste(tmpfl, ".*", sep=""))
+
+
+# https://edzer.github.io/UseR2017/#sf-handling-real-data good sf recource
+
+fname = system.file("shape/nc.shp", package = "sf")
+nc = read_sf(fname)
+
+gname="C:/Users/Andrew/Documents/R/southAfrica/shapefiles/SOU.shp"
+nc2 = read_sf(gname)
+# Error in CPL_read_ogr(dsn, layer, as.character(options), quiet, type,  : 
+#   NULL error in sfc_from_ogr addressed https://github.com/r-spatial/sf/issues/351
+
+#library(rgdal) # prev loaded via namespace so did not load
+
+data <- rgdal::readOGR(gname)
+
+# Deleted feature IDs:  334OGR data source with driver: ESRI Shapefile 
+# Source: "C:/Users/Andrew/Documents/R/southAfrica/shapefiles/SOU.shp", layer: "SOU"
+# with 334 features
+# It has 18 fields
+
+class(data)
+# > class(data)
+# [1] "SpatialPolygonsDataFrame"
+# attr(,"package")
+# [1] "sp"
+
+plot(data)
+
+# world_sp = as(world, Class = "Spatial")
+data_sf = st_as_sf(data, "sf")
+class(data_sf) #[1] "sf"         "data.frame"
+names(data_sf)
+
+#  [1] "ID"         "LBL"        "FIP"        "MMT_ID"     "SHORT__FRM" "LONG_FRM"   "ADM0"       "ADM1"       "ADM2"       "ADM3"      
+# [11] "ADM4"       "ADM5"       "STL.0"      "STL.1"      "STL.2"      "STL.3"      "STL.4"      "STL.5"      "geometry"  
+
+
+```
+
+No data yet doemlodaed as csv from data portal e.g http://southafrica.opendataforafrica.org/cuyaur/household-expenditures-and-living-conditions-of-south-africa-2009
+Next release date: Tuesday, 19 December 2017
+
+
+```{r}
+
+hhExpenditure <- read_csv("data/hhExpenditure.csv")
+names(hhExpenditure)
+
+unique(hhExpenditure$location)
+
+#[1] "location" "variable" "sex"      "Unit"     "Date"     "Value" 
+
+```
+
+
+ admin areas are by th regions 
+ 
+```{r}
+
+region_sp <- rgdal::readOGR("C:/Users/Andrew/Documents/R/southAfrica/shapefiles/SOU-level_1.shp")
+region_sf= st_as_sf(region_sp, "sf") #22 x5 but seems to break down west cape
+plot(region_sf) # as a test
+
+## try splitting off the other rows
+
+region_sf <- region_sf %>% 
+  filter(!is.na(CAPTION))
+
+plot(region_sf)
+
+```
+ 
+```{r}
+
+# now look at data
+
+
+food <- hhExpenditure %>% 
+filter(str_sub(variable,1,4)=="Food")
+
+region_sf <- region_sf %>% 
+  mutate(location=as.character(CAPTION))
+
+df <- food %>% 
+  left_join(region_sf,by=c("location"="CAPTION"))
+
+food$location
+region_sf$CAPTION
+
+glimpse(food)
+glimpse(region_sf)
+
+#  geom_text(aes(V1, V2, label = substr(name,1,4)), size=4,color = "white") form hexMapCreation.Rmd
+ggplot(df) +
+  geom_sf(aes(fill = Value)) +
+  geom_text(aes())
+```
+
+ggplot vignette
+
+```{r, warning = FALSE}
+
+#https://bhaskarvk.github.io/user2017.geodataviz/presentations/06-Static_Maps.html#12
+
+library(sf)
+world <- st_as_sf(rnaturalearth::countries110)
+europe <- dplyr::filter(world, region_un=="Europe" & name!='Russia')
+# A bounding box for continental Europe.
+europe.bbox <- st_polygon(list(
+  matrix(c(-25,29,45,29,45,75,-25,75,-25,29),byrow = T,ncol = 2)))
+europe.clipped <- st_intersection(europe, st_sfc(europe.bbox, crs=st_crs(europe)))
+ggplot(europe.clipped, aes(fill=gdp_md_est/1000)) +
+  geom_sf(alpha=0.8,col='white') +
+   coord_sf(crs="+proj=aea +lat_1=36.333333333333336 +lat_2=65.66666666666667 +lon_0=14") +
+  hrbrthemes::theme_ipsum_rc() +
+  viridis::scale_fill_viridis(
+    name='Median GDP \n(in Billions)', direction = -1, labels=scales::dollar) +
+  labs(x=NULL, y=NULL, title="Some Title",
+       caption='Source: http://www.naturalearthdata.com/')
+```
+
+ot tmap
+
+```{r}
+
+library(tmap)
+current.mode <- tmap_mode("plot")
+
+data(World, Europe, metro)
+
+tm_shape(World) +
+    tm_text("name", size="AREA")
+
+tm_shape(Europe) +
+    tm_polygons() +
+    tm_text("iso_a3", size="AREA", col = "grey20", root=4, shadow = TRUE, scale=2,
+        size.lowerbound = .1) +
+tm_shape(Europe) +
+    tm_text("name", size="AREA", root=4, scale=1,
+        ymod=-1 * tmaptools::approx_areas(Europe, target = "norm")^(1/4))
+
+## in view mode automatically goes to leaflet
+tm_shape(df) +
+    tm_polygons() #Error in get_projection(mshp_raw, as.CRS = TRUE) : shp is neither a Spatial nor a Raster object need to add a CRS
+
+
+```
+
+think about colorblindr package
+
+```
+
+
+```
+ 
+ Has other household data e.g possession of 
