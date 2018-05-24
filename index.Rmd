@@ -1,20 +1,20 @@
 --- 
-title: "Premier League Annual 2017/18"
+title: "Premier League Annual 2017/18 (with code)"
 author: "Andrew Clark"
-date: "`r Sys.Date()`"
+date: "May 2018"
 site: bookdown::bookdown_site
 documentclass: book
 #bibliography: [book.bib, packages.bib] 
 #biblio-style: apalike
 link-citations: yes
-description: "This is comprised of a  compilation of weekly
-blog posts, extensively extended with end-of-season updates, featuring varying aspects of the EPL using R code
-to produce charts and tables. Tweets, pods and game videos are also embedded."
+description: "A compilation of weekly blog posts, extensively extended with end-of-season updates, featuring varying aspects of football's English Premier League. A wide range of R packages are used to produce interactive charts and tables and tweets and podcasts are also embedded"
 ---
-
+ 
 ```{r, echo=FALSE}
 knitr::opts_chunk$set(collapse = TRUE, warning = FALSE, message=FALSE, echo=TRUE,  fig.align = 'center')
 ```
+
+
 
 ```{r setup}
 
@@ -156,23 +156,19 @@ subSeq <- function (x, item = NULL) {
 
 ```
 
-# Introduction {-}
+# Kick-Off {-}
+
+![](img/cover_image_with_text.png) {-}
+---
+
 
 Welcome to my - and possibly a world - first interactive sports annual
 
-The basis is the weekly [blog posts]() I have produced over the course of the 2017/18 English Premier League. It has been expanded with some additional - and I have passed commentary in many of the chapters updating the analyses reached at that stage of the season
+The basis is the weekly [blog posts](http://mytinyshinys.com/categories/eplweekly/) I have produced over the course of the 2017/18 English Premier League season. However, it has been significantly expanded with end-of season follow-ups on the analyses conducted each week 
 
-All the code is in R and, for those of you inclined, you can observe the code. I am no expert
-so if you have any hints to .. you can . The whole and the packages and code I used. Some weeks I will list some packages and functions which I may have used for the first time and may prove helpful
+All the code is in R and the book written in RMarkdown using the bokdown package. This version, incorporates code into the text but there is also a [code-free version]()  Some chapters highlight packages or functions which I may have used for the first time
 
-The data ...
+The data is unofficial and there may be some - hopefully insignificant errors. One aspect to mention is that I allow up to two assists per goal, rather than only one as used in official data
 
-Charts are generally zoomable/panable and often more detailed information can be found by hovering markers
+Charts are generally zoomable/pannable and often more detailed information can be found by hovering markers
 
-Help wanted
------------
-
-* Enhance code
-* Enhance design
-* Translation foreign languages
-* Other seasons

@@ -1,0 +1,24 @@
+# Future Developments {-}
+
+One of the great advantages of a on-line, HTML, book is that it can evolve - and hopefully improve - over time
+
+If anyone wants to suggest improvements, I am open to suggestions. You can either provide pull requests or raise them as issues on the [related github repo](https://github.com/pssguy/eplAnnual_2017-18/issues)
+
+ * Enhance code
+   I am sure my code can be enhanced both in efficiency and elegance. I learnt new techniques as the year progressed and new packages and functions became available  but I have not gone back and amended code. I'm done
+   
+ * Additional analyses
+     One of the advantages of the html/bookdown approach is the ability to slot in extra work seamlessly. I may do so myself but would welcome any other attributable chapters based on the underlying data. I have recently released the [epldata package](https://github.com/pssguy/epldata) containg the raw datasets  for all 26 seasons to date 
+     
+* Other seasons
+    I currently have no plans to continue this into the future of for that matter replicate past years. However, I intend to keep compiling the data and updating the aforementioned package annually so there is no theoretical reason why a variant could not be done for other years past, present or future. As a slightly divergent option, the data could be used to focus on specific clubs and/or players     
+
+ * Enhance design
+   The plain-vanilla bookdown look may be  appropriate for its most common usage - explaining R packages but I'd appreciate any suggestions to make this one more visually appealin
+   
+ * Translation into foreign languages
+    The Premier League is a world-wide phenomenen and there may be some interest in this in  non-speaking countries
+    
+    
+
+
