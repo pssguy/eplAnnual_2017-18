@@ -1,22 +1,9 @@
 # Week 23 {-}
 
 
-## Match of the Day {-}
-
 Man City's unbeaten run ended by a Coutinho-less Liverpool in seven goal thriller
 
-
-```{r topGame_23}
-
-embed_youtube("S326V6ytmts", width = 420, height = 315, frameborder = 0,
-   allowfullscreen = TRUE, query = NULL) 
-
-
-```
-
-
 ***
-
 
 ## Subs {-}
 
@@ -151,7 +138,7 @@ df %>%
 
 ```
 
-In spite of Palace's achievements, the Newcastle team featuring Alan Shearer (23 goals), Nolberto Solano(20 assists) and Gary Speed fared even better after their sticky start.    
+In spite of Palace's achievements, the Newcastle team featuring Alan Shearer (23 goals), Nolberto Solano (20 assists) and Gary Speed fared even better after their sticky start.    
  They were already six points clear of relegation after 23 games and finished 11th - only six points away from a top 6 place.      
  
  Currently only two points off 9th-placed-Everton, a top half finish is certainly feasible for Hodgson's team - though even 17th spot will be acceptable given the initial circumstances
@@ -162,17 +149,10 @@ In spite of Palace's achievements, the Newcastle team featuring Alan Shearer (23
 <p class="factoid">Stoke have already conceded 50 goals this season, eight more than any other team. Only twice, has the team conceding the most goals avoided relegation. And both Middlesbrough (1996/97) and Fulham(2006/7) only let in a total of 60. Stoke are on pace for 83</p>
 ***
 
-
-
-***
-
 ## Tweet of the Week {-}
 
-
-
-```{r}  
-shortcode("tweet", "952662805768847365") 
-```
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Not that unusual for champs to concede 4 goals in <a href="https://twitter.com/hashtag/PremierLeague?src=hash&amp;ref_src=twsrc%5Etfw">#PremierLeague</a> <br>Only time happened 2x when <a href="https://twitter.com/hashtag/MUFC?src=hash&amp;ref_src=twsrc%5Etfw">#MUFC</a> gave up 5 to <a href="https://twitter.com/hashtag/NUFC?src=hash&amp;ref_src=twsrc%5Etfw">#NUFC</a> and 6 to <a href="https://twitter.com/hashtag/saintsfc?src=hash&amp;ref_src=twsrc%5Etfw">#saintsfc</a> in consecutive games Oct 1996 <a href="https://twitter.com/hashtag/MCFC?src=hash&amp;ref_src=twsrc%5Etfw">#MCFC</a> <a href="https://twitter.com/hashtag/LFC?src=hash&amp;ref_src=twsrc%5Etfw">#LFC</a> <a href="https://t.co/sqqp8bHfrL">pic.twitter.com/sqqp8bHfrL</a></p>&mdash; Andrew Clark (@pssGuy) <a href="https://twitter.com/pssGuy/status/952662805768847365?ref_src=twsrc%5Etfw">January 14, 2018</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 
 
@@ -265,7 +245,7 @@ The 23rd round and 12th place proved a high-point for Palace not helped by Zaha 
 
 ---
 
-Kane duly reached the century mark for Spurs and is now up to .. place in terms of most goals for one club.
+Kane duly reached the century mark for Spurs and is now up to 11th place in terms of most goals for one club, with a good chance of reaching top sixth spot by the end of next season
 
 Here are the leading players for every PL club
 
@@ -287,10 +267,8 @@ playerGame %>%
 
 ```
 
-Alan Shearer has the unique distinction of reaching the century mark for two clubs and Aguero will be expecting to reach the top three in this category early next season
+Alan Shearer has the unique distinction of reaching the century mark for two clubs and Aguero will be expecting to reach the top three in this category early next season. Fowler just tops Gerrard (120) and Owen (118) for the Liverpool crown
 
-## Code Hints {-}
 
-  * none this week
 
 

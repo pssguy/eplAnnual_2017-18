@@ -1,18 +1,6 @@
 # Week 24 {-}
 
-
-## Match of the Day {-}
-
-
-
-```{r topGame_24}
-
-embed_youtube("gd4WjNSXBrg", width = 420, height = 315, frameborder = 0,
-   allowfullscreen = TRUE, query = NULL) 
-
-
-```
-
+Swift revenge for Swansea who avenge a 5-0 drubbing at the hands of Liverpool on Boxing Day. No surprises elsewhere
 
 ***
 
@@ -79,7 +67,7 @@ So, definitely one of the highest on record
 
 ## Clean Sheets {-}
 
-As a corollary, fewer goals by some teams will tend to mean more clean sheets by their opposition. Here are the nuber shutouts achieved by goalies by season. Filter by season,team or goaly using the select box
+As a corollary, fewer goals by some teams will tend to mean more clean sheets by their opposition. Here are the number of shutouts achieved by goalies by season. Filter by season,team or goaly using the select box
 
 
 ```{r clean_sheets_24}
@@ -153,11 +141,8 @@ It is interesting to see the change since the early days of the Premier League w
 
 ## Tweet of the Week {-} 
 
-
-
-```{r}  
-shortcode("tweet", "956596478591451136") 
-```
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">With goals in 3 consecutive <a href="https://twitter.com/hashtag/EPL?src=hash&amp;ref_src=twsrc%5Etfw">#EPL</a> games <a href="https://twitter.com/AnthonyMartial?ref_src=twsrc%5Etfw">@AnthonyMartial</a> will be hoping to keep <a href="https://twitter.com/hashtag/MUFC?src=hash&amp;ref_src=twsrc%5Etfw">#MUFC</a> place even with <a href="https://twitter.com/hashtag/AlexisSanchez?src=hash&amp;ref_src=twsrc%5Etfw">#AlexisSanchez</a> joining<br>He is 24th player for Man U to achieve feat in <a href="https://twitter.com/hashtag/premierleague?src=hash&amp;ref_src=twsrc%5Etfw">#premierleague</a> <a href="https://t.co/IB3qjwCPtT">pic.twitter.com/IB3qjwCPtT</a></p>&mdash; Andrew Clark (@pssGuy) <a href="https://twitter.com/pssGuy/status/956596478591451136?ref_src=twsrc%5Etfw">January 25, 2018</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 
 
@@ -177,7 +162,7 @@ shortcode("tweet", "956596478591451136")
 
 ```{r results_24}
 
-weekly_results("2018-01-23","2018-01-28")
+weekly_results("2018-01-16","2018-01-28")
 
 ```
 
@@ -219,7 +204,7 @@ standings %>%
   add_bars()  %>%
   hide_legend() %>%
   layout(
-    title = "Teams Averaging a Goal per Game by Season",
+    title = "Teams Averaging less than a Goal per Game by Season",
     xaxis = list(title = ""),
     yaxis = list(title = ""),
     margin = list(b = 100, pad = 5)
@@ -227,7 +212,7 @@ standings %>%
 ```
 
 
-So, in the end, only six teams but that has only been matched in a full season once and is a big step up from the last couple of years
+So, in the end, a record seven teams, a big step up from the last couple of years. This category includes Burnley, whose 7th place finish makes them easily the highest placed team to be so inept in front of goal. The 16 goals they scored at home was tied for worst in the league with Huddersfield
 
 
 Let's look at these team's top scorer
@@ -265,7 +250,7 @@ That proved to be Martial's only three game scoring sequence as he lacked game t
 playerGame %>%
   filter(season=="2017/18",mins>0) %>%
   arrange(gameDate) %>%
-  group_by(PLAYERID,name) %>% 
+  group_by(PLAYERID,name,POSITION) %>% 
   mutate(cat=ifelse(Gls>0,1,0)) %>%
   do(subSeq(.$cat)) %>%
     filter(value==1) %>%
@@ -273,13 +258,14 @@ playerGame %>%
       filter(slength>2) %>% 
   ungroup() %>% 
   arrange(desc(slength),PLAYERID) %>% 
-  select(name,run=slength) %>%
-                         DT::datatable(width= 300,class='compact stripe hover row-border order-column',rownames=FALSE,options= list(paging = TRUE, searching = TRUE,info=FALSE))
+  select(name,run=slength,POSITION) %>%
+                         DT::datatable(width= 350,class='compact stripe hover row-border order-column',rownames=FALSE,options= list(paging = TRUE, searching = TRUE,info=FALSE))
 ```
 
-There were .. or .. if you count both halves of Aguero's six in a row. Salah had three separate sequences of four or more games with at least one goal
+There were 37, or 38 if you count both halves of Aguero's six in a row. Salah had three separate sequences of four or more games with at least one goal
 
-No out-an-out surprises although Perez only scored .. goals in total and in two of Woods games he was asecond half substitute
+Biggest surprise was probably defender, Patrick van Aanholt, who rounded of the season with three goals. 
+Ayoza Perez started the season with only one goal in 2900 minutes; and in two of Woods games he was asecond half substitute
 
 ---
 

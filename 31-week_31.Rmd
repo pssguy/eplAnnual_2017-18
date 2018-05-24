@@ -1,18 +1,9 @@
 # Week 31 {-}
 
 
-## Match of the Day {-}
 
 Abbreviated version with only four games at the week-end but Salah runs riot
 
-
-```{r topGame_31}
-
-embed_youtube("7lPzCF-EJy8", width = 420, height = 315, frameborder = 0,
-   allowfullscreen = TRUE, query = NULL) 
-
-
-```
 
 ***
 <p class="factoid">Tenth time a Liverpool player has added an assist to a hat-trick and Salah's feat was the first in four years; since Suarez achieved it for third time in 18 months</p>
@@ -31,7 +22,7 @@ Here is the data for all completed seasons. Hover points for details NB has to b
 
 df <- standings %>%
   filter(season < "1995/96" &
-           tmYrGameOrder == 42 | season > "1994/95" & tmYrGameOrder == 34) %>%
+           tmYrGameOrder == 42 | season > "1994/95" & tmYrGameOrder == 38) %>%
   select(season, team, cumGF, cumGD, final_Pos) %>%
   arrange(desc(cumGD), desc(cumGF)) %>%
   group_by(season) %>%
@@ -107,21 +98,20 @@ df %>%
 
 ```
  
- West Ham and Sunderland are the two teams that would have been relegated if the decision was based on goal difference but actually finished 15th
+ Swansea, West Ham and Aston Villa are the teams that would have been relegated if the decision was based on goal difference but actually finished 15th. In Swansea's case, it only delayed the drop by one year
  
- --- 
+--- 
  <p class="factoid">Luka Milivojevic picked up his league leading sixth penalty and is now two ahead of the field in spite of missing a last-minute chance against Man City and having one wrestled off him by Benteke (who missed)</p>
-
-## 
+ 
+---
+ 
 
 
 
 ## Tweet of the Week {-}
 
-
-```{r}  
-shortcode("tweet", "975682892335591426") 
-```
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Amazingly, although over half of <a href="https://twitter.com/hashtag/premierleague?src=hash&amp;ref_src=twsrc%5Etfw">#premierleague</a> defeats are by a single goal,<br>of  <a href="https://twitter.com/hashtag/htafc?src=hash&amp;ref_src=twsrc%5Etfw">#htafc</a>&#39;s 16 losses this season, 15 have been by 2 or more<br>Only one was v <a href="https://twitter.com/hashtag/MCFC?src=hash&amp;ref_src=twsrc%5Etfw">#MCFC</a> decided by 84th minute goal<a href="https://twitter.com/hashtag/CPFC?src=hash&amp;ref_src=twsrc%5Etfw">#CPFC</a> <a href="https://t.co/MWVCmpEV56">pic.twitter.com/MWVCmpEV56</a></p>&mdash; Andrew Clark (@pssGuy) <a href="https://twitter.com/pssGuy/status/975682892335591426?ref_src=twsrc%5Etfw">March 19, 2018</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 
 ## Totally Football and Guardian Weekly Review Podcasts {-}
@@ -156,7 +146,7 @@ weekly_table("2018-03-20")
 
 ## Final Factoid {-}
 
-<p class="factoid">Mane grabs three assists for first time in EPL career and is just 2 goals shy of a double-double for third consecutive season</p>
+<p class="factoid">Mane grabs three assists for first time in his EPL career and is just two goals shy of a double-double for a third consecutive season</p>
 
 
 ---
@@ -164,7 +154,6 @@ weekly_table("2018-03-20")
 
 
 ## End of Season Update {-}
-
 
 This season, only Aguero could match Salah with a hat-trick and an assist in the same game. Prior to them, Kane had rattled the feat off three times in 10 games including the final two matches of last season
 
@@ -212,20 +201,20 @@ data %>%
 
 ---
 
-Milivojevic did finish as top penalty scorer with 7, allowing Benteke to take one when they were 4-0 up on Leicester in injury time, three clear of three others (including Murray who missed a couple for Brighton)
+Milivojevic did finish as top penalty scorer with 7, even after allowing Benteke to take one when they were 4-0 up on Leicester in injury time. He finished three clear of three others (including Murray who missed a couple for Brighton)
 
 
 ---
 
-Mane duly got his double-double, one of just ..  players to achieve the feat
+Mane duly got his double-double, one of just eleven  players to achieve the feat, including team-mates Salah and Firmino.
 
 Even Manchester United have failed to get someone reaching this achievement in 7 of the 26 seasons. Chelsea's 2009/10 had 4 players meet the mark Drogba(29 goals 18 assists); Lampard(22/21); Anelka(11/15); Malouda(12/12)
 
 ---
 
-## Code Hints
+## Code Hints {-}
 
-    base - cor( )
+  base - cor()
 
 
 

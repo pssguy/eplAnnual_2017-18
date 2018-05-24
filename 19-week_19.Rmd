@@ -1,18 +1,8 @@
 # Week 19 {-}
 
 
-## Match of the Day {-}
+Arsenal and Liverpool showing why they are fun to watch but won't be winning major trophies. Only second 3-3 scoreline this year in the league and Liverpool also fetaured in the other (v Watford)
 
-Arsenal and Liverpool showing why they are fun to watch but won't be winning major trophies
-
-
-```{r topGame_19}
-
-embed_youtube("hzsCYuzgkao", width = 420, height = 315, frameborder = 0,
-   allowfullscreen = TRUE, query = NULL) 
-
-
-```
 
 
 ***
@@ -55,6 +45,7 @@ playerGame %>%
     
 
 ```
+_NB 1992 only includes goals from August on_
 
 Kane was also the leader two years ago and will have Alan Shearer's four time winner's record in his sights
 Surprising winners? How about Robbie Keane 2007 and Wilfried Bony, 2014
@@ -85,7 +76,7 @@ Sort and filter the table, as desired
   mutate(rank=row_number()) %>% 
  # slice(2:11) %>% 
     select(rank,team=TEAMNAME,year,name,Goals=tot,`Goals per 90 mins`=gpg) %>%
-                         DT::datatable(width=600,class='compact stripe hover row-border order-column',rownames=FALSE,options= list(paging = TRUE, searching = TRUE,info=FALSE))
+                         DT::datatable(width=700,class='compact stripe hover row-border order-column',rownames=FALSE,options= list(paging = TRUE, searching = TRUE,info=FALSE))
   
 
 ```
@@ -101,7 +92,7 @@ Sort and filter the table, as desired
 
 After being comprehensively outplayed for much of the game, Liverpool's defensive frailties enabled the Gunners to score three goals in six minutes through Sanchez, Xhaka and Ozil; before, ultimately, settling for a point    
 
-Just how rare is this goal blitz
+Just how rare is such a goal blitz
 
 ```{r}
 scoreLines2 <- scoreLines %>% 
@@ -137,10 +128,9 @@ The only team to have ever scored four in six minutes are Spurs v Southampton ba
 
 ## Tweet of the Week {-}
 
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Jamie Vardy just became the first <a href="https://twitter.com/hashtag/LCFC?src=hash&amp;ref_src=twsrc%5Etfw">#LCFC</a> player to total 50 <a href="https://twitter.com/hashtag/premierleague?src=hash&amp;ref_src=twsrc%5Etfw">#premierleague</a> goals.<br>Which of clubs below is the only one to also have a 50 goal scorer in the <a href="https://twitter.com/hashtag/EPL?src=hash&amp;ref_src=twsrc%5Etfw">#EPL</a><a href="https://twitter.com/BenDinnery?ref_src=twsrc%5Etfw">@BenDinnery</a></p>&mdash; Andrew Clark (@pssGuy) <a href="https://twitter.com/pssGuy/status/944971910609113088?ref_src=twsrc%5Etfw">December 24, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-```{r}  
-shortcode("tweet", "944971910609113088") 
-```
 
 This got a pretty good response with some Fulham fans aware that Clint Dempsey notched exactly 50 goals for his club
 
@@ -189,7 +179,7 @@ weekly_table("2017-12-24")
 
 Kane has trundled along with another 25+ goals season but he has been surpassed by Mo Salah's(22nd on the above mentioned world ranking) astounding season
 
-As can be seen on the chart above, He has already scored .. and almost caught several calendar year record leaders such as Bony (19 in 2014). Bony really was a one-year wonder
+As can be seen on the chart above, He has already scored 15 in 2018 and almost caught several calendar year record leaders such as Bony (20 in 2014). Bony really was a one-year wonder as this accounts for 57% of his career output
 
 ```{r}
 
@@ -211,9 +201,9 @@ to his name in 2018 when he suffered a season-ending injury in early February
 
 ---
 
-There have actually only been .. 28  and Kane is just one behind matching Shearer for four years in a row. Rooney is the only player with more than one non-consecutive 25+ goal season (2009/19 & 2011/12)
+There have actually only been twent-eight 25+goal seasons  and Kane is just one behind matching Shearer for four years in a row. Rooney is the only player with more than one non-consecutive season (2009/10 & 2011/12)
 
-The 305 minute drought he suffered at the beginning of the season proved his longets spell without goals allcampaign
+The 305 minute drought Kane endured at the beginning of the season proved his longest spell without goals all campaign
 
 ```{r}
 playerGame %>% 
@@ -232,14 +222,13 @@ playerGame %>%
 
 ```
 
-#### Arsenal turnaround
+#### Arsenal turnaround {-}
 
-There were no subsequent occurrence of three goals within six minutes. The only other team
-to perform the feat had been Manchester United with Lukaku, Pogba and Martial scoring between the 80 and 84th minute at Swansea in August
+There were no subsequent occurrence of three goals within six minutes. The only other team to perform the feat this season had been Manchester United with Lukaku, Pogba and Martial scoring between the 80 and 84th minute at Swansea in August
 
 ---
 
-Sterling maintained his great goal-scoring form, missing plenty but finding the knack for being in the right place at the right time. He now has 49 goals andd they make interesting reading. Just 1 header, 3 from dead-ball situations and 2 from long-range. This season .. half of his .. goals have come from inside the six yard box. and he leads the league in this category
+Sterling maintained his great goal-scoring form, missing plenty but finding the knack for being in the right place at the right time. He now has 49 goals andd they make interesting reading. Just 1 header, 3 from dead-ball situations and 2 from long-range. This season exactly half of his 18 goals have come from inside the six yard box: he leads the league in this category
 
 
 ---

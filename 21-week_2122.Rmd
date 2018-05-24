@@ -4,19 +4,8 @@
 _This issue combines rounds 21 and 22 of the League_
 
 
-## Match of the Day {-}
-
 The congested holiday season saw Man City's winning run end at 18 games but little to suggest they were anything other than champions-elect    
 Meanwhile the transfer window opened on January 1st and Liverpool were soon the team making waves
-
-
-```{r topGame_21}
-
-embed_youtube("7KFfPrngaZc", width = 420, height = 315, frameborder = 0,
-   allowfullscreen = TRUE, query = NULL) 
-
-
-```
 
 
 ***
@@ -55,7 +44,7 @@ playerClub %>%
     text =  ~ paste0(player, "<br>",
                      team, "<br>",
                      date, "<br>",
-                     Fee / 1000, "<br>")
+                     Fee / 1000, " million<br>")
   ) %>%
   layout(
     title = "Progression in EPL Record Transfer Fees out<br>
@@ -292,7 +281,9 @@ playerGame %>%
 
 ```
 
-A bit of a mixed bag. Arsenal's are expensive, have performed but did not contribute an end-product for the club this year. Palace's underwhelmed but were mainly cover or bought for the future and they avoided relegation anyway. Newcastle's loans were very succesful but WBA;s were not. Moura gives the impression of another expensive squad player at Spurs
+A bit of a mixed bag. Arsenal's are expensive, have performed but did not contribute an end-product for the club this year. Palace's underwhelmed (3 of them never played a minute) but were mainly cover or bought for the future and they avoided relegation anyway. 
+
+Newcastle's loans were very succesful but WBA's were not. Moura gave the impression of another expensive squad player at Spurs until an out-of-the-blue 4 assists in the final game of the season
 
 ---
 
@@ -318,14 +309,17 @@ each %>%
   plot_ly(x=~jitter(TIME),y=~fct_reorder(Opponents, n)) %>% 
   add_markers(hoverinfo="text", color=~venue, colors=c("orange","blue"),
               text=~paste0(TIME," v ",TEAMNAME)) %>% 
-  layout(margin=list(l=120),autosize = F, height = 500,
+  layout(margin=list(l=120, pad=3),autosize = F, height = 500,
          title="Time of goals conceded, by venue, 2017/18",
          xaxis=list(title="Minutes Played"),
          yaxis=list(title="")
   ) %>%  config(displayModeBar = F,showLink = F)
+
 ```
 
-The earliest Manchester City allowed a goal at home was the 24th minute.(is this prem record need to code) Leicester's goal was only an equalizer and they were then hit by a 4 goal onslaught from Aguero, one of only two such hauls all season (Salah v Watford)
+
+The earliest Manchester City allowed a goal at home was the 24th minute and it mattered not a jot. Leicester's goal was only an equalizer and they were then hit by a 4 goal onslaught from Aguero, one of only two such hauls all season (Salah v Watford)
+ Leicester were susceptible to allowing early goals on their travels with 7 conceded in the first nine minutes of games
 
 
 ## Code Hints {-}

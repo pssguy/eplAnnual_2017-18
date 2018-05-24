@@ -1,18 +1,7 @@
 # Week 17 {-}
 
 
-## Match of the Day {-}
-
-Second time recently, Watford have removed Deeney late in winning position only to end up with no points
-
-
-```{r topGame_17}
-
-embed_youtube("aYtYqEXndlM", width = 420, height = 315, frameborder = 0,
-   allowfullscreen = TRUE, query = NULL) 
-
-
-```
+Second time recently, Watford have removed Deeney late in a winning position only to end up with no points. Only 6 points separate the bottom half of the table
 
 
 ***
@@ -35,7 +24,7 @@ At the time of writing, after Round 17 of 38, they have already scored more goal
 ```{r mnc_goals_17}
 
 mncGoals <- standings %>%
-  filter(team == "Man. City") %>%
+  filter(team == "Man. City",tmYrGameOrder==17) %>%
   arrange(desc(gameDate)) %>%
   slice(1) %>%
   pull(cumGF)
@@ -62,13 +51,11 @@ standings %>%
 
 ```
 
-Check back here as season progresses
-
 ***
 
 ## Goal Scoring by Team {-}
 
-Let's take a look at how the goalscoring has panned out by team, by minute
+Let's take a look at how the goalscoring has panned out by team, by minute.
 You may want to zoom in at 45 and 90 minute mark as this includes any extra time - when many goals are scored
 
 ```{r GF_by_min_17}
@@ -205,9 +192,9 @@ playerGame %>%
 ## Tweet of the Week {-}
 
 
-```{r}  
-shortcode("tweet", "940084359335309312") 
-```
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Tough quiz<a href="https://twitter.com/hashtag/MCFC?src=hash&amp;ref_src=twsrc%5Etfw">#MCFC</a> have set the single <a href="https://twitter.com/hashtag/premierleague?src=hash&amp;ref_src=twsrc%5Etfw">#premierleague</a> season record of consecutive wins. Back in 1992/93 six clubs set their best ever single season run<br> Can you name them?<a href="https://twitter.com/BenDinnery?ref_src=twsrc%5Etfw">@BenDinnery</a> <a href="https://twitter.com/jalapic?ref_src=twsrc%5Etfw">@jalapic</a></p>&mdash; Andrew Clark (@pssGuy) <a href="https://twitter.com/pssGuy/status/940084359335309312?ref_src=twsrc%5Etfw">December 11, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
 
 Nobody could/would!
 
@@ -260,7 +247,7 @@ weekly_table("2017-12-14")
 
 As the season progressed, the chart above gradually filled up and became pretty meaningless
 
-However, Man City's goal difference .. which is the highest in Premier League history also exceeds many team's Goals Scored
+However, Man City's goal difference of 79, which is the highest in Premier League history, also exceeds the goals scored by most teams
 
 ```{r mnc_goalsu_17}
 
@@ -290,13 +277,13 @@ standings %>%
   ) %>%  config(displayModeBar = F, showLink = F)
 ```
 
-As you can see their year ending goal difference of .. exceeds virtually every teams goals for. This season, only Liverpool with .. better that (and .. is best for second team?)
+As you can see their year ending goal difference of 79 exceeds virtually every teams goals for. This season, only Liverpool with 84 better that (and .. is best for second team?)
 
 ---
 
 ## Goal Scoring by Team {-}
 
-Most teams score more goals in the second half of games as legs tire; teams press for a crucial goal; and extra minutes are added
+Most teams score more goals in the second half of games as legs tire; teams press for a crucial goal; subs energize a team; and extra minutes are added
 
 ```{r goal_timesu_17}
 
@@ -387,7 +374,7 @@ all_years %>%
 
 ```
 
-The outliers are Aston Villa,2014/15(9/31) and Reading, 2007/08(31/41)
+The outliers are Aston Villa, 2014/15(9/31) and Reading, 2007/08(31/41)
 
 ---
 
@@ -431,8 +418,7 @@ playerGame %>%
 
 --- 
 
-Palace did, of course, improve and ended with .. and .. teams below them
-Still didnt match Harry Kane ??
+Palace did, of course, improve and ended with 16 Six teams were equal or below them and they topped Harry Kane, by one
 
 ---
 

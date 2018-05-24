@@ -1,21 +1,7 @@
 # Week 7 {-}
 
 
-## Game of the week WBA 2 - 2 Watford {-}
-
-These teams probably won't feature much but Watford deservedly fought back from a two goal deficit
-
-```{r topGame_07}
-
-# embed_youtube("qbs1TY3k5cQ", width = 420, height = 315, frameborder = 0,
-#   allowfullscreen = TRUE, query = NULL) 
-
-
-```
-
-
-<div style="width: 100%; height: 0px; position: relative; padding-bottom: 56.250%;"><iframe src="https://streamable.com/s/fcthv/vosdfu" frameborder="0" width="100%" height="100%" allowfullscreen style="width: 100%; height: 100%; position: absolute;"></iframe></div>
-
+These teams probably won't feature much but Watford deservedly fought back from a two goal deficit to tie with WBA. Palace heavy odds-on for relegation with still not a goal to their name
 
 
 ## Widening gap in class {-}
@@ -25,7 +11,7 @@ It was generally forecast that the top-six of last season would repeat again in 
 ```{r repeatTop6_07}
 
 seasons <- standings %>%
-  filter(season < "2017/18") %>%
+  #filter(season < "2017/18") %>% # was in blog code
   select(season) %>%
   unique() %>%
   arrange(season) %>%
@@ -45,14 +31,15 @@ myFun <- function(x) {
   length(intersect(yr1, yr2))
 }
 
-count=map_int(1:24,myFun)
-data.frame(season=seasons[2:25],count=count) %>% 
+count=map_int(1:25,myFun)
+data.frame(season=seasons[2:26],count=count) %>% 
   arrange(desc(season)) %>% 
                          DT::datatable(width=200,class='compact stripe hover row-border order-column',rownames=FALSE,options= list(paging = TRUE, searching = FALSE,info=FALSE))
 
 ```
+_N.B Code has been amended to include this year_
 
-The only repeat season was 2008/09 when Man Utd. Liverpool, Chelsea, Arsenal, Everton and Aston Villa did the trick    
+The only previous repeat season was 2008/09 when Man Utd. Liverpool, Chelsea, Arsenal, Everton and Aston Villa did the trick    
 
   FYI that season Tottenham were 8th and Man City 10th - 40 points behind their city rivals
 
@@ -87,7 +74,7 @@ Click on any box, for individual records and hover resulting points for team
 
 ## Classic Coutinho {-}
 
-Jon-Jo Shelvey must have been expecting it but was too slow to stop it. 20 yards out on the left side of goal, Coutinho cuts in and unleashes a bullet into the top corner    
+Rob Elliott must have been expecting it but was too slow to stop it. 20 yards out on the left side of goal, Coutinho cuts in and unleashes a bullet into the top corner    
   For such a slight player he packs a punch and for players who have scored as many as him, he is only the second - behind dead-ball specialist David Beckham - to secure at least 50% of his goals (at the time of writing) from shots outside the area
 
 
@@ -191,7 +178,7 @@ weekly_table("2017-10-02")
 
 ## Final Factoid {-}
 
-<p class="factoid">Liverpool fans, it's not the Year of the Ox until 2021. 35 million pound buy, attacking mid-fielder, Alex Oxlade-Chamberlain has now scored precisely three league goals in the past three years of Premier Leagie action</p>
+<p class="factoid">Liverpool fans, it's not the Year of the Ox until 2021. 35 million pound buy, attacking mid-fielder, Alex Oxlade-Chamberlain has now scored precisely three league goals in the past three years of Premier League action</p>
 
 
 ---
@@ -218,6 +205,10 @@ df %>%
 ```
 
 Well there had been talk of a top 6 prior to the season starting and so it panned out. However, Arsenal only achieved this by the skin of their teeth and a rickety defence suggests they may have trouble repeating next season. A lot will depend on summer trades and the impact of the new manager
+
+---
+
+Unsurprisingly, Martial's level of performance eased off but at 1.14 points(Goals+Assists) per 90 minutes he comfortably topped his team. However, witht the arrival of Sanchez, his time on the pitch became further reduced and it would be littl surprise if he left
 
 ---
 
@@ -252,15 +243,20 @@ Well the last few season do show something of an upturn apart from the aberratio
 
 ---
 
-Oxlade-Chamberlain's move actually proved relatively succesful. Playing in mid field he managed .. goals and .. assists in  .. minutes
-
----
 
 #### Classic Coutinho {-}
 
 Well Coutinho is a Premier League player no more and left with the share of his goals outside the box just dipping below the 50% mark
- Hernadez is now up to .. 44? goals without one from long distance
+ West Ham's Hernadez is now up to 44 goals without one from long distance
+ 
+---
 
+Rooney's assist drought continued until the 2nd December and proved his worst ever at 1747 minutes. He also ended the season - and quite possibly his Premier League career - with his only goal drought of more than a thousand minutes
+
+
+---
+
+Oxlade-Chamberlain's move actually proved relatively succesful. Playing in mid field he managed 3 goals and 11 assists in just over 1500 minutes. Not amazing but it would have been good enough for a World Cup spot if injury had not struck
 
 ---
 

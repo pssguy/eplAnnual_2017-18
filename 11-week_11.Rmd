@@ -1,17 +1,10 @@
 # Week 11 {-}
 
 
-## Match of the Day {-}
-
-Mourinho still can't buy a result away against big clubs
-
-```{r topGame_11}
-
-embed_youtube("QQ-cKUlOHHk", width = 420, height = 315, frameborder = 0,
-   allowfullscreen = TRUE, query = NULL) 
 
 
-```
+Mourinho still can't buy a result away against big clubs. The 'top six' now occupy the leading half-dozen spots in the league
+ 
 
 ***
 
@@ -155,10 +148,9 @@ tagList(fs_nobootstrap,
 
 ## Tweet of the Week {-}
 
-```{r tweet_11}
-shortcode("tweet", "927993920084201473")
-```
 
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr"><a href="https://twitter.com/hashtag/MUFC?src=hash&amp;ref_src=twsrc%5Etfw">#MUFC</a> have overcome 8 pt deficit after 11 <a href="https://twitter.com/hashtag/epl?src=hash&amp;ref_src=twsrc%5Etfw">#epl</a> games once - <a href="https://twitter.com/hashtag/LFC?src=hash&amp;ref_src=twsrc%5Etfw">#LFC</a> 2002/3<a href="https://twitter.com/unitedstats99?ref_src=twsrc%5Etfw">@unitedstats99</a> <a href="https://twitter.com/Malachians?ref_src=twsrc%5Etfw">@Malachians</a> <a href="https://t.co/vvTBOheCCK">pic.twitter.com/vvTBOheCCK</a></p>&mdash; Andrew Clark (@pssGuy) <a href="https://twitter.com/pssGuy/status/927993920084201473?ref_src=twsrc%5Etfw">November 7, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 
 ***
@@ -199,14 +191,15 @@ weekly_table("2017-11-08")
 
 #### The Spanish Connection {-}
 
-Azipcuelta hooked up with Morata .. more time finishing with a, career-high, .. assists
-with only one other defender, Aaron Cresswell topping him
+Azipcuelta hooked up with Morata one more time finishing with a, career-high, 11 assists with only one other defender, Aaron Cresswell (13) topping him
 
 de Bruyne helped David Silva score in consecutive games during December
 
 ####  Comebacks {-}
 
-Here is the reverse of the chart above, providing end results when the team has a two goal advantage. Note how often Liverpool have spurned goo positions over the past few seasons
+In the most recent two games Manchester United have gone two down they ended victorious
+
+Here is the reverse of the chart above, providing end results when the team has a two goal advantage. Note how often Liverpool have spurned good positions over the past few seasons
 
 ```{r comebacksu_11}
 

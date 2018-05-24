@@ -1,17 +1,10 @@
 #Week 10 {-}
 
 
-## Match of the Day {-}
 
-Kane-less Spurs lose to Pogba-less United and trail City by 8 points
-
-```{r topGame_10}
-
-embed_youtube("mdoG9SytG4w", width = 420, height = 315, frameborder = 0,
-   allowfullscreen = TRUE, query = NULL) 
+Kane-less Spurs lose to Pogba-less United and trail City by 8 points. Watford's day in the sun may have ended as they suffer back-to-back losses
 
 
-```
 
 ***
 
@@ -27,7 +20,6 @@ After 10 rounds and by dint of goal difference, they do form that elite group fo
 
 final <- c(1:6)
 
-# process as much as poss early to save processing time
 
 df_in <- standings %>%
   arrange(season, tmYrGameOrder, position)
@@ -124,7 +116,7 @@ It turns out that in 2009/10 the top 6 after round 3 finished in the top half-do
 
 ***
 
-<p class="factoid">Man City finally score in first qurter of an hour (and twice to boot). Previously, the leading scorers had been one of seven teams not to register in first 15 minutes</p>
+<p class="factoid">Man City finally score in first quArter of an hour (and twice to boot). Previously, the leading scorers had been one of seven teams not to register in first 15 minutes</p>
 
 ***
 
@@ -170,7 +162,7 @@ teamGames %>%
 Other than in the inaugural season, significant changes in record attendance have been basically linked to increases in capacity at Manchester United's ground, Old Trafford. With Tottenham's stay at Wembley of limited duration, one of their games this season is likely to hold sway indefinitely
 
 
-As the Premier League has got more popular and a higher percentage (if not all) of the crowd is there on season tickets, the range in attendance during a season has narrowed. Back in the day, Manchester United often drew far more than some of the lesser teams 
+As the Premier League has got more popular and a higher percentage (if not all) of the crowd is there on season tickets, the range in attendance during a season has narrowed. Back in the day, Manchester United were often a much bigger attraction than some of the lesser teams 
 
 
 
@@ -178,56 +170,56 @@ As the Premier League has got more popular and a higher percentage (if not all) 
 Lets look at individual teams NB problems here
 
 ```{r club_attendances2}
-# 
-# 
-# data <-teamGames %>% 
-#   
-#     filter(venue=="H")  %>% 
-#   inner_join(teamGames,by="MATCHID") %>% 
-#   filter(TEAMID.x!=TEAMID.y) %>% 
-#   rename(Opponents=TEAMNAME.y,crowd=CROWD.x) %>% 
-#    mutate(day=wday(gameDate.x,label=TRUE)) %>% 
-#   select(team=TEAMNAME.x,Opponents,crowd,season=season.x,day) %>% 
-#   group_by(team)
-#   
-# sd <- SharedData$new(data)
-# 
-# fs <- filter_select(
-# id = "team",
-# label = "Select or Type in Team",
-# sharedData = sd,
-# group =  ~ team,
-# allLevels = FALSE,
-# multiple = FALSE
-# )
-#   
-#  ## this is needed as crosstalk does not work nicely with bootstrap, apparently
-# fs_nobootstrap <- fs
-# 
-# attr(fs_nobootstrap, "html_dependencies") <- Filter(
-#   function(dep) {dep$name != "bootstrap"},
-#   attr(fs_nobootstrap, "html_dependencies")
-# )
-# 
-# 
-# 
-# chart <- sd %>%  
-#    plot_ly(x=~season,y=~crowd) %>% 
-#    add_markers(hoverinfo="text",
-#                text=~paste0(Opponents,"<br>",crowd,
-#                             "<br>", day)) %>% 
-#   layout(title="Reported Attendances by Game <br> Hover for Detail",
-#          xaxis=list(title=""),
-#          yaxis=list(title="Crowd Size"),
-#          margin=list(b=110,pad=5)) %>% 
-#        config(displayModeBar = F,showLink = F)
-# 
-# 
-#  tagList(
-#   fs_nobootstrap,
-#   br(),
-#   chart
-# )
+
+
+data <-teamGames %>%
+
+    filter(venue=="H")  %>%
+  inner_join(teamGames,by="MATCHID") %>%
+  filter(TEAMID.x!=TEAMID.y) %>%
+  rename(Opponents=TEAMNAME.y,crowd=CROWD.x) %>%
+   mutate(day=wday(gameDate.x)) %>%
+  select(team=TEAMNAME.x,Opponents,crowd,season=season.x,day) %>%
+  group_by(team)
+
+sd <- SharedData$new(data)
+
+fs <- filter_select(
+id = "team",
+label = "Select or Type in Team",
+sharedData = sd,
+group =  ~ team,
+allLevels = FALSE,
+multiple = FALSE
+)
+
+ ## this is needed as crosstalk does not work nicely with bootstrap, apparently
+fs_nobootstrap <- fs
+
+attr(fs_nobootstrap, "html_dependencies") <- Filter(
+  function(dep) {dep$name != "bootstrap"},
+  attr(fs_nobootstrap, "html_dependencies")
+)
+
+
+
+chart <- sd %>%
+   plot_ly(x=~season,y=~crowd) %>%
+   add_markers(hoverinfo="text",
+               text=~paste0(Opponents,"<br>",crowd,
+                            "<br>", day)) %>%
+  layout(title="Reported Attendances by Game <br> Hover for Detail",
+         xaxis=list(title=""),
+         yaxis=list(title="Crowd Size"),
+         margin=list(b=110,pad=5)) %>%
+       config(displayModeBar = F,showLink = F)
+
+
+ tagList(
+  fs_nobootstrap,
+  br(),
+  chart
+)
 
 ```
 
@@ -272,8 +264,7 @@ weekly_table("2017-11-01")
 
 ## Final Factoid {-}
 
-<p class="factoid">Palace record only their second draw in 30 league outings. All time record
-no-draws run is 28 by Bolton Wanderers</p>
+<p class="factoid">Palace record only their second draw in 30 league outings. All time record no-draws run is 28 by Bolton Wanderers</p>
 
 
 ---
@@ -288,7 +279,7 @@ Well the expected materialised. If you enter 2017/18 in the options above you ca
 
 ---
 
-Normality was resumed with .. Manchester City managing a league-leading .. goals in the first quarter of an hour. Stoke City only managed it just once in agame they still managed to lose 1-2 to Bournemouth. On the flip side the Potteries conceded  early seven times, obviiously a factor in their relegation
+Normality was resumed with  Manchester City managing a league-leading 12 goals in the first quarter of an hour. Stoke City only managed it twice but they won neither game. On the flip side the Potteries conceded  early seven times, obviously a factor in their relegation
 
 ---
 
@@ -317,6 +308,10 @@ df %>%
 With many teams selling out each week, it can be a bit hit and miss which team pulls in the most spectators e.g this year Crystal Palace's visit produced the biggest trunout at Old Trafford
 
 Some local rivalries can be noted e.g Bournemouth v Southampton and Manchester United still seem to be the biggest draw - although they no longer match the first two seasons of the League when they were the biggest attraction for 12 of the other clubs
+
+---
+
+Liverpool racked up by far the most drawn games of the top six, with 12. The others ranged between 4 and 8
 
 ---
 

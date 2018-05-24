@@ -1,17 +1,10 @@
 # Week 15 {-}
 
-## Match of the Day {-}
 
 The big-six contest, Arsenal v Man. Utd. illustrated once again that de Gea may be the finest goalkeeper in the world
 
+Leicester edge Burnley in what may be a fight for a Europa Cup place
 
-```{r topGame_15}
-
-embed_youtube("gYLMo-0hpdc", width = 420, height = 315, frameborder = 0,
-   allowfullscreen = TRUE, query = NULL) 
-
-
-```
 
 ***
 
@@ -158,9 +151,8 @@ downTwo %>%
 ## Tweet of the Week {-}
 
 
-```{r tweet_15}  
-shortcode("tweet", "936397390264770560") 
-```
+<blockquote class="twitter-tweet" data-lang="en"><p lang="de" dir="ltr">10 - Top 10 players minutes per assist in Premier League history (min 25 assists).<br><br>1 De Bruyne 178<br>2 Nani 226<br>3 Fabregas 226<br>4 Özil 228<br>5 Bergkamp 236<br>6 Cantona 246<br>7 David Silva 256<br>8 Berkovic 265<br>9 Beckham 270<br>10 Giggs 289<br><br>Creators</p>&mdash; OptaJoe (@OptaJoe) <a href="https://twitter.com/OptaJoe/status/936242719051173889?ref_src=twsrc%5Etfw">November 30, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 
 
@@ -206,8 +198,9 @@ weekly_table("2017-12-04")
 
 It may be hard to remember that after 15 games, Spurs were only holding off Burnley for sixth-place on goal difference and trailed their North London rivals by three points
 
-![6th Drc standings]()
- Over the remainder of the season, they were second only to Manchester City. 
+![6th Dec standings]()
+
+ Over the remainder of the season, they were second only to Manchester City in terms of points, securing six more than Liverpool and Manchester United  
  Nevertheless, the underlying issues remain as exemplified by their near-and-yet-so-far encounter with Juventus and the partly-self-induced capitulation to Manchester United in the FA Cup semi-final. Considering that there top three subs were Sissoko, Lamela and Llorente, only two goals from the bench (Sissoko, Wanyama) is a bit paltry
  
  A team much lower in the table Watford, by contrast, got a lot of output including a goal and three assists from Pereyra
@@ -261,7 +254,7 @@ Arsenal did go two goals down once more in 2017, in a memorable match against Li
 
 ---
 
-Coutinho did get his wish for a move to Real Madrid but Liverpool didn't miss a beat as van Dijk stepped in and Oxlade-Chamberalain stepped up. With the irrepresible Salah scoring for fun they actually marginally improved their points per game after Coutinho left
+Coutinho did get his wish for a move to Real Madrid but not before providing two more two-assists-one-goal games before he left. Liverpool didn't miss a beat as van Dijk stepped in and Oxlade-Chamberalain stepped up. With the irrepresible Salah scoring for fun they actually marginally improved their points per game after Coutinho left
 
 ---
 

@@ -4,28 +4,6 @@
 
 Well we're back with an exciting start to the new season. Manchester United turned in their best performance in  years and Huddersfield had a dream return to the top tier. Some things remain the same though with Dele Alli conning Shelvey into a dismissal and Liverpool conceding from corners
 
-### Game of the Week {-}
-
-Arsenal and Leicester swapping blows with the Gunners emerging victorious
-
-```{r topGame_01}
-
-embed_youtube(
-  "tXq8TlZupEY",
-  width = 420,
-  height = 315,
-  frameborder = 0,
-  allowfullscreen = TRUE,
-  query = NULL
-  ) %>%
-  div(align = "center")
-  
-
-```
-
-
-
-
 
 
 ## English born Players {-}
@@ -132,7 +110,7 @@ Only two Scots, Fraser (Bournemouth) and 33-year-old, Fletcher (Stoke). The last
 ## Big Away Wins {-}
 
 
-<p class="factoid">What Birmingham never did in seven seasons and Southampton only achieved at the 186th attempt, Huddersfield accomplished at the first time of asking<br>Won their first EPL away game by at least a three goal margin<br>Surprisingly, three other teams match them, including Blackpool, who were relegated the same year</p> 
+<p class="factoid">What Birmingham never did in seven seasons and Southampton only achieved at the 186th attempt, Huddersfield accomplished at the first time of asking<br>Won an EPL away game by at least a three goal margin<br>Surprisingly, three other teams match them, including Blackpool, who were relegated the same year</p> 
 
 
 
@@ -245,10 +223,7 @@ standings %>%
 
 ---
 
-### Totally Football and Guardian Weekly Review Podcasts {-}
-
-
-
+## Totally Football and Guardian Weekly Review Podcasts {-}
 
 <iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6203313-chelsea-crash-and-burn-ley-as-huddersfield-make-their-mark/embed/v4?eid=AQAAAO9tlFmxp14A" title="audioBoom player"></iframe>
 
@@ -333,6 +308,10 @@ hth %>%
 
 ## End of Season Update {-}
 
+Liverpool's defence improved, including their capacity to restrict goal from corners. They allowed just five, the joint-lowest in the past seven seasons. Over the league as a whole the
+number conceded ranged from 1 by Chelsea to a whopping 16 by Brighton - the worst ever in EPL history
+
+
 ### English born Players {-}
 
 No great departure from week 1, with a slight uptick for the second year running
@@ -400,7 +379,7 @@ test %>%
 
  Unsurprisingly, the top teams tend to be the wealthiest, who can afford to bring in the best players from around the world
 
-Chelseas 6.2% does make the top 5 in terms of proprtion of non-English for any season but the record is Arsenal's 2007/8 team with only 3.1%. A teenage, Theo Walcott was the only Englishman to feature for more than the 155 minutes of Justin Hoyte
+Chelseas 6.9% does make the top 5 in terms of proprtion of non-English for any season but the record is Arsenal's 2007/8 team with only 3.1%. A teenage, Theo Walcott was the only Englishman to feature for more than the 155 minutes of Justin Hoyte
 
 The teams relegated are fairly typical so any shift may depend on the promoted club and Wolves have a lot of Portugese players 
 
@@ -411,7 +390,7 @@ The teams relegated are fairly typical so any shift may depend on the promoted c
 
 United really turned it on early in the season and immediately followed up with another 4-0 win at Swansea in the next fixture, with equivalent scorelines against Everton and Crystal Palace by week 7. However, that was that and they go into next year on a 31 game drought (equal 6th worst in their PL history)
 
-The team scored 5 or more on 44 occasions during Sir Alex Ferguson's 21 year reign in the Premier League. They have not achieved it once since
+The team scored 5 or more on 44 occasions during Sir Alex Ferguson's 21 year reign in the Premier League. Since then, 69 teams have done it. None of them named Manchester United; 17 of them Manchester City 
 
 ***
 

@@ -3,15 +3,8 @@
 
 ### Game of the week West Ham 2-3 Tottenham {-}
 
-The star of this week's post, Christian Eriksen, gets involved in all three goals for Spurs
+The star of this week's post, Christian Eriksen, gets involved in all three goals for Spurs but City still dominate with 17 goals without reply in their last three outings
 
-```{r topGame_06}
-
-embed_youtube("5VrW8iKeE9Q", width = 420, height = 315, frameborder = 0,
-  allowfullscreen = TRUE, query = NULL) 
-
-
-```
 
 ***
 
@@ -76,10 +69,9 @@ bottom %>%
 
 ```
 
-Hover for details
+Hover points for teams
 
-Interesting to note that Tottenham proved very slow starters for three years in five (04/05, 06,07, 08/09)
-even before Harry Kane's August travails
+Interesting to note that Tottenham proved very slow starters for three years in five (04/05, 06,07, 08/09) even before Harry Kane's infamous August travails
 
 ***
 
@@ -178,9 +170,9 @@ _N.B. Unlike official statistics, up to two assists per goal are allowed_
 
 ## Barry Record {-}
 
-Gareth Barry breaking the record Premier league appearance record at the weekend was slightly tarnished by the fact that the previous record holder, Ryan Giggs, had played 40 top flight games before the Premier League was established
+Gareth Barry breaking the record Premier league appearance record at the weekend was slightly diminished by the fact that the previous record holder, Ryan Giggs, had played 40 top flight games before the Premier League was established
 
-On the other hand, Barry had already far surpassed Giggs time played as he has now played 525 complete games 138   more than the Welshman
+On the other hand, Barry had already far surpassed Giggs time played as he has now played 525 complete games, 138 more than the Welshman
   
   
 ```{r barry_06}
@@ -262,6 +254,8 @@ Only goalkeepers, David James(567) and Mark Schwarzer(513) also make the 500 clu
 
 ## End of Season Update {-}
 
+For the season as a whole, 14 different players scored for Manchester United. Arsenal led the way with 17
+
 
 #### Top v Bottom {-}
 
@@ -319,9 +313,9 @@ bottom %>%
 
 ```
 
-City continued on to .  but Crystal Palace recovered sufficiently to be  . in scoring
+City continued on to set a record tally of 106, 78 more than Swansea and Huddersfield  but Crystal Palace recovered sufficiently to be  10th equal in scoring
 
-This chart exemplifies what an outlier the inaugural season was. Manchester United were champions in spite of averaging less than 1.6 goals per game, only 0.6 more than the lowest scorers Nottingham Forest. This year the gap ...
+This chart exemplifies what an outlier the inaugural season was. Manchester United were champions in spite of averaging less than 1.6 goals per game, only 0.6 more than the lowest scorers Nottingham Forest. This year the gap is 2.05
 
 
 ####  Eriksen Pass Master {-}
@@ -356,9 +350,9 @@ playerGame %>%
 Points to note
   
    1. I include up to two assists per goal, which benefits midfielders
-   2. Players who have moved club during season may be listed for each team
+   2. Players who have moved club during season are listed separately for each team
    
- Kevin de Bruyne has been in a class of his own confirming the expectations put on him at the beginning of the season
+ Kevin de Bruyne has been in a class of his own confirming the expectations put on him at the beginning of the season. Aguero and Sterling both benefited seven times
  
 ***
  
@@ -368,7 +362,7 @@ Well he increased his margin over next up David James to an impressive 3000 minu
 
 However, it ended fairly ignominiously after the [taxi affair](http://www.dailymail.co.uk/sport/football/article-5400329/West-Brom-open-probe-incident-involving-four-players.html) followed by WBA's relegation
 
-It seems likely that, at 37, his EPL career is over. Unless John Terry returns with Aston Villa, Petr Cech will take over as the current player with most minutes under his belt and he is a full ... minutes behind in .... place - and his future must also be in doubt with a clear decline in ability and a new manager in at Arsenal
+It seems likely that, at 37, his EPL career is over. Unless John Terry returns with Aston Villa, Petr Cech will take over as the current player with most minutes under his belt and he is more than 15400 minutes behind in 17th place - and his future must also be in doubt with a clear decline in ability and a new manager in at Arsenal
 
 ---
 

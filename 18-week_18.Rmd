@@ -1,18 +1,7 @@
 # Week 18 {-}
 
 
-## Match of the Day {-}
-
-Four teams win away from home by at least three goal margins - surprisingly Huddersfield, West Ham and Crystal Palace join Liverpool
-
-
-```{r topGame_18}
-
-embed_youtube("mwLoshj56qs", width = 420, height = 315, frameborder = 0,
-   allowfullscreen = TRUE, query = NULL) 
-
-
-```
+Four teams win away from home by at least three goal margins - surprisingly Huddersfield, West Ham and Crystal Palace join Liverpool. Palace on a seven game undefeated run and jump to 14th place
 
 
 ***
@@ -177,10 +166,8 @@ Townsend extended his to 2103</p>
 ## Tweet of the Week {-}
 
 
-```{r}  
-shortcode("tweet", "942933134806433792") 
-```
-
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">One surprising aspect of <a href="https://twitter.com/hashtag/MCFC?src=hash&amp;ref_src=twsrc%5Etfw">#MCFC</a> dominance has been that 3 of top 4 defenders, Stones, Kompany &amp; Mendy do not figure in top 11 for <a href="https://twitter.com/hashtag/PremierLeague?src=hash&amp;ref_src=twsrc%5Etfw">#PremierLeague</a> minutes<br>And <a href="https://twitter.com/hashtag/Rooney?src=hash&amp;ref_src=twsrc%5Etfw">#Rooney</a> matching some top scorers<br>Latest stats <a href="https://t.co/5dQ5BrYsv5">https://t.co/5dQ5BrYsv5</a> <a href="https://t.co/pbRVFyGoxy">pic.twitter.com/pbRVFyGoxy</a></p>&mdash; Andrew Clark (@pssGuy) <a href="https://twitter.com/pssGuy/status/942933134806433792?ref_src=twsrc%5Etfw">December 19, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 
 ***
@@ -228,11 +215,14 @@ The four big away wins was a Premier League Record for one round of games. Hudde
 
 Well Pogba spoilt his copy book to some extent though Zaha continues to inspire Palace - they lost all ten games he did not appear in this season
 
-When the centre-back pairong of Tomkins and Sakho appear together they also have yet to be beaten - albeit the sides they have faced have tended to be weaker ones of the division
+For Palace,when the centre-back pairing of Tomkins and Sakho appear together they also have yet to be beaten - albeit the sides they have faced have tended to be weaker ones of the division
 
 ![](update)
 
 Any number of players can be found on the [premiersoccerstats site](www.premiersoccerstats.com)
+
+Of course, football is a tema game and there are the odd surprises. Aurier has had mixed reviews at Spurs and is no longer a first-choice but his 11-3-2 (W-D-L) record is best for club
+
 
 #### Liverpool equal all-time record {-}
 
@@ -267,7 +257,10 @@ standings %>%
   )
 
 ```
- .. 5 teams sporting more away than at home equals a Premier League record. Arsenal's figure of .. is the highest proprtion they have shown in all 26 EPL seasons
+
+
+ 
+ Arsenal's figure of 73 % goals scored at home is the highest proportion they have shown in any of the 26 EPL seasons
 
 ---
 

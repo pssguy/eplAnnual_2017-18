@@ -1,19 +1,9 @@
 # Week 37 {-}
 
 
-
-## Match of the Day {-} 
-
-Only one point from the top four this week-end means Chelsea still have chance to catch Liverpool and Spurs. Stoke first condemned to the drop
+Only one point from the top four this week-end means Chelsea still have chance to catch Liverpool and Spurs. Stoke are the first team condemned to the drop after losing from a winning position at home
 
 
-```{r topGame_37}
-
-embed_youtube("ih7vZ9RgKKQ", width = 420, height = 315, frameborder = 0,
-   allowfullscreen = TRUE, query = NULL) 
-
-
-```
 
 ***
 <p class="factoid">Liverpool's five goals haul is the 66th time a team has done this since Manchester United last achieved it. Manchester City account for 17 of them</p>
@@ -63,6 +53,8 @@ playerGame %>%
 
 
 A little inconclusive. Manchester City's haul of 146 is already the greatest ever by a team in a season, after just 36 games. However, on a per goal basis they are middle of the pack although well above both Liverpool (think over the top balls to Salah) and Chelsea (think the Azpilicueta-Morata linkup)
+
+Over the league as a whole, assists per goal were at their highest rtae ever; and the top four averages have come in the past four seasons so there seems to have been a marked change. Crystal Palace, for example, posted a significantly higher figure than ever before. Chelsea, on the other hand, dropped 39 assists from the year before - surely in the decline from Champions to also-rans
 
 ---
 
@@ -124,10 +116,9 @@ At the time of publication, Man City's Laporte had a perfect record of seven sta
 
 ## Tweet of the Week {-} 
 
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">If <a href="https://twitter.com/hashtag/WBA?src=hash&amp;ref_src=twsrc%5Etfw">#WBA</a> avoid defeat against <a href="https://twitter.com/hashtag/CPFC?src=hash&amp;ref_src=twsrc%5Etfw">#CPFC</a> next week they will join 52 other <a href="https://twitter.com/hashtag/premierleague?src=hash&amp;ref_src=twsrc%5Etfw">#premierleague</a> teams who have not lost in their final 6 games of a season. Of these, only <a href="https://twitter.com/hashtag/NUFC?src=hash&amp;ref_src=twsrc%5Etfw">#NUFC</a> in 2015/16 were relegated as <a href="https://twitter.com/hashtag/SAFC?src=hash&amp;ref_src=twsrc%5Etfw">#SAFC</a> matched them and finished 1 position higher <a href="https://twitter.com/BenDinnery?ref_src=twsrc%5Etfw">@BenDinnery</a></p>&mdash; Andrew Clark (@pssGuy) <a href="https://twitter.com/pssGuy/status/992894955650670592?ref_src=twsrc%5Etfw">May 5, 2018</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-```{r}  
-shortcode("tweet", "992894955650670592") 
-```
 
 
 ## Totally Football and Guardian Weekly Review Podcasts {-}

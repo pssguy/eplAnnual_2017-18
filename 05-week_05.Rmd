@@ -5,15 +5,6 @@
 
 Second time Man City have won by 5+ goals in consecutive games against same team. They have also done it to Derby. Only achieved on two other occasions in English league top tier with WBA figuring twice: crushing local rivals, Birmingham, and suffering  at the hands of Liverpool
 
-Unfortunately, no video available so you'll have to settle for this home-made Huddesfield v Leicester game!
-
-```{r topGame_05}
-
-embed_youtube("sr_hvKIwnVE", width = 420, height = 315, frameborder = 0,
-  allowfullscreen = TRUE, query = NULL) 
-
-
-```
 
 ***
 
@@ -21,7 +12,7 @@ embed_youtube("sr_hvKIwnVE", width = 420, height = 315, frameborder = 0,
 
 One thing Manchester United have improved this season is scoring on the break - particularly when teams press late for an equalizer. A classic example was this week against Everton with three late goals just after Everton missed a good chance of an equalizer    
 
-At the time of writing, they have scored more goals from the 80th minute on than any team, other than thier cross-city rivals, have managed in total
+At the time of writing, they have scored more goals from the 80th minute on than any team, other than their cross-city rivals, have managed in total
 
 ```{r strong_finish_05}
 
@@ -209,19 +200,19 @@ standings %>%
 
 ```
 
-??? With ony 2 goals Brighton and Stoke do feature towards the bottom end in EPL history
+ With only 2 late goals Brighton and Stoke do feature towards the bottom end in EPL history
 
 ---
 
-??? Newcastle went one better when they won 4 in a row later in the season, not done by a promoted team since ?
+Newcastle went one better when they won 4 in a row later in the season, not done by a promoted team since Watford in 2015/16
 
-Neither Brighton nor Huddersfield managed more than two game winning sequences 
+Neither of the other promoted clubs, Brighton and Huddersfield, managed more than two game winning sequences all season
 
 ---
 
 #### Player on the decline {-}
 
-Things dod not improve for Jason Puncheon
+Things did not improve for Jason Puncheon
 
 ```{r declineu}
 playerGame %>%
@@ -238,14 +229,15 @@ playerGame %>%
 
 ```
 
- After week five he was more often than not an unused sub. When he did finally get some time, he suffered a season-ending injury fouling Kevin de Bruyne
+After week five he was more often than not an unused sub. When he did finally get some time, he suffered a season-ending injury fouling Kevin de Bruyne
+
 ---
 
 #### Super Subs {-}
 
 As can be seen from the above table, the amount of scoring done by subs evened out to the usual 11-12%
 
-As for Manchester United, the torrid start was not maintained ?? wait until season end
+As for Manchester United, the torrid start was not maintained but they did top the league with 11 and Martial, on 4, was joint individual leader with Peter Crouch
 
 
 

@@ -1,19 +1,9 @@
 # Week 29 {-}
 
 
-
-## Match of the Day {-}
-
 Great come-back by Man United, who are now nine points clear of fifth-placed Chelsea and looking good for CL football again next year
+Arsenal lose three league games in eight days
 
-
-```{r topGame_29}
-
-embed_youtube("mvengkopiBo", width = 420, height = 315, frameborder = 0,
-   allowfullscreen = TRUE, query = NULL) 
-
-
-```
 
 ***
 <p class="factoid">In 273 league appearances with Manchester United Patrice Evra was part of a line up that conceded 4 or more goals on 5 occasions (1.8%). For West Ham, he is 2 for 2 (100%)</p>
@@ -22,44 +12,12 @@ embed_youtube("mvengkopiBo", width = 420, height = 315, frameborder = 0,
 
 ## Rod off Burnley's back {-}
 
-As many of you have heard, Burnley finally won a Premier Leaague match under Sean Dyche after going behind. Unsurprisingly, it was Everton - with their poor away record - that were the collaborators, allowing Chris Wood to be unguarded in the six yard area from a corner
+As many of you have heard, Burnley finally won a Premier League match under Sean Dyche after going behind. Unsurprisingly, it was Everton - with their poor away record - that were the collaborators, allowing Chris Wood to be unguarded in the six yard area from a corner
 
 How does this run compare with the worst ever by team?
  
  
 ```{r behind_29}
-
-## function extracted from doBy package
-
-# subSeq <- function (x, item = NULL) {
-#   rrr <- rle(x)
-#   len <- rrr$lengths
-#   val <- rrr$values
-#   
-#   first <- last <- rep.int(NA, length(val))
-#   first[1] <- 1
-#   last [1] <- len[1]
-#   if (length(val)>1){
-#     for (kk in 2:length(val)){
-#       first[kk] <- last[kk-1]+1
-#       last [kk] <- last[kk-1]+len[kk]
-#     }
-#   }
-#   midp <- floor(first + len/2)
-#   
-#   ans <- cbind(first=first, last=last, slength=len, midpoint=midp)
-#   
-#   if (!is.null(item)) {
-#     iii <- val==item
-#     ans <- as.data.frame.matrix(ans[iii,,drop=FALSE], stringsAsFactors=FALSE)
-#     ans$value <- val[iii]
-#   } else {
-#     ans <- as.data.frame.matrix(ans, stringsAsFactors=FALSE)
-#     ans$value <- val
-#   }
-#   ans
-# }
-# 
 
 
 everBehind <- scoreLines %>%
@@ -96,7 +54,7 @@ everBehind %>%
 ```
  
  So Burnley's record does crack the top ten but is by no means the worst. Little surprise to see Sunderland and Derby County leading the field - even if over 100 games, for each, seems extraordinary
- The Man. City run ended in 2003 ,a period before the big investment
+ The Man. City run ended in 2003, a period before the big investment
  
 
 ## Quick off the mark {-}
@@ -161,7 +119,7 @@ firstGoals %>%
 
 _N.B. Ties for top position are not shown_
 
-At the time of writing, Benteke tops the Crystal Palace ranking with the only two goals he has scored all season
+At the time of writing, Benteke tops the Crystal Palace ranking with the only two goals he has scored all season ( _Subsequently Milivojevic and Zaha had three openers_ )
 
 
 
@@ -171,11 +129,8 @@ At the time of writing, Benteke tops the Crystal Palace ranking with the only tw
 
 ## Tweet of the Week {-}
 
-
-
-```{r}  
-shortcode("tweet", "970276394851880961") 
-```
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Bournemouth become latest <a href="https://twitter.com/hashtag/premierleague?src=hash&amp;ref_src=twsrc%5Etfw">#premierleague</a> team to notch a run of 10 consecutive games with a goal. Unlikely that long time failures <a href="https://twitter.com/hashtag/SCFC?src=hash&amp;ref_src=twsrc%5Etfw">#SCFC</a> and <a href="https://twitter.com/hashtag/CPFC?src=hash&amp;ref_src=twsrc%5Etfw">#CPFC</a> will join them this year <a href="https://twitter.com/hashtag/AFCB?src=hash&amp;ref_src=twsrc%5Etfw">#AFCB</a> <a href="https://t.co/DNX7cOwXD5">pic.twitter.com/DNX7cOwXD5</a></p>&mdash; Andrew Clark (@pssGuy) <a href="https://twitter.com/pssGuy/status/970276394851880961?ref_src=twsrc%5Etfw">March 4, 2018</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 
 ## Totally Football and Guardian Weekly Review Podcasts {-}
@@ -217,7 +172,7 @@ weekly_table("2018-03-06")
 
 ## End of Season Update {-}
 
-What would be a sad epitaph to Evra's career was eased somewhat as his final appearance was as a sub helping West Ham come back from a goal down to draw at Stamford Bridge
+Amazingly, Evra had one more start for West Ham. It too ended in a 4-1 defeat to Manchester City
 
 ---
 
@@ -255,7 +210,7 @@ scoreLines %>%
 
 If Huddersfield, WBA or Brighton went into arrears they could pretty well say goodbye to any points
 
-?? Arsenal actually went into arrears in games more often than Brighton, though their superior talent did ensure they more often made amends
+ Arsenal actually went into arrears in games more often than Brighton, though their superior talent did ensure they more often made amends
 
 ---
 
@@ -265,7 +220,7 @@ Own Goals have been beneficial to Huddersfield but two 'first-goals' have also b
 
 ---
 
-Dembele upped his game a bit at the end of the year and ended with .. assists, good for .. on the team. No goals, though, and rumoured to be available this summer
+Dembele upped his game a bit at the end of the year and ended with 4 assists, good for 8th= on the team. No goals, though, and rumoured to be available this summer
 
 ---
 

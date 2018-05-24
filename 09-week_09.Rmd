@@ -1,19 +1,8 @@
 # Week 9 {-}
 
 
+Sunday games rule; as Arsenal consign Koeman to the dustbin and Klopp may start to worry as Liverpool slip to eigth place. Surprise, though, has to be Man United's loss to Huddersfield - a team that had a negative goal difference past season in the Championship
 
-## Match of the Day{-}
-
-Sunday games rule; as Arsenal consign Koeman to the dustbin and Klopp may start to worry
-
-
-```{r topGame_09}
-
-embed_youtube("BggJS6xh2JE", width = 420, height = 315, frameborder = 0,
-   allowfullscreen = TRUE, query = NULL) 
-
-
-```
 
 ***
 
@@ -55,7 +44,12 @@ temp <- managers %>%
 temp %>%
   count(year) %>%
   plot_ly(x =  ~ year, y =  ~ n) %>%
-  add_bars(color = I("lightblue")) %>%  config(displayModeBar = F, showLink = F)
+  add_bars(color = I("lightblue")) %>% 
+  layout(
+    xaxis=list(title=""),
+    yaxis=list(title="Count",range=c(0:4))
+  ) %>% 
+  config(displayModeBar = F, showLink = F)
 
 ```
 
@@ -245,6 +239,8 @@ However, Stoke, West Ham and WBA(2x) did soon press the eject button. Adding in 
 
 Everton did rectify the ship via return from injuries e.g Bolasie, Coleman and winter purchases e.g Walcott and Tosun. In the end .. 10 of the 20 players who played over 500 minutes were in the 25-30 age range. However, their top-class players such as Jageilka, Rooney and Baines are all well past their best but were nevertheless regulars at season's end as the graph below indicates
 
+One worry for Man City rivals. Sterling is only 23 but 12 younger played for the team this season. Brighton and Burnley both only had two 23 or younger players
+
 ```{r agesu_09}
 temp <- standings %>%
   filter(season == "2017/18") %>%
@@ -330,7 +326,7 @@ H has been subbed (often to his disgust) .. second in league and more than twice
 
 ---
 
-Manchester City attacking prowess is reflected in the five players who secured 25 or more points including deBruyne, Sterling, Aguero, David Silva and Sane. This matches the only other team which managed a fiver their own 2013/14 side - with Aguero and Siva repeat performers
+Manchester City attacking prowess is reflected in the five players who secured 25 or more points including deBruyne, Sterling, Aguero, David Silva and Sane. This matches the only other team which managed a fiver their own 2013/14 side - with Aguero and Siva repeat performers. Tottenham ran them close with Kane, Alli, Eriksen and Son but only three other teams had even one 25 pointer.   
 
 ---
 

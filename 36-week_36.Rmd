@@ -1,19 +1,8 @@
 # Week 36 {-}
 
 
+Signs of life from the botton three with wins for WBA and Southampton and a draw for Stoke at Anfield. 
 
-## Match of the Day {-}
-
-Signs of life from the botton three with wins for WBA and Southampton and a draw for Stoke at Anfield. Unfortunately, all available is the Liverpool game with Italian commentary
-
-
-```{r topGame_36}
-
-embed_youtube("e7kbmIpByDI", width = 420, height = 315, frameborder = 0,
-   allowfullscreen = TRUE, query = NULL) 
-
-
-```
 
 ***
 <p class="factoid">Somewhat overshadowed by de Bruyne, Sterling (18 goals, 22 Assists) joins Salah as the only other player on the 40 points mark this season</p>
@@ -128,7 +117,7 @@ player_team %>%
 
 Only two players appear twice on the list.
 
-John Hartson performed the feat first with West Ham and Wimbledon the clubs involved
+John Hartson performed the feat first, with West Ham and Wimbledon the clubs involved
 
 However, this is trumped by Robbie Keane who started the 2002/03 season for Leeds whom he scored against after a transfer to Spurs. Then in 2008/09, he was sold to Liverpool and after a disappointing spell went back to Spurs for 8 million pounds less and... well you can guess the rest
 
@@ -137,8 +126,7 @@ However, this is trumped by Robbie Keane who started the 2002/03 season for Leed
 
 Crystal Palace's 5-0 romp over Leicester both virtually freed them from relegation concerns and was their best ever Premier League win
 
-Here is the best result, in terms of scoreline, for every team that has appeared
- Determing factors are by order, goal difference, goals scored and earliest occurence
+Here is the best result, in terms of scoreline, for every team that has appeared.  Determing factors are by order, goal difference, goals scored and earliest occurence
 
 ```{r big_win_36}
 
@@ -168,9 +156,9 @@ Barnsley, Cardiff and Swindon never managed more than a two goal win in their si
 ## Tweet of the Week {-}
 
 
-```{r}  
-shortcode("tweet", "989880967224586240") 
-```
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">See how <a href="https://twitter.com/hashtag/Mourinho?src=hash&amp;ref_src=twsrc%5Etfw">#Mourinho</a> juggled attacking players time over season. Lingard effectively took over from Mkhitaryan but then Sanchez arrived. Tough to fit 4 other players into 2-3 spots<a href="https://twitter.com/hashtag/MUFC?src=hash&amp;ref_src=twsrc%5Etfw">#MUFC</a> <a href="https://t.co/2VZKF3Bqtg">pic.twitter.com/2VZKF3Bqtg</a></p>&mdash; Andrew Clark (@pssGuy) <a href="https://twitter.com/pssGuy/status/989880967224586240?ref_src=twsrc%5Etfw">April 27, 2018</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
 
 
 ## Totally Football and Guardian Weekly Review Podcasts {-}
@@ -242,9 +230,9 @@ standings %>%
  
 Not the same situation at all. In fact, in 1996/97 Spurs finished in the top half of the table in spite of losing almost half their games. With 46 points, they only finished 7 points clear of second-bottom, Middlesbrough 
 
-This season..
+This season only Swansea fir the bill, leading the league with 21 defeats. Next, on 19, were survivors Watford and Huddersfield
 
-With 22 losses you seem pretty well certain to be relegated and even with just 15 a couple of sides have taken the drop including Crystal Palace in a 42 game schedule in 1992/93 and ..
+With 22 losses you seem pretty well certain to be relegated and even with just 15 a couple of sides have taken the drop, including Crystal Palace in a 42 game schedule in 1992/93
 
 
 #### Best Win {-}
@@ -280,9 +268,9 @@ Other than the teams appearing in the Premier League for the first time, Brighto
 
 --
 
-## Code Hints
+## Code Hints {-}
 
-  * base - intersect()
+  base - intersect()
 
 
 

@@ -1,17 +1,8 @@
 # Week 12 {-}
 
-## Match of the Day {-}
 
-Following a defeat to North London rivals, Spurs now talking top 4, not title
+Following a defeat to North London rivals, Spurs now talking top 4, not title. 
 
-
-```{r topGame_12}
-
-embed_youtube("n_vQUh5X0KQ", width = 420, height = 315, frameborder = 0,
-   allowfullscreen = TRUE, query = NULL) 
-
-
-```
 
 ***
 
@@ -120,9 +111,9 @@ The Liverpool side with the SSS strike-force of Suarez, Sterling and Sturridge b
 
 ## Tweet of the Week {-}
 
-```{r}
-shortcode("tweet", "932379661778210817")
-```
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Things have tailed odd for <a href="https://twitter.com/hashtag/davidmoyes?src=hash&amp;ref_src=twsrc%5Etfw">#davidmoyes</a> but he still has a 50 point lead over Redknapp after 500 EPL games. Well off pace of others in 500 club though<a href="https://twitter.com/hashtag/MUFC?src=hash&amp;ref_src=twsrc%5Etfw">#MUFC</a> <a href="https://twitter.com/hashtag/AFC?src=hash&amp;ref_src=twsrc%5Etfw">#AFC</a> <a href="https://twitter.com/hashtag/EFC?src=hash&amp;ref_src=twsrc%5Etfw">#EFC</a> <a href="https://twitter.com/hashtag/WHFC?src=hash&amp;ref_src=twsrc%5Etfw">#WHFC</a> <a href="https://twitter.com/hashtag/SAFC?src=hash&amp;ref_src=twsrc%5Etfw">#SAFC</a> <a href="https://t.co/kBc3K0akbs">pic.twitter.com/kBc3K0akbs</a></p>&mdash; Andrew Clark (@pssGuy) <a href="https://twitter.com/pssGuy/status/932379661778210817?ref_src=twsrc%5Etfw">November 19, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
 
 
 
@@ -168,17 +159,15 @@ weekly_table("2017-11-21")
 
 #### Pulis is Out {-}
 
-Well I was wrong about the Wales managership - which went instead to Ryan Giigs. He took over at Middlesbrough and led them to ..
+Well I was wrong about the Wales managership - which went instead to Ryan Giiggs. He took over at Middlesbrough and led them to the playoffs, where they list to Aston Villa in the semi-final
 
-Of course WBA catastrophically signed Alan Pardew who led them to just 1 win .. before being sacked with the team 10 points from safety
+Of course, WBA catastrophically signed Alan Pardew who led them to just 1 win in 18 before being sacked with the team 10 points from safety, which even a strong run-in could not negate
 
 #### Flat Track Bullies {-}
 
-For the season as a whole Manchester United racked up .. games with four goals or more
-trailing Manchester City () and Liverpool
+For the season as a whole Manchester United racked up six games with four goals or more, only good for fifth in the league ans trailing Manchester City by four
 
-More interstingly they have now gone five full seasons since putting up 5 in a single game. Since then 14 teams, including Hull (6-0 v Fulham) have, in total, posted .. with
-Manchester City and Liverpool accounting for a combined..
+More interstingly they have now gone five full seasons since putting up 5 in a single game. Since then 14 teams, including Hull (6-0 v Fulham) have, in total, posted 67 with Manchester City and Liverpool accounting for a combined 29
 
 ```{r bullies_12u}
 
@@ -237,11 +226,10 @@ Method %>%
   ) %>% config(displayModeBar = F, showLink = F)
 ```
 
-You will probably want to zoom( or rectangular select up to 50 Total Goals) and hover for more details
-Milivojevis on .. is next with 100% record - and most of his are from the penalty spot
-Noble has scored 35 of 36 with his right foot - the exception a left-footer in April 2008 v Newcastle.     
+You will probably want to zoom (or rectangular select up to 50 Total Goals) and hover for more details
+Milivojevis on 12 is next with a 100% record - and most of his are from the penalty spot. Noble has scored 36 of 37 with his right foot - the exception a left-footer in April 2008 v Newcastle.     
 
- On the flip side none of Chris Brunt's 25 have been with his right-peg
+ On the flip side none of Chris Brunt's 25 have been with his right-peg. As he is getting on and in the Championship next season, that record could stand for a while
 
  ---
 

@@ -1,18 +1,7 @@
 # Week 20 {-}
 
 
-## Match of the Day {-}
-
-Burnley hold Manchester United at Old Trafford whilst all the other top clubs record victories
-
-
-```{r topGame_20}
-
-embed_youtube("hzsCYuzgkao", width = 420, height = 315, frameborder = 0,
-   allowfullscreen = TRUE, query = NULL) 
-
-
-```
+Burnley hold Manchester United at Old Trafford whilst all the other top clubs record victories. Liverpool's five goal haul now places them second in league with 46 but they still trail Man City's 49 goal difference
 
 
 ***
@@ -143,7 +132,7 @@ City are now one shy of the 19 consecutive wins record in the big leagues of Bay
 
 One surprising aspect of this, is that they have yet to score in the first nine minutes of any game. Only Stoke have failed to score earlier
 
-![](/img/mncNoEarlyGoal.png)
+![](img/mncNoEarlyGoal.png)
 
 They have not conceded over that time period either but, nevertheless they would currently be hovering above the relegation zone if games were played over nine rather than ninety minutes
 
@@ -188,6 +177,7 @@ standings %>%
 
 ```
 
+_NB This chart updates as the season progresses_
 
 
 
@@ -197,9 +187,8 @@ standings %>%
 ## Tweet of the Week {-}
 
 
-```{r}  
-shortcode("tweet", "946114232990310400") 
-```
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Updated <a href="https://twitter.com/hashtag/EPL?src=hash&amp;ref_src=twsrc%5Etfw">#EPL</a> stats site to inc Boxing Day<a href="https://t.co/5dQ5BrYsv5">https://t.co/5dQ5BrYsv5</a><a href="https://twitter.com/hashtag/THFC?src=hash&amp;ref_src=twsrc%5Etfw">#THFC</a> Son has second 3-assist game in last four and topping <a href="https://twitter.com/hashtag/Kane?src=hash&amp;ref_src=twsrc%5Etfw">#Kane</a> in assists+goals per minute <a href="https://t.co/H6ydvWvqcx">pic.twitter.com/H6ydvWvqcx</a></p>&mdash; Andrew Clark (@pssGuy) <a href="https://twitter.com/pssGuy/status/946114232990310400?ref_src=twsrc%5Etfw">December 27, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 
 
@@ -215,7 +204,7 @@ shortcode("tweet", "946114232990310400")
 
 ***
 
-## Results and Table
+## Results and Table {-}
 
 ```{r results_20}
 
@@ -284,9 +273,9 @@ WBA have suffered a similar situaton before. In spite of Gary Megson getting the
 
 #### Man City plough on
 
-Bit of a joke tabel. As all other teams did, Manchester City did score within the first nine minutes. The amazing observation is that WBA would be in second place and qualifying for Europe. They should follow cricket's lead and significantly reduce game time
+Bit of a joke table. As all other teams did, Manchester City did score within the first nine minutes. The amazing observation is that WBA would be in second place and qualifying for Europe. They should follow cricket's lead and significantly reduce game time
 
-Manchester City scored a .. record number of times but only in  disticnt minutes
+Manchester City scored 106 goals a record number of times but only in 60 disticnt minutes
 Here are the ones they missed out on
 
 ```{r cityu_20}
@@ -326,7 +315,7 @@ managerGame %>%
     `Av Pts per Game` = ppg
   ) %>%
   DT::datatable(
-    width = 400,
+    width = 600,
     class = 'compact stripe hover row-border order-column',
     rownames = TRUE,
     options = list(

@@ -1,18 +1,8 @@
 # Week 33 {-}
 
 
-## Match of the Day {-}
-
 City's title celebrations put on ice as the Manchester derby provides 5 goals and 9 bookings whilst the Liverpool one cannot provide one of either
 
-
-```{r topGame_33}
-
-embed_youtube("ifmH4HFCU08", width = 420, height = 315, frameborder = 0,
-   allowfullscreen = TRUE, query = NULL) 
-
-
-```
 
 ***
 <p class="factoid">Rooney has only completed 5 of his 23 starts. He is currently posting his fourth 800+ minute goalless streak: all since the 2014/15 season</p>
@@ -120,10 +110,8 @@ The above game was more closely matched by the Manchester derby, with the away s
 
 ## Tweet of the Week {-}
 
-
-```{r}  
-shortcode("tweet", "983296430365396993") 
-```
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">After the false hope of last season and a big summer spend, <a href="https://twitter.com/hashtag/EFC?src=hash&amp;ref_src=twsrc%5Etfw">#EFC</a> are back in the familiar positon (12/26 <a href="https://twitter.com/hashtag/premierleague?src=hash&amp;ref_src=twsrc%5Etfw">#premierleague</a> seasons) of sporting 41 points or less after 33 matches. Add in their worst- ever Goal difference (-15) at this stage of an <a href="https://twitter.com/hashtag/EPL?src=hash&amp;ref_src=twsrc%5Etfw">#EPL</a> season <br>Ouch<a href="https://twitter.com/hashtag/LFC?src=hash&amp;ref_src=twsrc%5Etfw">#LFC</a> <a href="https://twitter.com/hashtag/EVELIV?src=hash&amp;ref_src=twsrc%5Etfw">#EVELIV</a> <a href="https://t.co/SA5EeDFolF">pic.twitter.com/SA5EeDFolF</a></p>&mdash; Andrew Clark (@pssGuy) <a href="https://twitter.com/pssGuy/status/983296430365396993?ref_src=twsrc%5Etfw">April 9, 2018</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 
 ## Totally Football and Guardian Weekly Review Podcasts {-}
@@ -213,7 +201,7 @@ df %>%
 ```
 
 
-Nevertheless, it has been a great career, including five  titles
+Nevertheless, it has been a great career, including five titles
 He has been extremely durable and only Gareth Barry and Frank Lampard had spent more time on the pitch at his age
 
 ```{r most_minsu_33}
@@ -246,11 +234,11 @@ playerGame %>%
 
 #### Super Subs {-}
 
-Although Huddersfield had only two different players score as sub, Tom Ince's for Huddersfield was a 90th minute winner against... providing what turnes out to be ..
+Although Huddersfield had only two different players score as sub, Tom Ince's for Huddersfield was a 90th minute winner against Watford and was a major contributing factor to their survival in the division
 
-Lukaku and Salah were just taking a break on the bench but still contributed but Benteke had lost his spot when he came on to score a toppage time penalty in Palace's rout of Leicester
+Lukaku and Salah were just taking a break on the bench but still contributed but Benteke had lost his spot when he came on to score a stoppage time, pity-penalty in Palace's rout of Leicester
 
-Arsenal (2009/10) and Liverpool (2015/16) had 14 goals contributed by subs. In that Arsenal ten different players scored
+Arsenal (2009/10) and Liverpool (2015/16) had 14 goals contributed by subs. In that season, Arsenal ten different players scored
 
 ```{r super_subu_33}
 
@@ -282,12 +270,12 @@ It was Perez's only goal in the Premier League
 Here is a summary of the 324 different players who have appeared in the 
 Liverpool derby during the Premier League era
 
-Steven Gerrard has clearly been the outstanding figure
+Steven Gerrard has clearly been the outstanding figure, leading in terms of games, goals and assists
 
 ```{r dullest_derbyu_33}
 liv_eve_matches <- standings %>%
   filter(team == "Liverpool", OppTeam == "Everton") %>%
-  pull(MATCHID) # 52 could
+  pull(MATCHID) 
 
 playerGame %>%
   filter(MATCHID %in% liv_eve_matches) %>%

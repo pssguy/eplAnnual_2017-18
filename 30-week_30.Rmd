@@ -1,18 +1,11 @@
 # Week 30 {-}
 
 
-## Match of the Day {-}
+Rashford schools Alex-Arnold.    
 
-Rashford schools Alex-Arnold
+A third consecutive one-goal loss to a top 6 team means that Palace
+will be relying on their easy run in to get back out of the bottom three
 
-
-```{r topGame_30}
-
-embed_youtube("CvZuoNWASbw", width = 420, height = 315, frameborder = 0,
-   allowfullscreen = TRUE, query = NULL) 
-
-
-```
 
 ***
 <p class="factoid">Palace joined WBA with a league-leading ninth one-goal defeat. Every team has suffered at least one such occurrence this season. Surprisingly Huddersfield have lost by a single goal just once in their 15 defeats</p>
@@ -90,12 +83,12 @@ plot_ly(teamRecord, color = ~ TEAMNAME) %>%
  
  Double-Click on the team name to isolate just their data. The short segments (barring de Boer at Crustal Palace) represent caretakers    
  
- Other than WBA - where Alan Pardew's managerial career in the Premier League looks set to end - there have been some improvement; Though Stoke's is marginal and may not suffice to save them
+ Other than WBA - where Alan Pardew's managerial career in the Premier League looks set to end - there have been some improvement; though Stoke's is marginal and may not suffice to save them
  
 
 ## Super Subs {-}
 
-Burnley have proved this season's  good-news story and after a sticky spell are again pushing for a Europa spot. One reason has been the form of new-purchase, Chris Wood, and he came on as a sub, Sturday, to set up the first goal and score two others. Three points in a game for a sub is a pretty rare event - occurring on average just over once  a  season
+Burnley have proved this season's  good-news story and after a sticky spell are again pushing for a Europa spot. One reason has been the form of new-purchase, Chris Wood, and he came on as a sub, Saturday, to set up the first goal and score two others. Three points in a game for a sub is a pretty rare event - occurring on average just more than once per season
 
 
 
@@ -132,19 +125,15 @@ _N.B. Unlike official statistics, I allow up to two assists per goal_
 Oscar and David Beckham, feature twice
 
 Stand-out performances include Solskjaer's four goals in 22 minutes and 
-Wigan;s Amr Zaki who pitched in 2 goals and an assist in just 6 minutes in a game versus Hull - a team he was subsequently played for without scoring or assisting on a single goal
+Wigan;s Amr Zaki who pitched in 2 goals and an assist in just 6 minutes in a game versus Hull - a team he subsequently played for without scoring or assisting on a single goal
+
 ---
 
 
-
-***
-
 ## Tweet of the Week {-}
 
-
-```{r}  
-shortcode("tweet", "973146759135481856") 
-```
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr"><a href="https://twitter.com/hashtag/WHUFC?src=hash&amp;ref_src=twsrc%5Etfw">#WHUFC</a> get beaten by three clear goals, third game on trot. Only ever happened 10 times in <a href="https://twitter.com/hashtag/premierleague?src=hash&amp;ref_src=twsrc%5Etfw">#premierleague</a>. Exactly a decade ago, the Hammers lost consecutive games 0-4 to <a href="https://twitter.com/hashtag/CFC?src=hash&amp;ref_src=twsrc%5Etfw">#CFC</a>  <a href="https://twitter.com/hashtag/LFC?src=hash&amp;ref_src=twsrc%5Etfw">#LFC</a> and <a href="https://twitter.com/hashtag/THFC?src=hash&amp;ref_src=twsrc%5Etfw">#THFC</a> <a href="https://t.co/092CjHsHBg">pic.twitter.com/092CjHsHBg</a></p>&mdash; Andrew Clark (@pssGuy) <a href="https://twitter.com/pssGuy/status/973146759135481856?ref_src=twsrc%5Etfw">March 12, 2018</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 
 ## Totally Football and Guardian Weekly Review Podcasts {-}
@@ -189,24 +178,29 @@ weekly_table("2018-03-13")
 ## End of Season Update {-}
 
 
-In the end, Huddersfield did lose another game by the odd goal, 0-1 to Newcastle, but the distribution still looks odd
+In the end, Huddersfield did lose a couple of other games by the odd goal, 0-1 to both Newcastle and Arsenal, but the distribution still looks odd
 
 ```{r}
 standings %>%
-  filter(season == "2017/18" & team == "Huddersfield") %>%
+  filter(season == "2017/18",team=="Huddersfield") %>%
   mutate(GD = GF - GA) %>%
   plot_ly(x =  ~ GD) %>%
-  add_histogram(color = "yellow")
+  add_histogram(color = I("yellow")) %>% 
+  layout(xaxis=list(title="Goal Difference"),
+         yaxis=list(title="Number of Games")) %>% config(displayModeBar = F, showLink = F)
 ```
 
-Excluding Huddersfield, defeated teams lost by 1 goal .. % of the time. WBA ended up with most single game defeats
+Excluding Huddersfield, defeated teams lost by 1 goal 50% of the time. Newcastle and Swansea ended up with most single game defeats,12.
+
+
 
 ---
 
 #### Manager changes {-}
 
-In most seasons 38 points, a point a game, is enough to stay up, but teams worried about relegation and swapping managers are often in a worse situation  and will expect more
-  From the chart above, ... might add something when cleare picture
+In most seasons 38 points, a point a game, is enough to stay up, but teams worried about relegation and swapping managers are often in a worse situation  and will expect more.
+  Mark Hughes, at Southampton, walked off with a big cheque and praise as a 'ggod fit' for an extension in spite of his ppg being only marginally better than his predecessor
+  With a far weaker squad, Carvahal, at Swansea, proved far superior in the long run. Unfrotunately it was the dhort run of 5 defeats in a row and relegation that counts
   
   
 #### Super Subs {-}
@@ -257,7 +251,7 @@ Tottenham trail the other top clubs, with only single strikes from Wanyama and S
 
 ---
 
-The Burnley defeat may have been the end of West Ham's big losses but by the end of the year they had suffered 10 three goal or larger losses, matching the 38 game season record of Derby County in 2007-8
+The Burnley defeat may have been the end of West Ham's big losses but by the end of the year they had suffered 10 three goal or larger losses, matching the 38 game season record of Derby County in 2007/08
 
 
 ## Code Hints {-}

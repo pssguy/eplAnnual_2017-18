@@ -3,7 +3,7 @@
 
 ## Match of the Day {-}
 
-Allardyce is beaming. Everton are close to top half of table and he has three long-term-injured players back soon: Boalsie, Barkley and Coleman
+Allardyce is beaming. Everton are close to top half of table and he has three long-term-injured players back soon: Bolasie, Barkley and Coleman
 
 ```{r topGame_14}
 
@@ -20,7 +20,7 @@ embed_youtube("JddLLNc2tvw", width = 420, height = 315, frameborder = 0,
 
 I do not collect the  number of goals scored from own-half but that final goal of his hat-trick was the 28th in his EPL career from outside of the area - good for 7th all-time 
 
-What is perhaps even more impressive is that after just over 900 minutes on the pitch he has already notched 7 goals
+What is perhaps even more impressive is that after just over 900 minutes on the pitch he has already notched 7 goals. 
 In only one season has he started the year more quickly
 
 ```{r rooney_14}
@@ -188,9 +188,10 @@ goalData %>%
 
 ## Tweet of the Week {-}
 
-```{r}  
-shortcode("tweet", "936082648295866368") 
-```
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Mo Salah has 12 goals in his first 14 <a href="https://twitter.com/hashtag/epl?src=hash&amp;ref_src=twsrc%5Etfw">#epl</a> games for <a href="https://twitter.com/hashtag/LFC?src=hash&amp;ref_src=twsrc%5Etfw">#LFC</a>, a club record. <br>Four players have scored more in their first 14 <a href="https://twitter.com/hashtag/premierleague?src=hash&amp;ref_src=twsrc%5Etfw">#premierleague</a> apps for a club<br>Which of these does not belong and who should replace them<a href="https://twitter.com/BenDinnery?ref_src=twsrc%5Etfw">@BenDinnery</a> <a href="https://twitter.com/jalapic?ref_src=twsrc%5Etfw">@jalapic</a></p>&mdash; Andrew Clark (@pssGuy) <a href="https://twitter.com/pssGuy/status/936082648295866368?ref_src=twsrc%5Etfw">November 30, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
 
 The answer is Viduka. Who - like Salah and a few others - managed 12 in 14. The missing player is Papiss Cisse who got 13 at the start of his career at Newcastle
 
@@ -237,12 +238,87 @@ weekly_table("2017-11-30")
 
 The table updates throughout the season and is interesting to note that given the time he has spent on the pitch his goal return of 10 ia actually the most common level he achieved throughout his career - although most of his goals came in the first half of the season
 
-NB Assist data to add
+Here is the equivalent data for assists
 
+```{r}
+
+plDroughtFun <- function(df) {
+  expand.grid(c(df$on:df$off),df$PLAYER_MATCH)
+}
+
+rooney <- playerGame %>% 
+  filter(PLAYERID=="ROONEYX") %>% 
+  select(season,gameDate,mins,Assists) %>% 
+  group_by(season) %>% 
+  arrange(gameDate) %>% 
+  mutate(cumMins=cumsum(mins),cumAssists=cumsum(Assists))
+
+
+maxMins <-rooney %>% 
+  filter(season=="2017/18"&cumMins==max(cumMins)) %>% 
+  select(cumMins) %>% 
+  pull(cumMins)
+
+
+
+assts <- assists %>% 
+  mutate(assisted=1)
+
+
+games <-playerGame %>% 
+  filter(PLAYERID=="ROONEYX"&mins>0) %>% 
+  select(PLAYERID,name,PLAYER_MATCH,START,on,offA,gameDate,TEAMMATCHID,season) %>% 
+  mutate(on=as.integer(on),off=as.integer(offA)) %>% 
+  mutate(on=ifelse(is.na(on),1,on),off=ifelse(is.na(off),90,off))
+
+# create list so can apply function above with purrr
+games_list <- split(games, 1:nrow(games))
+mins <-map_df(games_list,plDroughtFun)
+
+
+# rename columns and add gameDate
+names(mins) <- c("TIME","PLAYER_MATCH") 
+mins <-mins %>% 
+  left_join(games) %>% 
+  select(TIME,PLAYER_MATCH,gameDate,season)
+
+
+
+
+assistData <- mins %>% 
+  left_join(assts)  %>% 
+  select(PLAYER_MATCH,TIME,gameDate,assisted,season) %>% 
+  arrange(gameDate,TIME,season) %>% 
+  group_by(season) %>% 
+  mutate(minsPlayed=row_number(),assist=ifelse(is.na(assisted),0,1),cumAssists=cumsum(assist))
+
+
+
+df <- assistData %>% 
+  filter(minsPlayed==maxMins) %>% 
+  arrange(season)
+
+   
+
+theTitle <- glue("Assists provided by Rooney after {maxMins} minutes of season")
+
+df %>% 
+  plot_ly(x=~season,y=~cumAssists, color=~season) %>% 
+  add_bars(showlegend = FALSE) %>% 
+  layout(title=theTitle,margin=list(r=20, b=100),
+         xaxis=list(title=""),
+         yaxis=list(title="Assists to date")) %>%  config(displayModeBar = F,showLink = F)
+
+
+```
+
+This does show him producing at the lowest level since his debut season. It was pretty clear that it would be one year and out at Everton
+
+---
 
 #### Palace Patience {-}
 
-In the end, as the table above shows, Palace also failed to score on their next away game (0-0 at WBA) before Christain Benteke, of all people, headed one in their shock 3-0 win at Leicester - ending the misert at 935 minutes 
+In the end, as the table above shows, Palace also failed to score on their next away game (0-0 at WBA) before Christain Benteke, of all people, headed one in their shock 3-0 win at Leicester - ending the misery at 935 minutes 
 
 ```{r palaceu_14}
 tmDroughtFun <- function(df) {
@@ -334,7 +410,7 @@ Giroud popped in one more as sub for Arsenal before his move to Chelsea where he
 
 ---
 
-So much for predictions. After six 4 goal hauls in their first 14 outings they .. did not manage one again all season
+So much for predictions. After six 4 goal hauls in their first 14 outings they Manchester United did not manage another one all season. From that date on, they scored less than Crystal Palace whom they had outgunned 4:1 up to that point
 
 
 ---

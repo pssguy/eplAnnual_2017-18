@@ -1,18 +1,8 @@
 # Week 34 {-}
 
 
-## Match of the Day {-}
 
-Bit of a damp squib with Man. Utd. handing City the title but at least the,about- to-become, Champions put in a better performance at Wembley to take some of the pain off the Liverpool trouncing in the Champion's League
-
-
-```{r topGame_34}
-
-embed_youtube("NmHQQN1KSbw", width = 420, height = 315, frameborder = 0,
-   allowfullscreen = TRUE, query = NULL) 
-
-
-```
+Bit of a damp squib with Man. Utd. handing City the title. At least the, about-to-become, Champions put in a better performance at Wembley to take some of the pain off the Liverpool trouncing in the Champion's League
 
 
 ***
@@ -81,7 +71,7 @@ standings %>%
 So a welcome uptick this season, if you appreciate close games, from the lowest recorded level last year
  
  --- 
- <p class="factoid">Allowing for two assists per goal, Cresswell; Shaqiri and Allen all reached the 25 career level in the Monday game between West Ham and Stoke</p>
+ <p class="factoid">Allowing up to two  per goal, Cresswell; Shaqiri and Allen all reached the 25 career level for assists in the Monday game between West Ham and Stoke</p>
  
  ---
 
@@ -137,9 +127,8 @@ This looks one that will go down to  the wire. At the time of writing, the 34 ye
 ## Tweet of the Week {-}
 
 
-```{r}  
-shortcode("tweet", "985811245768077312") 
-```
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Any idea what this <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> <a href="https://twitter.com/hashtag/dataviz?src=hash&amp;ref_src=twsrc%5Etfw">#dataviz</a> is? <br>Is  <a href="https://twitter.com/grant_watts?ref_src=twsrc%5Etfw">@grant_watts</a> a helpful hint.... Thought not. <br>Try blog post <a href="https://t.co/HpidQo4D5y">https://t.co/HpidQo4D5y</a> …<br><br>HT <a href="https://twitter.com/jalapic?ref_src=twsrc%5Etfw">@jalapic</a> <a href="https://twitter.com/vivalosburros?ref_src=twsrc%5Etfw">@vivalosburros</a> <a href="https://twitter.com/GaborCsardi?ref_src=twsrc%5Etfw">@GaborCsardi</a> Benoit Thieurmel<a href="https://twitter.com/hashtag/CPFC?src=hash&amp;ref_src=twsrc%5Etfw">#CPFC</a> <a href="https://twitter.com/DataCamp?ref_src=twsrc%5Etfw">@DataCamp</a> <a href="https://t.co/8OPdiaF8Ls">pic.twitter.com/8OPdiaF8Ls</a></p>&mdash; Andrew Clark (@pssGuy) <a href="https://twitter.com/pssGuy/status/985811245768077312?ref_src=twsrc%5Etfw">April 16, 2018</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 
 ## Totally Football and Guardian Weekly Review Podcasts {-}
@@ -181,9 +170,7 @@ weekly_table("2018-04-17")
 
 ####  Bravo Burnley {-}
 
-NB need to check book is > than code -
-
-Burnley continued with close encounters and lead in that category this season. .. add bit about where they finished and Man city at opposite extreme
+Burnley continued with close encounters and led in that category this season with 33, equalling the record for a 38 game season. At the other extreme, Man City's 16 nail-biters was only one more than the fewest
 
 
 ```{r burnleyu_34}
@@ -236,17 +223,16 @@ my_df %>%
 ---
 
 #### Big Fish {-}
+ Murray did not score again and slipped down to 4th spot
 
-.. Murray did not score again and slipped down to 3rd spot with..
-
-Austin might have been up there if he had palyed more than -- % of the season
+Austin might have been up there if he had played more than 30% of the season
 
 
 ---
 
 ## Code Hints
 
- * plotly - pyramid plot
+  plotly - pyramid plot
 
 
 

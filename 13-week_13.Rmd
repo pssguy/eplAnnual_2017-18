@@ -1,17 +1,10 @@
 # Week 13 {-}
 
-## Match of the Day {-}
 
-The one top-six clash ended in stalemate leaving both Liverpool and Chelsea even further behind the Manchester clubs
-
-
-```{r topGame_13}
-
-embed_youtube("n_vQUh5X0KQ", width = 420, height = 315, frameborder = 0,
-   allowfullscreen = TRUE, query = NULL) 
+The one top-six clash ended in stalemate leaving both Liverpool and Chelsea even further behind the Manchester clubs. Everton already have a Goal Difference of -15, their worst at any stage of a season since 2005/06
 
 
-```
+
 
 ***
 
@@ -129,9 +122,8 @@ data.frame(goals = counts) %>%
 
 ## Tweet of the Week {-}
 
-```{r}  
-shortcode("tweet", "933768157054955520") 
-```
+<blockquote class="twitter-tweet" data-lang="en"><p lang="sl" dir="ltr">Pogba &gt; de Bruyne. Big claim from <a href="https://twitter.com/jackaustin_1?ref_src=twsrc%5Etfw">@jackaustin_1</a> @ Independent <a href="https://t.co/hmPJ8KdFfx">https://t.co/hmPJ8KdFfx</a> <br>v other top six Pobga 1assist(inc secondary) 0 gls. de B 6&amp;10<a href="https://t.co/5dQ5BrYsv5">https://t.co/5dQ5BrYsv5</a> <a href="https://twitter.com/hashtag/MUFC?src=hash&amp;ref_src=twsrc%5Etfw">#MUFC</a> <a href="https://twitter.com/hashtag/MCFC?src=hash&amp;ref_src=twsrc%5Etfw">#MCFC</a> <a href="https://t.co/W7Wy9jBEvo">pic.twitter.com/W7Wy9jBEvo</a></p>&mdash; Andrew Clark (@pssGuy) <a href="https://twitter.com/pssGuy/status/933768157054955520?ref_src=twsrc%5Etfw">November 23, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 
 
@@ -244,18 +236,18 @@ standings %>%
 ```
 
 There is a clear relationship to be seen. Teams that performed out of the ordinary would include, surprise-surprise, Manchester City. They picked up maximum points in spite of facing
-both Manchester United an Tottenham. Watford, in contrast under-performed culminating in succesive defeats to newlypromoted clubs, Huddersfield and Brighton
+both Manchester United an Tottenham. Watford, in contrast under-performed culminating in succesive defeats to newly promoted clubs, Huddersfield and Brighton
 
 ---
 
-Pickford ended up conceding .. per game. He was one of only .. to play every minute of the season and was favourite to start in goal for England at the World Cup
+As some veteran defenders in Jageilka, Baines and Coleman returned Pickford ended up conceding just 1.52 per game and becoming England's number one choice. He was one of only ten players to play every minute of the season 
 
 ---
 
 
 #### So close for Burnley {-}
 
-As can be seen from the chart, Burnley's defence earned the praise it has been given.
+As can be seen from the chart, Burnley's defence earned the praise it has been given, particularly at the start of the campaign
 
 Teams that did manage four game shutout runs this season
 
@@ -290,11 +282,11 @@ res %>%
 
 ```
 
-The one surprise on the list is Arsenal, who have conceded .. more than Burnley. However, the run came early in the season and included home games versus Bournemouth, West Brom and Brighton as well a, more impressive, 0-0 draw at Chelsea.
+The one surprise on the list is Arsenal, who, in total, conceded 12 more than Burnley. However, the run came early in the season and included home games versus Bournemouth, West Brom and Brighton as well a, more impressive, 0-0 draw at Chelsea.
 
 ---
 
-In the end, no team conceded an average of two goals a game, although Stoke and West Ham (featuring two England gpalkeepers) flirted with the figure .. Of, course it did not help Stoke survive the drop
+In the end, no team conceded close to an average of two goals a game.  Stoke and West Ham (featuring two England gpalkeepers) were closest with hust 68 against, the fewest for a worst-placed side since WBA's 67 in 2008/09
 
 ---
 

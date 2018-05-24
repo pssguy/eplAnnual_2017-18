@@ -1,26 +1,19 @@
 # Week 4 {-}
 
 
-## Game of the week {-}
-
 United's first real test a  2-2 draw at Stoke. Still look going forward but defensive frailties may be exposed by top opposition
 
-```{r topGame_04}
-
-embed_youtube("eNBb-vP5Lco", width = 420, height = 315, frameborder = 0,
-  allowfullscreen = TRUE, query = NULL) 
-
-
-```
+Once Mane saw red there was no way back for Liverpool at Manchester City
 
 
 ***
  
-## It must be September - Kane starts scoring
+## It must be September - Kane starts scoring {-}
 
-The first one was a bit of a fluke but he reaches the 80 goal mark at a younger age than any who have reached that level in fewer appearances
+The first one was a bit of a fluke but he reaches the 80 goal mark at a younger age than any who have attained that level in fewer appearances
 
 ```{r eighty_goals_04}
+
 
 
 players <- c("HENRYT", "KANEH", "SHEAREA", "AGUEROS", "VANNISR")
@@ -55,7 +48,7 @@ playerGame %>%
 
 ***
 
-## Palace racking up the records
+## Palace racking up the records {-}
 
  * First time since 1924/5 that a top-tier team (Preston NE) have started a season with four games goalless and pointless
  * Became only team to have two distinct five game runs of EPL games without a goal (Ipswich 7 is record)
@@ -66,13 +59,13 @@ playerGame %>%
 
 
  
-## Player Rotation
+## Player Rotation {-}
 
 Another season, another manager but the same old Watford. They have already utilized 22 players after 4 league games and do not have European games to take into account. On the other hand Liverpool do and the 21 they have put on the pitch already exceeds one full season and matches another
 
 ```{r rotation_04}
 
-x <-
+df <-
   playerGame %>%
   group_by(name, PLAYERID, TEAMNAME, season) %>%
   summarise(tot = sum(mins)) %>%
@@ -82,7 +75,7 @@ x <-
   tally() %>%
   arrange(desc(n))
 
-x %>%
+df %>%
   filter(TEAMNAME == "Liverpool") %>%
   plot_ly(x =  ~ season, y =  ~ n)  %>%
   add_bars(color = I('red'), opacity = 0.5) %>%
@@ -104,7 +97,7 @@ last scored a Premier League goal. Since then, 295 other players have achieved t
 
 ***
 
-## Totally Football and Guardian Weekly Review Podcasts
+## Totally Football and Guardian Weekly Review Podcasts {-}
 
 
 
@@ -115,52 +108,26 @@ last scored a Premier League goal. Since then, 295 other players have achieved t
 
 ***
 
-## Results and Table
+## Results and Table {-}
 
 ```{r results_04}
 
-hth %>%
-  filter(season == "2017/18" &
-           gameDate >= "2017-08-28" & gameDate <= "2017-09-11") %>%
-  filter(venue == "H") %>%
-  arrange(team) %>%
-  select(Home = team, GF, GA, Away = OppTeam) %>%
-  DT::datatable(
-    rownames = FALSE,
-    class = 'compact stripe hover row-border',
-    colnames = c('', '', '', ''),
-    options = list(
-      paging = FALSE,
-      searching = FALSE,
-      info = FALSE,
-      columnDefs = list(list(
-        width = '40%', targets = list(0, 3)
-      ))
-    ),
-    width = 250
-  )
+weekly_results("2017-08-28", "2017-09-11")
+
 ```
 
-
+<p>
+---
 
 ```{r standings_04}
 
-hth %>% 
-  filter(season=="2017/18"&gameDate<="2017-09-11") %>% 
-  group_by(team) %>% 
-  mutate(W = ifelse(res=="Win",1,0),L = ifelse(res=="Loss",1,0),D = ifelse(res=="Draw",1,0)) %>%
-  summarise(P=n(),Pts=sum(points),W=sum(W),D=sum(D),L=sum(L),GD=sum(GF)-sum(GA),GF=sum(GF)) %>% 
-  arrange(desc(Pts),desc(GD),desc(GF),team) %>%
-  DT::datatable(class='compact stripe hover row-border order-column',colnames = c('', 'P', 'Pts', 'W','D', 'L', 'GD','GF'),
-                rownames=TRUE,options= list(paging = FALSE, searching = FALSE,info=FALSE))
-
+weekly_table("2017-09-11")
 
 ```
 
-
 ***
 
-## Final Factoid
+## Final Factoid {-}
 
 <p class="factoid">If Crystal Palace lose their next game without finding the net, it will be the first time in the top English Division that a team has kicked off a campaign with five goalless, scoreless games - matching Hartlepool (tier 3 1938/9) and Sunderland (tier 2 1985/6)</p>
 
@@ -172,7 +139,7 @@ hth %>%
 
 ### It must be September - Kane starts scoring {-}
 
-And kept scoring. As the graph above shows, he has now cracked the 100 goal barrier much younger than his rivals and if he continues to be granted [goal he didn't score](https://www.theguardian.com/football/2018/apr/11/harry-kane-awarded-goal-stoke-twitter-premier-league-mo-salah) he will do so
+And kept scoring. As the graph above shows, he has now cracked the 100 goal barrier much younger than his rivals and if he continues to be granted [goals he didn't score](https://www.theguardian.com/football/2018/apr/11/harry-kane-awarded-goal-stoke-twitter-premier-league-mo-salah) he will do so
 
 
 ```{r eighty_goalsu}
@@ -276,7 +243,7 @@ Shearer's drought stands out but it was at the tail-end of his career when he wa
 
 ### Player Rotation {-}
 
-?? In the end, Liverpool ended up in the middle of the pack with their modal average of 26 players actually appearing on the pitch in the season
+In the end, Liverpool ended up in the middle of the pack with their modal average of 26 players actually appearing on the pitch in the season
 
 The overall rankings for the year are
 
@@ -303,7 +270,7 @@ Everton were one of many clubs with relegation fears that switched managers mid 
 whilt Eddie Howe, at Bournemouth, enjoyed his sixth season at the reigns
 
 The overall range in player usage has ranged from 19 (Liverpool 1995/96) to 39
- Fulham(2013/14). Amazingly, Fulham additionally had six players who never made it off the bench. Not so surprisingly, they were relegated with noe of their forwards even reaching the 5-goal mark
+(Fulham 2013/14). Amazingly, Fulham additionally had six other players who never made it off the bench. Not so surprisingly, they were relegated with none of their forwards even reaching the 5-goal mark
  
 ---
 

@@ -1,26 +1,15 @@
 # Week 16 {-}
 
 
+Bizarrely, the top two teams contrive to score three cock-up goals but it now looks a long way back for United to catch City
 
-## Match of the Day {-}
-
-Bizarrely, the top two teams contrive to score three cock-up goals
-
-
-```{r topGame_16}
-
-embed_youtube("3GtmoG1PEOI", width = 420, height = 315, frameborder = 0,
-   allowfullscreen = TRUE, query = NULL) 
-
-
-```
 
 ***
 
-## City dominance {-}
+## City Dominance {-}
 
-With an eleven point lead over their nearest rivals, Man City are looking home and hosed for the title. Their 46 point tally after 16 games is an EPL record, three greater than Chelsea 2005/6, but is actually not the largest margin at this stage of a season.    
- In 1993/4, Man. Utd. held a 12 point lead over their nearest rivals, Blackburn, which had narrowed to 8 by the season end
+With an eleven point lead over their nearest rivals, Man City are looking home and hosed for the title. Their 46 point tally after 16 games is an EPL record, three greater than Chelsea 2005/6, but the point asvantage over second-placed, Manchester United, is actually not the greatest at this stage of a season.    
+ In 1993/4, Man. Utd. held a 12 point lead over their nearest rivals, Blackburn, which had narrowed to,a still comfortable, 8 by the season end
 
 Here are the biggest comebacks each season (hover for details)
 
@@ -40,8 +29,7 @@ df <- standings %>%
   group_by(season) %>% 
   slice(1) %>% 
   mutate(diff=if_else(diff==0,-0.2,diff)) %>% 
-  mutate(diffnumber=if_else(diff==0,0,-diff)) %>% 
-  filter(season!="2017/18")
+  mutate(diffnumber=if_else(diff==0,0,-diff)) 
 
 legendtitle <- list(yref='paper',xref="paper",y=1.05,x=1.2,font=list(size= 14, color="#ff0000"),    text="Champions",showarrow=F)
 
@@ -118,7 +106,7 @@ df %>%
 
 ```
 
-Brighton will be hoping to have got themselves off the bottom of the chart by the end of the season
+Brighton will be hoping to have got themselves off the bottom of the chart by the end of the season ( _which they did_ )
 
 
 <p class="factoid">Benteke's missed penalty means he has now gone 1000 minutes without scoring in the league
@@ -147,25 +135,23 @@ standings %>%
   ungroup() %>% 
   select(-c(gameDate,cat,roll_sum)) %>% 
   unique() %>%
- DT::datatable(width=300,class='compact stripe hover row-border order-column',rownames=FALSE,options= list(paging = TRUE, searching = TRUE,info=FALSE))
+ DT::datatable(width=350,class='compact stripe hover row-border order-column',rownames=FALSE,options= list(paging = TRUE, searching = TRUE,info=FALSE))
 
 
 ```
 
-So typically once a season, with WBA featuring on one previous occasion but escaping by the skin of their teeth. 
-Generally, such a run will mean the drop but there are obviously many teams still in the mix
+So, this poor sequence typically occurs once a season, with WBA featuring on one previous occasion - when they escaped by the skin of their teeth. 
+Generally, such a run will mean the drop but there are obviously many teams still in the mix this year and they are currently just above the trap-door
 
 
 <p class="factoid">There was a greater than 20 year age gap between two outfield bench-warmers for the first time this season. WBA's Gareth McAuley(38) and Rayaan Tulloch(16) also set a club record</p>
 
 ***
 
-## Tweet of the Week
+## Tweet of the Week {-}
 
-
-```{r tweet16}  
-shortcode("tweet", "940072530953383937") 
-```
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Shawcross&#39;s feat of goal and OG in same <a href="https://twitter.com/hashtag/EPL?src=hash&amp;ref_src=twsrc%5Etfw">#EPL</a> game is 32nd time it has occurred and first by <a href="https://twitter.com/hashtag/SCFC?src=hash&amp;ref_src=twsrc%5Etfw">#SCFC</a> player. No-one has done it more than once</p>&mdash; Andrew Clark (@pssGuy) <a href="https://twitter.com/pssGuy/status/940072530953383937?ref_src=twsrc%5Etfw">December 11, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 
 
@@ -181,7 +167,7 @@ shortcode("tweet", "940072530953383937")
 
 ***
 
-## Results and Table
+## Results and Table {-}
 
 ```{r results_16}
 
@@ -212,7 +198,7 @@ weekly_table("2017-12-11")
 
 Manchester City extended their winning run to 18 before it was ended by Crystal Palace, with Liverpool inflicting the first defeat on them two games later
 
-Brighton did extricate themselves leaving Cardiff as the only team in Premier League history never to have recorded successive victories
+Brighton did manage two wins on the trot, leaving Cardiff as the only team in Premier League history never to have recorded successive victories
 
 The most common best-sequence is five; achieved by 14 of the 49 teams to ever appear in the Premier League. Let's see how often that length run has been achieved at least in a season, by club
 
@@ -229,11 +215,6 @@ fiveWins <- function(x,y) {
     filter(value==1,slength>4) %>% 
     nrow()
 }
-
-# tmYrs <-standings %>%
-#   select(season,team) %>%
-#   unique(.)
-
 
 
 fiveYearRun <- map2_dbl(tmYrs$team,tmYrs$season,fiveWins)
@@ -256,17 +237,17 @@ fiveYears_df %>%
 
 ```
 
-Unsurprisingly, Manchester United top the list. The only seasons they have failed to achieve the feat are 2010/11 (when they nonetheless won the title by nine points); 2013/14 and 2015/16
+Unsurprisingly, Manchester United top the list. The only seasons they have failed to achieve the feat are 2010/11 (when they nonetheless won the title by nine points); 2013/14 and 2015/16. It seems a bit odd to see Bolton and Leeds featuring in the top ten
 
 ---
 
-Benteke finally ended his drought at just over 1100 minutes but he managed only .. in over .. (equivalent to games) and ended the season on the bench . On the plus side, his .. * assists was double that of any other of his six seasons in the league
+Benteke finally ended his drought at just over 1100 minutes but he managed only three (including a mishit penalty) in over 2200 minutes (equivalent to 25 games) and ended the season on the bench . On the plus side, his nine assists was more than double that of any other of his six seasons in the league
 
 ---
 
 #### West Brom Woes {-}
 
-Things got little better for West Brom. The winless run extended to 20 and Pardew was dismissed before season's end. Virtually the only highlight of the season was an away victory at Old Trafford under caretaker manager, Darren Moore
+Things got little better for West Brom. The winless run extended to 20 and Pardew was dismissed before season's end. Virtually the only highlight of the season was a run of five unbeaten games at the tail-end of the season under caretaker manager, Darren Moore, including an away victory at Old Trafford 
 
 
 ---

@@ -1,17 +1,11 @@
 # Week 8 {-}
 
-## Game of the week Crystal Palace 2 - 1 Chelsea {-}
-
-Champions lose to previously goalless, pointless London rivals
 
 
-```{r topGame_08}
-
-embed_youtube("MuLTnBYuEWs", width = 420, height = 315, frameborder = 0,
-   allowfullscreen = TRUE, query = NULL) 
+Champions lose to previously goalless, pointless London rivals, Crystal Palace, slightly overshadowing Watford's move into the top four. City (who else) are the first to hit seven in a game this season
 
 
-```
+`
 
 
 <p class="factoid">Julian Speroni and Gareth McAuley made their first appearances of the season becoming the oldest player and oldest outfielder, respectively, to appear in this campaign</p>
@@ -22,7 +16,7 @@ embed_youtube("MuLTnBYuEWs", width = 420, height = 315, frameborder = 0,
 
 ## Mo's MO {-}
 
-It is a well known that Jose Mourinho's modus operandi in away games against top sides is to play very conseravtively. It was not that succesful last season and although he got a point at Liverpool, the latter's poor defence was probably there for the taking against a team that had averaged three goals per game after seven rounds
+It is a well known that Jose Mourinho's modus operandi in away games against top sides is to play very conservatively. It was not that succesful last season and although he got a point at Liverpool, the latter's poor defence was probably there for the taking against a team that had averaged three goals per game after seven rounds
 
 Jamie Redknapp mentioned that you don't expect many 3-2 victories from a Mourinho team.     
 
@@ -86,6 +80,47 @@ So his 23rd goalless stalemate. 2-0 victories (40) is narrowly the most common o
 
 
 ```{r no_score_AF_08}
+temp <- managerGame %>%
+  filter(ManagerID == "FergusonA") %>%
+  mutate(combo = paste0(GF, GA)) %>%
+  group_by(combo) %>%
+  tally()
+
+
+allCombos <- expand.grid(data.frame(GF = 0:9, GA = 0:9)) %>%
+  mutate(combo = paste0(GF, GA)) #still a df with 100vals
+
+test <- allCombos %>%
+  left_join(temp) %>%
+  select(GF, GA, count = n)
+
+# need to transform
+Games <- t(matrix(
+  test$count,
+  nrow = 10,
+  ncol = 10,
+  byrow = TRUE,
+  dimnames = list(unique(test$GF),
+                  unique(test$GA))
+))
+
+
+plot_ly(
+  x = unique(test$GF),
+  y = unique(test$GF),
+  z = Games,
+  key = Games,
+  hoverinfo = "z",
+  colorscale = 'YIOrRd',
+  reversescale = T,
+  type = "heatmap"
+) %>%
+  layout(
+    title = "Ferguson Results by Goal Score",
+    xaxis = list(title = "Goals Against"),
+    yaxis = list(title = "Goals For")
+  ) %>%  config(displayModeBar = F, showLink = F)
+
 
 ```
 
@@ -144,7 +179,7 @@ prev %>%
     name = "Man City 17/18"
   ) %>%
   layout(
-    title = "Goals for by team by Year",
+    title = "Goals For, by team, by Year",
     xaxis = list(title = "Games played"),
     yaxis = list(title = "Cumulative Goals")
   ) %>%  config(displayModeBar = F, showLink = F)
@@ -196,7 +231,26 @@ Up to and including 2007, Arsenal conceded 20 away goals in only two years. Sinc
 ## Totally Football and Guardian Weekly Review Podcasts {-}
 
 
-<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtrans`
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6398477-stoke-enter-city-s-seventh-circle-of-swell/embed/v4?eid=AQAAAFMy7lkNomEA" title="audioBoom player"></iframe>
+
+<iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6398652-from-zaha-to-mourinho-the-premier-league-happiness-index-football-weekly/embed/v4?eid=AQAAANsx7lm8omEA" title="audioBoom player"></iframe>
+## Results and Table {-}
+
+```{r results_08}
+
+weekly_results("2017-10-02","2017-10-17")
+
+```
+
+<p>
+---
+
+```{r standings_08}
+
+weekly_table("2017-10-17")
+
+```
 
 
 ## Final Factoid {-}
@@ -208,18 +262,18 @@ Up to and including 2007, Arsenal conceded 20 away goals in only two years. Sinc
 
 ## End of Season Update {-}
 
-Speroni amd McAuley remained the oldest player(38.6 years) and outfielder(38.2 years) to appear this season, although both were bench players by the end of the season
+Speroni amd McAuley remained the oldest player(38.6 years) and outfielder(38.2 years) to appear this season, although both were bench players by the end of the season. They are ranked 40th and 52nd all-time
 
 #### Mo's MO {-}
 
-The heat map gets updated and you can see that there was just one more 0-0 result, a disappointing end of calendar home game against Southampton. The most common result..
+The heat map gets updated and you can see that there was just one more 0-0 result, a disappointing end of calendar home game against Southampton. As for 3-2's? Two more, away both impressive away victories from two down at 
+Crystal Palace and Manchester City
 
-..? min table
 
 
 #### City on the Rampage {-}
 
-For the remainder of the season City were there or thereabouts as the top scorers ever after each round of games and..
+For the remainder of the season City were there or thereabouts as the top scorers ever after each round of games and ended as best ever ina season
 
 ```{r}
 
@@ -284,11 +338,13 @@ plot_ly() %>%
 
 Interestingly, their 2013/14 title-winning team reached 100 goals after 37 games but only scored 2 in their final game and thus could not match the 2009/10 Chelsea side that pummeled Wigan 8-0 on the final day of that season
 
+Their goal difference of 79 exceeded the goals scored by any other team except Liverpool (84)
+
 ---
 
 #### Arsenal conceding Away {-}
 
-In the end, Arsenal did improve sonewhat. The 35 goals conceded was some way off Stoke's 40 and not even a club EPL record. However, the away travails continued into 2018 so that by mid-April they were the only club in the top five divisions of English football not to gain points on their travels since the turn of the year
+In the end, Arsenal did improve sonewhat. The 35 goals conceded was some way off Stoke's 40 and not even a club EPL record. However, the away travails continued into 2018 so that by mid-April they were the only club in the top five divisions of English football not to gain points on their travels since the turn of the year. A one-nil victory at Huddersfield to conclude the season eased the pain somewhat
 
 ---
 

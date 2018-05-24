@@ -1,20 +1,8 @@
 # Week 25 {-}
 
 
-## Match of the Day {-}
+Spurs score early - but should have more often - against a lack-lustre Manchester United sporting their shiny new toy, Alexis Sanchez. Swansea defeat another top 6 club and Bourenmouth pull of a shock win at Stamford Bridge with three unanswered second-half goals 
 
-
-Spurs score early - but should have more often - against a lack-lustre Manchester United sporting their shiny new toy, Alexis Sanchez 
-
-
-
-```{r topGame_25}
-
-embed_youtube("twxvaC-gP2E", width = 420, height = 315, frameborder = 0,
-   allowfullscreen = TRUE, query = NULL) 
-
-
-```
 
 
 ***
@@ -55,7 +43,7 @@ playerGame %>%
 
 ```
 
-_N.B. Up to 2 assists may be credited to each goal_
+_N.B. Up to 2 assists may be credited to each goal. The table updates as season progresses_
 
 On publishing, the under-the-radar leader is Brighton's Pascal Gross. Albeit helped by the team's poor scoring record, he has proven a shrewd purchase
 
@@ -69,7 +57,7 @@ On publishing, the under-the-radar leader is Brighton's Pascal Gross. Albeit hel
 
 ## Goal machines {-}
 
-Both Liverpool and Manchestr City recorded 3-0 victories mid-week and are tied for  winning games by three goal margins,at 9
+Both Liverpool and Manchester City recorded 3-0 victories mid-week and are tied for  winning games by three goal margins,at 9
 
 City just shade Liverpool 14-13 in the number of occasions they have scored at least three goals
 
@@ -101,7 +89,7 @@ standings %>%
 ***
 
 
-## Totally Football and Guardian Weekly Review Podcasts
+## Totally Football and Guardian Weekly Review Podcasts {-}
 
 <iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6633122-swoops-swaps-and-resurgent-swans/embed/v4?eid=AQAAALr1dFqiNmUA" title="Audioboom player"></iframe>
 ***
@@ -111,7 +99,7 @@ standings %>%
 
 ***
 
-## Results and Table
+## Results and Table {-}
 
 ```{r results_25}
 
@@ -128,7 +116,7 @@ weekly_table("2018-02-02")
 ```
 
 
-## Final Factoid
+## Final Factoid {-}
 
 <p class="factoid">Sixth time Man. Utd. have conceded in first minute (Everton lead with 10) and second time to Spurs. Eriksen joining Jermain Defoe's effort in 2009/10</p>
 
@@ -139,19 +127,27 @@ weekly_table("2018-02-02")
 
 
 
-#### One that got away, not
+#### One that got away, not {-} 
 
 Although slipping somewhat, Mahrez still led Leicester in contributing to goals scored
 but the real star of the league, and still somewhat appreciated, was Pascal Gross
 
-Obviously, with a low scoring team you are going to have a chance to shine more but Brighton's bargain buy was exceptional. See how he stacks up all-time
+Obviously, with a low scoring team you are going to have a chance to shine more but Brighton's bargain buy was exceptional. See how he stacks up all-time especially in comparison with fellow south-coaster, Matt le Tissier
 
 ```{r mahrezu_25}
 
-##looks like still might take too long hangs when building book
+
+
+tmGoals <- standings %>%
+  group_by(team, season) %>%
+  filter(tmGameOrder == max(tmGameOrder)) %>%
+  select(team, cumGF, season)
+
+
 
 df <- playerGame %>%
   group_by(name, PLAYERID, TEAMNAME, season) %>%
+  #filter(season=="2017/18") %>%
   summarize(points = sum(Gls) + sum(Assists)) %>%
   rename(team = TEAMNAME) %>%
   left_join(tmGoals) %>%
@@ -208,10 +204,11 @@ df %>%
 
 ```
 
-In order to avoid a big delay in processing the minimum points total for season is 20. Just under 500 players have achieved tha in 26 seasons
+In order to avoid a big delay in processing the minimum points total for season is 20. Just under 500 players have achieved that in 26 seasons
 
 ---
 
+Unless an unexpected reversal of fortunes occurs, Everton can be expected to pass Spurs early next season  and lead all Premier League clubs in terms of goals conceded
 
 ```{r GAU_25}
 
@@ -237,13 +234,9 @@ standings %>%
 
 ---
 
-Man City led the way in games scoring at least 3 goals .. just shy of Liverpools 2013/14 record.. mark 21
+Man City led the way, scoring at least 3 goals in 21 games thus matching Liverpools 2013/14 record
 
----
 
-## Code Hints {-}
-
-  * none this week
 
 
 

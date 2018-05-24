@@ -1,17 +1,8 @@
 # Week 26 {-}
 
-## Match of the Day {-}
 
+This week's crisis team, Chelsea. The so-far unimpressive Bakayoko sent off after just half-an-hour with teams' level. Arsenal climb to within 5 points of the Championship places as Ramsey hits his first league hat-trick
 
-This week's crisis team, Chelsea.  
-
-```{r topGame_26}
-
-embed_youtube("MT6riYHiNUQ", width = 420, height = 315, frameborder = 0,
-   allowfullscreen = TRUE, query = NULL) 
-
-
-```
 
 ***
 <p class="factoid">Jordon Ibe has picked up 3 assists in his most recent two games. He managed just one in 25 appearances for Bournemouth last season</p>
@@ -82,7 +73,7 @@ At the 20 game mark, Conte had an 80% win rate but this has been on the slide in
 
 ## Consecutive thumpings {-}
 
-A late collapse to Watford consigned Chelsea to consecutive losses by three goal margins for the first time since they were beaten 1-4 by Man Utd. and 3-0 by Blackburn, two powerhouses in October 1995
+A late collapse to Watford consigned Chelsea to consecutive losses by three goal margins for the first time since they were beaten 4-1 by Man Utd. and 3-0 by Blackburn, two powerhouses, in October 1995
 
 Here are the most recent occurrences for the 38 teams that have suffered the indignation at least once
 
@@ -122,11 +113,8 @@ Six teams have already had consecutive drubbings handed to them this season but 
 
 ## Tweet of the Week {-}
 
-
-
-```{r}  
-shortcode("tweet", "962020532836167680") 
-```
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr"><a href="https://twitter.com/hashtag/CPFC?src=hash&amp;ref_src=twsrc%5Etfw">#CPFC</a> may not have won a game without Zaha since September 2016 but they have only ONCE ever drawn a game without him since he returned to them in <a href="https://twitter.com/hashtag/EPL?src=hash&amp;ref_src=twsrc%5Etfw">#EPL</a> - and it was against <a href="https://twitter.com/hashtag/EFC?src=hash&amp;ref_src=twsrc%5Etfw">#EFC</a> <a href="https://twitter.com/hashtag/EVECRY?src=hash&amp;ref_src=twsrc%5Etfw">#EVECRY</a> <a href="https://t.co/iCnwFfiui2">pic.twitter.com/iCnwFfiui2</a></p>&mdash; Andrew Clark (@pssGuy) <a href="https://twitter.com/pssGuy/status/962020532836167680?ref_src=twsrc%5Etfw">February 9, 2018</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 
 ## Totally Football and Guardian Weekly Review Podcasts {-}
@@ -158,7 +146,7 @@ weekly_table("2018-02-06")
 
 ## Final Factoid {-}
 
-<p class="factoid">Looking like a 3-way race for Player of Season with pre-season favourite de Bruyne(7 goals, 22 assists) being challenged by Salah(21/11) and Kane(22/8)</p>
+<p class="factoid">Looking like a 3-way race for Player of Season with pre-season favourite de Bruyne (7 goals, 22 assists) being challenged by Salah (21/11) and Kane (22/8)</p>
 
 
 ---
@@ -215,15 +203,15 @@ test %>%
   ) %>%  config(displayModeBar = F, showLink = F)
 ```
 
-Guardiola overtook Conte aas the season wounded down but both trail Mourinho's initial two years in the league when he won back-to-back titles. The others had to settle for one each
+Guardiola overtook Conte as the season wound down but both trail Mourinho's initial two years in the league when he won back-to-back titles. The others had to settle for one each
 
 ---
 
 #### Consecutive thumpings {-}
 
-As can be seen from the table above, Chelsea were not the last side to suffer the indinity this season. West Ham even made it three heavy defeats in a row
+As can be seen from the table above, Chelsea were not the last side to suffer the indignity this season. West Ham even made it three heavy defeats in a row
 
-This is a fairly rare occurrence, which actually only happened once in the first 15 years of the Premier League
+The latter fate is a fairly rare occurrence, which actually only happened once in the first 15 years of the Premier League
 
 
 ```{r big_lossu_26}
@@ -259,11 +247,8 @@ Two years later after 22 games, Stoke were in 7th spot just six points off the t
 
 Salah finished the season very strongly and desevedly took home the individual honours
 
----
-
-## Code Hints {-}
 
 
- * none this week
+
 
 

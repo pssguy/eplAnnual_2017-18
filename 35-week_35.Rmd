@@ -1,9 +1,7 @@
 # Week 35 {-}
 
 
-## Match of the Day {-}
-
-WBA, Stoke and Southampton edge ever closer to the drop
+WBA, Stoke and Southampton edge ever closer to the drop. Swansea fold 5-0 to Man City to give them all some hope
 
 
 ```{r topGame_35}
@@ -55,6 +53,7 @@ playerGame %>%
  
 Silva has the distinction of providing assists at the fastest rate
 for this select group
+
 ---
 
 He is not too shabby a goalscorer either and has shown a remarkable level of consistency over his career
@@ -133,7 +132,7 @@ df %>%
          ) %>% config(displayModeBar = F, showLink = F)
 ```
 
-Wenger kept pace much of the time until the end of the 2004/5 season, when both lost out to Chelsea. Over each of eight successive seasons one of them took home the trophy
+Wenger kept pace much of the time until the end of the 2004/5 season, when both lost out to Chelsea for the title. Over each of eight successive seasons one of them took home the trophy
 
 Man U  1996/7, 1998/9, 1999/00,2000/1,2002/3
 Arsenal   1997/8  2001/2 2003/4
@@ -148,7 +147,7 @@ His 1998/9 team only conceded 17 goals a Premier League record with the primrary
 
 One of the gripes about Arsenal is that they have got themselves into favourable positions in the League just to let it slip
 
-Here are the deepest time into the season that they reached their peak spot. I have taken the liberty of assuming that they will finish sixth thi season
+Here are the deepest time into the season that they reached their peak spot. I have taken the liberty of assuming that they will finish sixth this season
 
 
 ```{r topSpot_35}
@@ -187,10 +186,8 @@ In his last four years he will never have had Arsenal ending within single-digit
 
 ## Tweet of the Week {-} 
 
-
-```{r}  
-shortcode("tweet", "986892971827253250") 
-```
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr"><a href="https://twitter.com/hashtag/AFC?src=hash&amp;ref_src=twsrc%5Etfw">#AFC</a> are sporting their worst Goal Against record in <a href="https://twitter.com/hashtag/EPL?src=hash&amp;ref_src=twsrc%5Etfw">#EPL</a> with worrying trend<br>Players are either past it (Cech, Koscielny) having off years (Bellerin) or not up to snuff (Mustafi, Chambers,Kolasinac) Overhaul or mid-table awaits<a href="https://twitter.com/arseblog?ref_src=twsrc%5Etfw">@arseblog</a> <a href="https://t.co/vdumxjGPj6">pic.twitter.com/vdumxjGPj6</a></p>&mdash; Andrew Clark (@pssGuy) <a href="https://twitter.com/pssGuy/status/986892971827253250?ref_src=twsrc%5Etfw">April 19, 2018</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 
 ## Totally Football and Guardian Weekly Review Podcasts {-}
@@ -266,8 +263,9 @@ data %>%
   layout(
     title = "",
     margin = list(l = 120, pad = 3),
+     title = "Maximun time between Home Goals -2017/18",
     yaxis = list(title = ""),
-    xaxis = list(title = "Maximum Gap between Goals (mins)")
+    xaxis = list(title = "Maximum Gap (mins)")
   ) %>% config(displayModeBar = F, showLink = F)
 
 #away
@@ -289,11 +287,13 @@ data <-
 data %>%
   plot_ly(x =  ~ maxGap, y =  ~ fct_reorder(team, maxGap)) %>%
   add_bars(color =  ~ team) %>%
+  hide_legend() %>% 
   layout(
     title = "",
     margin = list(l = 120, pad = 3),
+    title = "Maximun time between Away Goals -2017/18",
     yaxis = list(title = ""),
-    xaxis = list(title = "Maximum Gap between Goals (mins")
+    xaxis = list(title = "Maximum Gap (mins")
   ) %>% config(displayModeBar = F, showLink = F)
 
 
@@ -306,14 +306,27 @@ Got the principle right. Just need to do some fine-tuning
 
 Of course, at Manchester City this season, David Silvas performance was not a standout
 
-![copy of final weeks PSS stuff]()
+```{r}
+
+playerGame %>% 
+  filter(TEAMNAME=="Man. City",season=="2017/18",PLAYERID!="OWNGOAL") %>% 
+  group_by(name) %>% 
+  summarize(mins=sum(mins),goals=sum(Gls),assists=sum(Assists),
+             ppg=round(90*(goals+assists)/mins,2)) %>% 
+  filter(ppg>0.99) %>%
+  arrange(desc(ppg)) %>% 
+  select(name,mins,goals,assists,ppg) %>% 
+                         DT::datatable(class='compact stripe hover row-border order-column',rownames=FALSE,options= list(paging = FALSE, searching = FALSE,info=FALSE))
+
+```
+
 
 
 #### Arsene Wenger {-}
 
-Another disappointment as defeat in the Europa Cup Final means that Arsenal miss out on Champions League football again in 2018/19
+Another disappointment as defeat in the Europa Cup semi-final means that Arsenal miss out on Champions League football again in 2018/19
 
-Here is Wenger's record against all other teams
+Here is Wenger's record against all other teams in the EPL
 
 ```{r Wenger_teamu_35}
 
@@ -366,7 +379,8 @@ all <- temp %>%
 all %>%
   plot_ly(x =  ~ G,
           y =  ~ ppg,
-          color = I("red")) %>%
+          color = I("red")
+          ) %>%
   add_markers(
     hoverinfo = "text",
     text =  ~ paste0(OppTeam, "<br>(W-D-L) ", W, "-", D, "-", L,
@@ -379,12 +393,11 @@ all %>%
   ) %>% config(displayModeBar = F, showLink = F)
 ```
 
-No real surorise, though in admittedly small sample siazes he did not perform that well 
- against the Sheffield Clubs
+No real surprise, though in admittedly small sample siazes he did not perform that well against the Sheffield Clubs
  
 ---
  
- And by opposingmanager
+ And by opposing manager
  
  
 ```{r wenger_manageru_35}
@@ -427,7 +440,7 @@ temp %>%
 
 ```
  
-
+He had 100% records against 50 of the 153 he faced
 
 
 

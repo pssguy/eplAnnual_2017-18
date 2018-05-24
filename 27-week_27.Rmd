@@ -1,16 +1,8 @@
 # Week 27 {-}
 
+Only six away goals this week with Salah, predictably, amongst the scorers. Fourth game in a row in which they have either won or lost by three clear goals
 
-## Match of the Day {-}
-
-
-```{r topGame_27}
-
-embed_youtube("r45wUXosH-A", width = 420, height = 315, frameborder = 0,
-   allowfullscreen = TRUE, query = NULL) 
-
-
-```
+***
 
 ## Aguero-a-go-go {-}
 
@@ -166,13 +158,11 @@ Obviously, this could go down to the wire, but with City almost certain to win t
 
 ## Tweet of the Week {-} 
 
-
-```{r}  
-shortcode("tweet", "962257142525939712") 
-```
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Chelsea have just suffered their first consecutive three goal margin defeats in <a href="https://twitter.com/hashtag/premierleague?src=hash&amp;ref_src=twsrc%5Etfw">#premierleague</a> since 1995. But which <a href="https://twitter.com/hashtag/EPL?src=hash&amp;ref_src=twsrc%5Etfw">#EPL</a> ever-presents have never had such back to back drubbings?<a href="https://twitter.com/hashtag/AFC?src=hash&amp;ref_src=twsrc%5Etfw">#AFC</a> <a href="https://twitter.com/hashtag/CFC?src=hash&amp;ref_src=twsrc%5Etfw">#CFC</a> <a href="https://twitter.com/hashtag/LFC?src=hash&amp;ref_src=twsrc%5Etfw">#LFC</a> <a href="https://twitter.com/hashtag/MUFC?src=hash&amp;ref_src=twsrc%5Etfw">#MUFC</a> <a href="https://twitter.com/hashtag/THFC?src=hash&amp;ref_src=twsrc%5Etfw">#THFC</a><a href="https://twitter.com/BenDinnery?ref_src=twsrc%5Etfw">@BenDinnery</a></p>&mdash; Andrew Clark (@pssGuy) <a href="https://twitter.com/pssGuy/status/962257142525939712?ref_src=twsrc%5Etfw">February 10, 2018</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 
-## Totally Football and Guardian Weekly Review Podcasts
+## Totally Football and Guardian Weekly Review Podcasts {-}
 
 <iframe width="100%" height="300" style="background-color:transparent; display:block; padding: 0; max-width: 700px;" frameborder="0" allowtransparency="allowtransparency" scrolling="no" src="//embeds.audioboom.com/posts/6670169-tottenham-take-charge-super-salah-and-derry-goes-football-weekly/embed/v4?eid=AQAAAKKzglpZx2UA" title="Audioboom player"></iframe>
 ***
@@ -212,9 +202,9 @@ weekly_table("2018-02-14")
 
 ## Aguero-a-go-go {-}
 
-Aguero finished the season just above the 50% mark and reached the 20 goal mark for the fourth year in succession (..) as he finally made the PFA team of the season
+Aguero finished the season just above the 50% mark and reached the 20 goal mark for the fourth year in succession, finally making the PFA team of the season
 
-Kane's multi-goal scoring explots dropped a bit as his final .. were single goal exploits 
+Kane's multi-goal scoring explots dropped a bit although he finished the season with a brace
 
 ```{r}
 
@@ -254,29 +244,7 @@ goals %>%
 
 ---
 
-There was at least one draw in every round ..
 
-This needs fixing
-
-```{r result_rangeu_27}
-
-standings %>%
-  filter(season == "2017/18", res == "Draw") %>%
-  count(tmYrGameOrder, sort = TRUE) %>%
-  mutate(draws = as.factor(n / 2)) %>%
-  group_by(draws) %>%
-  tally()
-  
-```
-
-
-
----
-
-
-## Code Hints {-}
-
- * none this week
 
 
 
