@@ -158,7 +158,13 @@ subSeq <- function (x, item = NULL) {
 
 # Kick-Off {-}
 
-![](img/cover_image_with_text.png) {-}
+```{r}
+knitr::include_graphics("img/cover_image_with_text.png")
+```
+
+
+
+
 ---
 
 
@@ -166,7 +172,7 @@ Welcome to my - and possibly a world - first interactive sports annual
 
 The basis is the weekly [blog posts](http://mytinyshinys.com/categories/eplweekly/) I have produced over the course of the 2017/18 English Premier League season. However, it has been significantly expanded with end-of season follow-ups on the analyses conducted each week 
 
-All the code is in R and the book written in RMarkdown using the bokdown package. This version, incorporates code into the text but there is also a [code-free version]()  Some chapters highlight packages or functions which I may have used for the first time
+All the code is in R and the book written in RMarkdown using the bokdown package. This version, incorporates code into the text but there is also a [code-free version](https://mytinyshinys.com/annual)  Some chapters highlight packages or functions which I may have used for the first time
 
 The data is unofficial and there may be some - hopefully insignificant errors. One aspect to mention is that I allow up to two assists per goal, rather than only one as used in official data
 

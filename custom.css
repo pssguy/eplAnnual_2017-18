@@ -55,7 +55,8 @@ p {
   color: #cc0000;
 }      
 
-/* relates to any section named update the id is automatically conferred */
+/* relates to any section named update the id is automatically conferred 
+but doesnt look very good*/
 #end-of-season-update {
   background-color: #efeded;
   
@@ -78,9 +79,50 @@ font-family: "source-sans-pro", Arial, Helvetica, sans-serif;
 looks like adobe typekit which have to pay for*/
 body {
 font-family: 'Baskerville Old Face', Arial, Helvetica, sans-serif;
-font-size: 12;
+font-size: 24;
 }
 
-.book .book-summary ul.summary li span {
+/* from hadley r4ds */
+.book .book-summary ul.summary li a, .book .book-summary ul.summary li span {
   padding: 2px 15px;
+}
+
+.book .book-header h1 {
+  opacity: 1;
+  text-align: left;
+}
+
+#header .title {
+  margin-bottom: 0em;
+}
+#header h4.author {
+  margin: 0;
+  color: #666;
+}
+#header h4.author em {
+  font-style: normal;
+}
+/* experiments */
+.sourcecode {
+  background-color: #666;
+}
+
+.body {
+  background-color: #ccbd9d;
+}
+
+/* end experiments */
+/* blogdown is diff */
+/* no impact on p */
+body {
+  font: 14px "open sans", "Helvetica Neue", "Microsoft Yahei", Helvetica, Arial, sans-serif;
+}
+p {
+    font-size: 22px;
+}
+
+
+.book .book-summary ul.summary li a, .book .book-summary ul.summary li span {
+ 
+    color: #dc1b61;
 }

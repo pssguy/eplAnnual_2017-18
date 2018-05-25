@@ -1,23 +1,12 @@
-#bookdown::html_book:
-#    theme: united
-#    code_folding: hide
-
 bookdown::gitbook:
   css: custom.css #style.css was there - this is what I have in blog
-  split_by: chapter # section caused error - but doe not seen to split by chaptr
+  split_by: chapter # how to split html output
   config:
     toc:
-      collapse: section
+      collapse: section # dont think works section is deepest 
       before: |
-        <li><a href="./">First Ever Interactive Sports Annual</a></li>
+        <li><a href="./">World's First Interactive Sports Annual!</a></li>
       after: |
-        <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
-#    download: ["pdf", "epub"]
-#bookdown::pdf_book:
-#  includes:
-#    in_header: preamble.tex
-#  latex_engine: xelatex
-#  citation_package: natbib
-#  keep_tex: yes
-#bookdown::epub_book: default
-#always_allow_html: yes
+        <li><a href="https://mytinyshinys.com" target="blank">Andrew Clark</a></li>
+        <li><a href="https://github.com/rstudio/bookdown" target="blank">A bookdown production</a></li>
+        
