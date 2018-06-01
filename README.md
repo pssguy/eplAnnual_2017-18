@@ -1,2 +1,2 @@
-This is comprised of a  compilation of weekly blog posts, extensively extended with end-of-season updates, featuring varying aspects of the EPL using R code
-to produce charts and tables. Tweets, pods and game videos are also embedded
+This is comprised of a compilation of weekly  blog posts, extensively extended with end-of-season updates, featuring varying aspects of the EPL using R code
+to produce about 100 unique charts and tables. Tweets and weekly popular podcasts are also embedded
