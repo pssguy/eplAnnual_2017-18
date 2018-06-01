@@ -168,13 +168,13 @@ knitr::include_graphics("img/cover_image_with_text.png")
 ---
 
 
-Welcome to my - and possibly a world - first interactive sports annual
+Welcome to my - and possibly the world's - first interactive sports annual!
 
-The basis is the weekly [blog posts](http://mytinyshinys.com/categories/eplweekly/) I have produced over the course of the 2017/18 English Premier League season. However, it has been significantly expanded with end-of season follow-ups on the analyses conducted each week 
+The basis is the weekly [blog posts](http://mytinyshinys.com/categories/eplweekly/) I have produced over the course of the 2017/18 English Premier League season. However, it has been significantly expanded with end-of season follow-ups on the analyses conducted each week. The youtube video links in the weeekly posts have been excluded as many are no lnger available 
 
-All the code is in R and the book written in RMarkdown using the bokdown package. This version, incorporates code into the text but there is also a [code-free version](https://mytinyshinys.com/annual)  Some chapters highlight packages or functions which I may have used for the first time
+All the code is in R and the book written in RMarkdown using the bookdown package. This version, incorporates code into the text but there is also a [code-free version](https://mytinyshinys.com/annual)  Some chapters highlight packages or functions which I may have used for the first time
 
 The data is unofficial and there may be some - hopefully insignificant errors. One aspect to mention is that I allow up to two assists per goal, rather than only one as used in official data
 
-Charts are generally zoomable/pannable and often more detailed information can be found by hovering markers
+Charts are generally zoomable/pannable and often more detailed information can be found by hovering markers. Several also allow you to interact by choosing different players or teams and impacting the output. Tables are usually sortable and searchable
 
