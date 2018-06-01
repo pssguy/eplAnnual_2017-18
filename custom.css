@@ -1,20 +1,4 @@
-/* works
 
-/* by element type 
-li { 
-    color: yellow; /* all <li> elements are yellow */
-/*}
-*/
-
-/* by ID with the # symbol */
-#my-id { 
-    color: yellow; /* elements with id = "my-id" are yellow */
-}
-
-/* by class with the . symbol */
-.my-class { 
-    color: blue; /* elements with class = "my-class" are blue  */
-}
 
 /* worked with color now not with size but that may be down to an error in one of rmds?*/
 p {
@@ -55,25 +39,8 @@ p {
   color: #cc0000;
 }      
 
-/* relates to any section named update the id is automatically conferred 
-but doesnt look very good*/
-#end-of-season-update {
-  background-color: #efeded;
-  
- 
-}
 
-#end-of-season-update h2{
-  text-align: center;
-vertical-align: middle;
-}
 
-/* from http://socviz.co/index.html who mas interesting css work 
-
-body {
-font-family: "source-sans-pro", Arial, Helvetica, sans-serif;
-}
-*/
 
 /* if adjusted in chrome works. Not sure best though din-2014 on plotico
 looks like adobe typekit which have to pay for*/
@@ -99,7 +66,7 @@ font-size: 24;
   margin: 0;
   color: #666;
 }
-#header h4.author em {
+#header h4.author em { /* h4 should not be qualified */
   font-style: normal;
 }
 /* experiments */
@@ -111,17 +78,9 @@ font-size: 24;
   background-color: #ccbd9d;
 }
 
-/* end experiments */
-/* blogdown is diff */
-/* no impact on p */
-body {
-  font: 14px "open sans", "Helvetica Neue", "Microsoft Yahei", Helvetica, Arial, sans-serif;
-}
-p {
-    font-size: 22px;
-}
 
 
+/* this works */
 .book .book-summary ul.summary li a, .book .book-summary ul.summary li span {
  
     color: #dc1b61;
