@@ -1,13 +1,14 @@
 --- 
 title: "Premier League Annual 2017/18 (with code)"
 author: "Andrew Clark"
-date: "May 2018"
+date: "June 2018"
 site: bookdown::bookdown_site
 documentclass: book
 #bibliography: [book.bib, packages.bib] 
 #biblio-style: apalike
+cover-image: "img/coverWithCode.png" 
 link-citations: yes
-description: "A compilation of weekly blog posts, extensively extended with end-of-season updates, featuring varying aspects of football's English Premier League. A wide range of R packages are used to produce interactive charts and tables and tweets and podcasts are also embedded"
+description: "World's first interactive Sports Annual comprising of a compilation of weekly blog posts, extensively extended with end-of-season updates, featuring varying aspects of football's English Premier League. A wide range of R packages are used to produce interactive charts and tables and tweets and podcasts are also embedded"
 ---
  
 ```{r, echo=FALSE}
@@ -159,7 +160,7 @@ subSeq <- function (x, item = NULL) {
 # Kick-Off {-}
 
 ```{r}
-knitr::include_graphics("img/cover_image_with_text.png")
+knitr::include_graphics("img/coverWithCode.png")
 ```
 
 
@@ -170,11 +171,19 @@ knitr::include_graphics("img/cover_image_with_text.png")
 
 Welcome to my - and possibly the world's - first interactive sports annual!
 
-The basis is the weekly [blog posts](http://mytinyshinys.com/categories/eplweekly/) I have produced over the course of the 2017/18 English Premier League season. However, it has been significantly expanded with end-of season follow-ups on the analyses conducted each week. The youtube video links in the weeekly posts have been excluded as many are no lnger available 
+The basis is the weekly [blog posts](http://mytinyshinys.com/categories/eplweekly/) I have produced over the course of the 2017/18 English Premier League season. However, it has been significantly expanded with end-of season follow-ups on the analyses conducted each week. The youtube video links in the weeekly posts have been excluded as many are no longer available
+
+The toolbar at the top of the screen has buttons which allow you to 
+
+ * toggle Table of Contents
+ * word search throughout book
+ * change font/theme settings
+ * connect to social media
+ 
 
 All the code is in R and the book written in RMarkdown using the bookdown package. This version, incorporates code into the text but there is also a [code-free version](https://mytinyshinys.com/annual)  Some chapters highlight packages or functions which I may have used for the first time
 
-The data is unofficial and there may be some - hopefully insignificant errors. One aspect to mention is that I allow up to two assists per goal, rather than only one as used in official data
+The data is unofficial and there may be some, hopefully insignificant, errors. One aspect to mention is that I allow up to two assists per goal, rather than only one as used in official data
 
-Charts are generally zoomable/pannable and often more detailed information can be found by hovering markers. Several also allow you to interact by choosing different players or teams and impacting the output. Tables are usually sortable and searchable
+Charts are generally zoomable/pannable and often more detailed information can be found by hovering markers. Several also allow you to interact by choosing different players or teams and impacting the output. Tables are usually sortable and searchable.   
 
