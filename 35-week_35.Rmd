@@ -4,14 +4,6 @@
 WBA, Stoke and Southampton edge ever closer to the drop. Swansea fold 5-0 to Man City to give them all some hope
 
 
-```{r topGame_35}
-
-embed_youtube("X0xoyvCJDyw", width = 420, height = 315, frameborder = 0,
-   allowfullscreen = TRUE, query = NULL) 
-
-
-```
-
 ***
 <p class="factoid">What with hitting the woodwork three times the Watford v Palace 0-0 matchup saw some records forestalled. Watford's run of scoring at home only equalled their best of 12 and Palace were one shy of equalling their top sequence of scoring in 10 away games on the trot </p>
 

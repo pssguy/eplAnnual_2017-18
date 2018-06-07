@@ -358,7 +358,7 @@ Palace's escape is probably the most remarkable, although Newcastle fared even b
 
 ### Time between goals {-}
 
-In many ways the table is not that meaningful. However, one name that pops out is that of Kelechi Iheanacho who scored his first goal for Leicester 439 days after his previous with Manchester City. Although the jury is still out on him, there have been several seriously-misfiring big money signings (think Meny, Musa and Slimani) that Leicester have made since winning the title. With Mahrez probably looking to leave again after Leicester's mediocre season and Vardy now 31 they will need to improve their acqusition abilities in the next couple of seasons
+In many ways the table can be misleading as there is obviously a summer gap, whilst certain players may be out of the league for a while and then return. However, one name that pops out is that of Kelechi Iheanacho who scored his first goal for Leicester 439 days after his previous with Manchester City. Although the jury is still out on him, there have been several seriously-misfiring big money signings (think Meny, Musa and Slimani) that Leicester have made since winning the title. With Mahrez probably looking to leave again after Leicester's mediocre season and Vardy now 31 they will need to improve their acqusition abilities in the next couple of seasons
 
 
 ```{r goal_gap_all03u}
@@ -393,6 +393,7 @@ playerGame %>%
   config(displayModeBar = F, showLink = F)
 ```
 
+Javier Hernández, Chicharito, is a good example of the chart shortcoming. After a career at Manchester United, he spent some time with Real Madrid and Bayer Leverkausen before returning to the EPL with West Ham  
 
 Another Nacho showed the other side. Arsenals Nacho Monreal scored his first goal in over 10,000 minutes and then followed it up with four more during season
 

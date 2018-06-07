@@ -3,4 +3,5 @@
 .RData
 .Ruserdata
 _outputBU.yml
+_bookdown.yml
 customBU.css
