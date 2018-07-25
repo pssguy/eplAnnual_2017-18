@@ -2,5 +2,5 @@
 
 I would like to thank my brother, Stuart Clark, for providing all the goal and assist data for many years Also the [soccerbase web site](www.soccerbase.com) has been a great reference source
     
-In addition, the developers and maintainers of all the R packages I have used; pride of place going to the RStudio team in particular the [bookdown](https://github.com/rstudio/bookdown) creator, and Carson Sievert for the, ropensci, plotly package
+In addition, the developers and maintainers of all the R packages I have used; pride of place going to the RStudio team, in particular [Yihui Xie](https://twitter.com/xieyihui) the [bookdown](https://github.com/rstudio/bookdown) creator, and [Carson Sievert](https://twitter.com/cpsievert) for the, ropensci, plotly package
  

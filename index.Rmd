@@ -157,13 +157,13 @@ subSeq <- function (x, item = NULL) {
 
 ```
 
-# Kick-Off {-}
+
 
 ```{r}
 knitr::include_graphics("img/coverWithCode.png")
 ```
 
-
+# Kick-Off {-}
 
 
 ---

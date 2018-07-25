@@ -10,7 +10,9 @@ bookdown::gitbook:
         <li><a href="https://mytinyshinys.com" target="blank">Andrew Clark</a></li>
         <li><a href="https://github.com/rstudio/bookdown" target="blank">A bookdown production</a></li>
   download: no
-  fontsettings:
+  # these appeared to work for while then didnt
+  # even removing custom.css had no impact
+  fontsettings:  
       theme: sepia
       family: serif
       size: 3  ## overridden in css?
