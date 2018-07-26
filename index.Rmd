@@ -4,8 +4,7 @@ author: "Andrew Clark"
 date: "June 2018"
 site: bookdown::bookdown_site
 documentclass: book
-#bibliography: [book.bib, packages.bib] 
-#biblio-style: apalike
+github-repo: "pssguy/eplAnnual_2017-18"
 cover-image: "img/coverWithCode.png" 
 link-citations: yes
 description: "World's first interactive Sports Annual comprising of a compilation of weekly blog posts, extensively extended with end-of-season updates, featuring varying aspects of football's English Premier League. A wide range of R packages are used to produce interactive charts and tables and tweets and podcasts are also embedded"
